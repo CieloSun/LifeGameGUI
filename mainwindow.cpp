@@ -5,9 +5,12 @@ MainWindow::MainWindow(int _SIZE,QWidget *parent) :
     QMainWindow(parent),SIZE(_SIZE),
     ui(new Ui::MainWindow)
 {
+    WIDTH=700/SIZE;
+    /*
     Mainmap=new cell::cellMap(SIZE);
     Mainmap->loadMap(0.5,time(0));
     Mainmap->startMap();
+    */
     ui->setupUi(this);
 }
 MainWindow::~MainWindow()
@@ -22,7 +25,10 @@ void MainWindow::paintEvent(QPaintEvent *)
     painter->setPen(QPen(Qt::darkGreen,0.2,Qt::SolidLine));
     for(int i=0;i<=SIZE;++i)
     {
-        painter->drawLine(Ox,Oy+WIDTH*i,Ox+WIDTH*SIZE,Oy+WIDTH*i);
+        painter->drawLine(Ox,Oy+WIDTH*i,Ox+WIDTH*SIZE*2,Oy+WIDTH*i);
+    }
+    for(int i=0;i<=2*SIZE;++i)
+    {
         painter->drawLine(Ox+WIDTH*i,Oy,Ox+WIDTH*i,Oy+WIDTH*SIZE);
     }
 }

@@ -13,17 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    cell.cpp
 
 HEADERS  += \
-    cellMap.h \
-    position.h \
-    stdafx.h \
     targetver.h \
     cell.h \
-    position.h \
-    stdafx.h \
-    cellmap.h \
     mainwindow.h
 
 FORMS    += mainwindow.ui
