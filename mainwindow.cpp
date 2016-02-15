@@ -5,13 +5,20 @@ MainWindow::MainWindow(int _SIZE,QWidget *parent) :
     QMainWindow(parent),SIZE(_SIZE),
     ui(new Ui::MainWindow)
 {
-    WIDTH=700/SIZE;
-    /*
+    WIDTH=this->width()/SIZE;
+    Ox=this->width()/7;
+    Oy=this->height()/10;
+    myTimerId=0;
+
+
     Mainmap=new cell::cellMap(SIZE);
     Mainmap->loadMap(0.5,time(0));
     Mainmap->startMap();
-    */
+
     ui->setupUi(this);
+
+    connect(ui->actionStart,SIGNAL(triggered(bool)),this,SLOT(Start()));
+    connect(ui->actionExit,SIGNAL(triggered(bool)),this,SLOT(close()));
 }
 MainWindow::~MainWindow()
 {
@@ -31,10 +38,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     {
         painter->drawLine(Ox+WIDTH*i,Oy,Ox+WIDTH*i,Oy+WIDTH*SIZE);
     }
-}
 
-void MainWindow::drawTheArr()
-{
     painter->setBrush(QBrush(Qt::black,Qt::SolidPattern));
     for(int i=0;i<SIZE;++i)
     {
@@ -47,5 +51,25 @@ void MainWindow::drawTheArr()
         }
     }
 }
+
+void MainWindow::Start()
+{
+    myTimerId=startTimer(30);
+}
+
+void MainWindow::timerEvent(QTimerEvent *event)
+{
+    if(event->timerId()==myTimerId)
+    {
+        update();
+        updateGeometry();
+    }
+    else
+    {
+        QWidget::timerEvent(event);
+    }
+}
+
+
 
 

@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-const int defaultSize=65;
+const int defaultSize=30;
 
 int main(int argc, char *argv[])
 {

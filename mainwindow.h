@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPainter>
+#include <QTimer>
 #include "cell.h"
 #include "ui_mainwindow.h"
 
@@ -19,21 +20,23 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    const int Ox=20;
-    const int Oy=50;
-
     explicit MainWindow(int _SIZE,QWidget *parent = 0);
     ~MainWindow();
 protected:
     void paintEvent(QPaintEvent *);
+    void timerEvent(QTimerEvent *);
 private slots:
-    void drawTheArr();
+    void Start();
 private:
+
     Ui::MainWindow *ui;
     QPainter *painter;
     cell::cellMap *Mainmap;
+    int myTimerId;
     int SIZE;
     int WIDTH;
+    int Ox;
+    int Oy;
 };
 
 #endif // MAINWINDOW_H
