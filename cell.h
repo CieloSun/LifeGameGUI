@@ -108,7 +108,7 @@ public:
 
 private:
     size_t size;
-    cell arr[MaxSize][2*MaxSize];
+    cell arr[2*MaxSize][MaxSize];
 
     //True if the progress will be finished
     atomic<bool> finish;

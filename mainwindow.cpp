@@ -31,7 +31,7 @@ void MainWindow::paintEvent(QPaintEvent *)
 {
     painter=new QPainter;
     painter->begin(this);
-    painter->setPen(QPen(Qt::darkGreen,0.2,Qt::SolidLine));
+    painter->setPen(QPen(Qt::darkGreen,0.2,Qt::DotLine));
     for(int i=0;i<=SIZE;++i)
     {
         painter->drawLine(Ox,Oy+WIDTH*i,Ox+WIDTH*SIZE*2,Oy+WIDTH*i);
@@ -77,7 +77,7 @@ void MainWindow::Save()
     fstream file("savedata.dat");
     if(file)
     {
-        cell::cellMap::saveMap(file);
+        Mainmap->saveMap(file);
         QMessageBox::information(this,"Hint",QString::fromStdString("You have save it successfully"),QMessageBox::Cancel);
     }
     file.close();
@@ -88,7 +88,7 @@ void MainWindow::Load()
     fstream file("savedata.dat");
     if(file)
     {
-        cell::cellMap::loadMap(file);
+        Mainmap->loadMap(file);
         QMessageBox::information(this,"Hint",QString::fromStdString("You have load it successfully"),QMessageBox::Cancel);
     }
     else QMessageBox::critical(this,"Error",QString::fromStdString("No save data"),QMessageBox::Cancel);

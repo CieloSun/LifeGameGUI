@@ -43,6 +43,7 @@
      <string>Other</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionSetting"/>
    </widget>
    <widget class="QMenu" name="menuExit">
     <property name="title">
@@ -88,6 +89,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionSetting">
+   <property name="text">
+    <string>Setting</string>
    </property>
   </action>
  </widget>

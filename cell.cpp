@@ -5,9 +5,9 @@ cell::cellMap::cellMap()
     finish = false;
     flush = -1;
     //补充arr中每个cell的初始化
-    for (unsigned int i = 0;i < getSize();++i)
+    for (unsigned int i = 0;i < 2*getSize();++i)
     {
-        for (unsigned int j = 0;j < 2*getSize();++j)
+        for (unsigned int j = 0;j < getSize();++j)
         {
             arr[i][j] = cell(position(i, j), DEAD);
         }
@@ -22,7 +22,14 @@ int cell::cellMap::count(const position &curr) const
     {
         for (size_t j = -1; j <= 1; ++j)
         {
-            res += cget(position(curr.x + i, curr.y + j)).state;
+            bool edge=curr.x+i>=2*getSize()||curr.x+i<=0||curr.y+i>=getSize()||curr.y+i<=0;
+            if(!edge)
+            {
+                if(cget(position(curr.x+i,curr.y+j)).state==LIVE)
+                {
+                    res++;
+                }
+            }
         }
     }
     return res;
