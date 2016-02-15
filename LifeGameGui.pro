@@ -21,6 +21,7 @@ HEADERS  += \
     cell.h \
     mainwindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    dialog.ui
 
 CONFIG   +=c++11

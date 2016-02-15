@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <fstream>
+#include <QMessageBox>
 
 MainWindow::MainWindow(int _SIZE,QWidget *parent) :
     QMainWindow(parent),SIZE(_SIZE),
@@ -70,6 +72,28 @@ void MainWindow::timerEvent(QTimerEvent *event)
     }
 }
 
+void MainWindow::Save()
+{
+    fstream file("savedata.dat");
+    if(file)
+    {
+        cell::cellMap::saveMap(file);
+        QMessageBox::information(this,"Hint",QString::fromStdString("You have save it successfully"),QMessageBox::Cancel);
+    }
+    file.close();
+}
+
+void MainWindow::Load()
+{
+    fstream file("savedata.dat");
+    if(file)
+    {
+        cell::cellMap::loadMap(file);
+        QMessageBox::information(this,"Hint",QString::fromStdString("You have load it successfully"),QMessageBox::Cancel);
+    }
+    else QMessageBox::critical(this,"Error",QString::fromStdString("No save data"),QMessageBox::Cancel);
+    file.close();
+}
 
 
 

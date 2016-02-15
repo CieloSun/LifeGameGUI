@@ -27,6 +27,8 @@ protected:
     void timerEvent(QTimerEvent *);
 private slots:
     void Start();
+    void Save();
+    void Load();
 private:
 
     Ui::MainWindow *ui;
