@@ -42,13 +42,6 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Condition</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Grass</string>
@@ -86,25 +79,6 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QComboBox" name="comboBox">
-        <item>
-         <property name="text">
-          <string>abundant</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>normal</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>severe</string>
-         </property>
-        </item>
-       </widget>
-      </item>
       <item>
        <widget class="QLineEdit" name="lineEdit_2"/>
       </item>
