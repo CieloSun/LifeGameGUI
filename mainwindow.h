@@ -7,11 +7,13 @@
 #include "cellMap.h"
 #include "ui_mainwindow.h"
 
-namespace cell {
+namespace cell
+{
 class MainWindow;
 }
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
@@ -20,7 +22,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(int ,int ,QWidget *parent = 0);
+    explicit MainWindow(int , int , QWidget *parent = 0);
     ~MainWindow();
 protected:
     void paintEvent(QPaintEvent *);
@@ -29,7 +31,7 @@ private slots:
     void Start();
     void Save();
     void Load();
-private:    
+private:
     int MapWidth;
     int MapHeight;
 
