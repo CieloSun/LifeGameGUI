@@ -15,13 +15,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     cell.cpp \
-    cellMap.cpp
+    cellMap.cpp \
+    thread.cpp
 
 HEADERS  += \
     targetver.h \
     cell.h \
     mainwindow.h \
-    cellMap.h
+    cellMap.h \
+    thread.h
 
 FORMS    += mainwindow.ui \
     dialog.ui

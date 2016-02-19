@@ -6,6 +6,7 @@
 #include <QTimer>
 #include "cellMap.h"
 #include "ui_mainwindow.h"
+#include "thread.h"
 
 namespace cell
 {
@@ -29,6 +30,7 @@ protected:
     void timerEvent(QTimerEvent *);
 private slots:
     void Start();
+    void Stop();
     void Save();
     void Load();
 private:
@@ -42,6 +44,7 @@ private:
     int WIDTH;
     int Ox;
     int Oy;
+    Thread threadRun;
 };
 
 #endif // MAINWINDOW_H

@@ -19,7 +19,7 @@ cell::cellMap::cellMap(int _width, int _height)
     producerAmount = 0;
     consumerAmount = 0;
     highConsumerAmount = 0;
-    pause = false;
+    //pause = false;
 }
 
 //设置完毕，生成初始态
@@ -187,7 +187,7 @@ void cell::cellMap::exist(int x, int y)
         }
     }
 }
-
+/*
 void cell::cellMap::runMap(cellMap *ob)
 {
     while (!ob->pause)
@@ -218,10 +218,7 @@ void cell::cellMap::startMap(cellMap *ob)
     t.detach();
 }
 
-void cell::cellMap::pauseMap(cellMap *ob)
-{
-    ob->pause = true;
-}
+
 
 void cell::cellMap::resumeMap(cellMap *ob)
 {
@@ -230,6 +227,11 @@ void cell::cellMap::resumeMap(cellMap *ob)
 }
 
 
+void cell::cellMap::pauseMap(cellMap *ob)
+{
+    ob->pause = true;
+}
+*/
 void cell::cellMap::outputMap(std::ostream &os)
 {
     if (os)

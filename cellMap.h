@@ -28,16 +28,17 @@ public:
     {
         return array[x][y];
     }
-
+    int getWidth(){return width;}
+    int getHeight(){return height;}
 
     static void runMap(cellMap *);
 
+    static void pauseMap(cellMap *);
+/*
     static void startMap(cellMap *);
 
-    static void pauseMap(cellMap *);
-
     static void resumeMap(cellMap *);
-
+*/
     void outputMap(std::ostream &);
 
     void saveMapToFile(std::ostream &);
@@ -51,6 +52,6 @@ private:
     int consumerAmount;
     int highConsumerAmount;
     cell array[MaxWidth][MaxHeight];
-    bool pause;
+    //bool pause;
 };
 }
