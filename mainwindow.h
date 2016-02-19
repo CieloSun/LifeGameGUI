@@ -40,11 +40,12 @@ private:
     Ui::MainWindow *ui;
     QPainter *painter;
     cell::cellMap *Mainmap;
+    Thread *threadRun;
     int myTimerId;
     int WIDTH;
     int Ox;
     int Oy;
-    Thread threadRun;
+
 };
 
 #endif // MAINWINDOW_H

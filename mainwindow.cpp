@@ -17,7 +17,7 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
 
     Mainmap = new cell::cellMap(MapWidth, MapHeight);
     Mainmap->loadMap();
-
+    threadRun=new Thread(Mainmap);
 
     ui->setupUi(this);
     int WindowWidth = this->geometry().width() * 2;
@@ -65,16 +65,15 @@ void MainWindow::paintEvent(QPaintEvent *)
 
 void MainWindow::Start()
 {
-    threadRun.setMap(Mainmap);
-    threadRun.start();
+    threadRun->start();
     myTimerId = startTimer(30);
 }
 
 void MainWindow::Stop()
 {
-    if(threadRun.isRunning())
+    if(threadRun->isRunning())
     {
-        threadRun.stop();
+        threadRun->stop();
     }
 }
 
