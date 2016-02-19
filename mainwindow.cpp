@@ -3,19 +3,21 @@
 #include <fstream>
 #include <QMessageBox>
 
-MainWindow::MainWindow(int _SIZE,QWidget *parent) :
-    QMainWindow(parent),SIZE(_SIZE),
+MainWindow::MainWindow(int _width,int _height,QWidget *parent) :
+    QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    WIDTH=this->width()/SIZE;
+    MapWidth=_width;
+    MapHeight=_height;
+    WIDTH=this->width()/MapWidth;
     Ox=this->width()/7;
     Oy=this->height()/10;
     myTimerId=0;
 
 
-    Mainmap=new cell::cellMap(SIZE);
+    Mainmap=new cell::cellMap(MapWidth,MapHeight);
     Mainmap->loadMap(0.5,time(0));
-    Mainmap->startMap();
+    cell::cellMap::startMap(Mainmap);
 
     ui->setupUi(this);
 
@@ -32,21 +34,21 @@ void MainWindow::paintEvent(QPaintEvent *)
     painter=new QPainter;
     painter->begin(this);
     painter->setPen(QPen(Qt::darkGreen,0.2,Qt::DotLine));
-    for(int i=0;i<=SIZE;++i)
+    for(int i=0;i<=MapHeight;++i)
     {
-        painter->drawLine(Ox,Oy+WIDTH*i,Ox+WIDTH*SIZE*2,Oy+WIDTH*i);
+        painter->drawLine(Ox,Oy+WIDTH*i,Ox+WIDTH*MapWidth,Oy+WIDTH*i);
     }
-    for(int i=0;i<=2*SIZE;++i)
+    for(int i=0;i<=MapWidth;++i)
     {
-        painter->drawLine(Ox+WIDTH*i,Oy,Ox+WIDTH*i,Oy+WIDTH*SIZE);
+        painter->drawLine(Ox+WIDTH*i,Oy,Ox+WIDTH*i,Oy+WIDTH*MapHeight);
     }
 
     painter->setBrush(QBrush(Qt::black,Qt::SolidPattern));
-    for(int i=0;i<SIZE;++i)
+    for(int i=0;i<MapWidth;++i)
     {
-        for(int j=0;j<SIZE;++j)
+        for(int j=0;j<MapHeight;++j)
         {
-            if(Mainmap->cget(cell::position(i,j)).state==cell::LIVE)
+            if(Mainmap->cget(i,j).getState()==cell::cell::LIVE)
             {
                 painter->drawEllipse(Ox+WIDTH*i,Oy+WIDTH*j,WIDTH/2,WIDTH/2);
             }
@@ -74,6 +76,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
 void MainWindow::Save()
 {
+    /*
     fstream file("savedata.dat");
     if(file)
     {
@@ -81,10 +84,12 @@ void MainWindow::Save()
         QMessageBox::information(this,"Hint",QString::fromStdString("You have save it successfully"),QMessageBox::Cancel);
     }
     file.close();
+    */
 }
 
 void MainWindow::Load()
 {
+    /*
     fstream file("savedata.dat");
     if(file)
     {
@@ -93,6 +98,7 @@ void MainWindow::Load()
     }
     else QMessageBox::critical(this,"Error",QString::fromStdString("No save data"),QMessageBox::Cancel);
     file.close();
+    */
 }
 
 

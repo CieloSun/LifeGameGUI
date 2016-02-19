@@ -1,192 +1,55 @@
-#include "cell.h"
-
-cell::cellMap::cellMap()
+﻿#include "cell.h"
+cell::cell::cell(int _state, int _type)
 {
-    finish = false;
-    flush = -1;
-    //补充arr中每个cell的初始化
-    for (unsigned int i = 0;i < 2*getSize();++i)
-    {
-        for (unsigned int j = 0;j < getSize();++j)
-        {
-            arr[i][j] = cell(position(i, j), DEAD);
-        }
-    }
-    //若pos属性删除，此段代码不必要
+	init(_state, _type);
 }
 
-int cell::cellMap::count(const position &curr) const
+void cell::cell::init(int _state, int _type)
 {
-    int res = -cget(curr).state;
-    for (size_t i = -1; i <= 1; ++i)
-    {
-        for (size_t j = -1; j <= 1; ++j)
-        {
-            bool edge=curr.x+i>=2*getSize()||curr.x+i<=0||curr.y+i>=getSize()||curr.y+i<=0;
-            if(!edge)
-            {
-                if(cget(position(curr.x+i,curr.y+j)).state==LIVE)
-                {
-                    res++;
-                }
-            }
-        }
-    }
-    return res;
+	state = _state;
+	type = _type;
+	switch (type)
+	{
+	case PRODUCER:
+		liveNumber = PRODUCER_LN;
+		deadNumber = PRODUCER_DN;
+		range = PRODUCER_RANGE;
+		ageLimit = PRODUCER_AGE;
+		afterDeadLimit = PRODUCER_AFTER_DEAD;
+		break;
+	case CONSUMER:
+		liveNumber = CONSUMER_LN;
+		deadNumber = CONSUMER_DN;
+		range = CONSUMER_RANGE;
+		ageLimit = CONSUMER_AGE;
+		afterDeadLimit = CONSUMER_AFTER_DEAD;
+		break;
+	case HIGH_CONSUMER:
+		liveNumber = HIGH_CONSUMER_LN;
+		deadNumber = HIGH_CONSUMER_DN;
+		range = HIGH_CONSUMER_RANGE;
+		ageLimit = HIGH_CONSUMER_AGE;
+		afterDeadLimit = HIGH_CONSUMER_AFTER_DEAD;
+		break;
+	default:
+		liveNumber = deadNumber = range = 0;
+		break;
+	}
+	age = 0;
+	afterDead = 0;
 }
 
-void cell::cellMap::nextCell(cellMap *currMap, const position curr)
+void cell::cell::copy(cell const & ob)
 {
-    int num = currMap->count(curr);
-    cell *targetCell = &(currMap->get(curr));
-    cell nextCell;
-    while (!currMap->finish)
-    {
-        nextCell = *targetCell;
-        if (num < BurnNum || LiveNum < LiveNum)
-        {
-            nextCell.state = DEAD;
-        }
-        else if (num == LiveNum)
-        {
-            nextCell.state = LIVE;
-        }
-        while (currMap->flush == FLUSH_INIT || currMap->flush == FLUSH_FINISH)
-        {
-            this_thread::yield();
-        }
-        *targetCell = nextCell;
-        --currMap->flush;
-        while (currMap->flush != FLUSH_INIT)
-        {
-            this_thread::yield();
-        }
-
-    }
-    --currMap->flush;
+	state = ob.state;
+	type = ob.type;
+	range = ob.range;
+	liveNumber = ob.liveNumber;
+	deadNumber = ob.deadNumber;
+	ageLimit = ob.ageLimit;
+	afterDeadLimit = ob.afterDeadLimit;
+	//复制即是新生
+	age = 0;
+	afterDead = 0;
 }
 
-void cell::cellMap::nextMap()
-{
-    flush = getSize() * getSize();
-    while (flush != FLUSH_FINISH)
-    {
-        this_thread::yield();
-    }
-    flush = FLUSH_INIT;
-}
-
-void cell::cellMap::startMap()
-{
-    finish = false;
-    flush = FLUSH_INIT;
-    position pos;
-    for (pos.x = 0; pos.x < getSize(); ++pos.x)
-    {
-        for (pos.y = 0; pos.y < getSize(); ++pos.y)
-        {
-            thread(nextCell, this, pos).detach();
-        }
-    }
-}
-
-void cell::cellMap::stopMap()
-{
-    finish = true;
-    flush = getSize() * getSize();
-    while (flush != FLUSH_FINISH)
-    {
-        this_thread::yield();
-    }
-    flush = FLUSH_INIT;
-    finish = false;
-}
-
-//Load Map from filestream or screen(stdin)
-void cell::cellMap::loadMap(istream &ins)
-{
-    //暂时先写从文件读入
-    while (!ins.eof())
-    {
-        ins >> size;
-        position pos;
-        int pos_state;
-        for (pos.x = 0; pos.x < getSize(); ++pos.x)
-        {
-            for (pos.y = 0; pos.y < getSize(); ++pos.y)
-            {
-                ins >> pos_state;
-                arr[pos.x][pos.y] = cell(pos, pos_state);
-            }
-        }
-        //bool pfinish;
-        //bool pflush;
-        //ins >> pfinish >> pflush >> stat;
-        //finish = pfinish;
-        //flush = pflush;
-    }
-}
-
-//Save Map to filestream or screen(stdout)
-void cell::cellMap::saveMap(ostream &file)
-{
-    //输出到文件
-    if (file.good())
-    {
-        file << getSize() << endl;
-        position pos;
-        for (pos.x = 0; pos.x < getSize(); ++pos.x)
-        {
-            for (pos.y = 0; pos.y < getSize(); ++pos.y)
-            {
-                file << arr[pos.x][pos.y].state << " ";
-            }
-            file << endl;
-        }
-        //bool pfinish = finish;
-        //bool pflush = flush;
-        //file << pfinish << " " << pflush << " " << stat << endl;
-    }
-}
-
-/*Summary: Generate Map by generator
-            Parameters:
-                    seed: Seed for random engine
-                    freq: Possibility of live cells between 0 and 1
-            Return: True if loaded successfully
-            */
-bool cell::cellMap::loadMap(double freq, const unsigned int seed)
-{
-    if (freq < 0 || freq > 1) return false;
-    std::default_random_engine engine(seed);
-    std::uniform_real_distribution<double> distribution(0, 1);
-    position pos;
-    for (pos.x = 0; pos.x < getSize(); ++pos.x)
-    {
-        for (pos.y = 0; pos.y < getSize(); ++pos.y)
-        {
-            if (distribution(engine) < freq)
-            {
-                get(pos).state = LIVE;
-            }
-            else
-            {
-                get(pos).state = DEAD;
-            }
-        }
-    }
-    return true;
-}
-
-//Summary: Fill Map with a cell object
-void cell::cellMap::loadMap(const cell obj)
-{
-    position pos;
-    for (pos.x = 0; pos.x < getSize(); ++pos.x)
-    {
-        for (pos.y = 0; pos.y < getSize(); ++pos.y)
-        {
-            get(pos) = obj;
-        }
-    }
-}
