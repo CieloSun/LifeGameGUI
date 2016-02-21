@@ -34,13 +34,15 @@ void Thread::run()
             break;
         }
         //测试线程
+        /*
         static int counter=0;
         counter++;
         std::cerr<<counter<<std::endl;
         emit ChangeScreen();
         Sleep(500);
+        */
         //
-        /*
+
         for (int i = 0; i < Mainmap->getWidth(); ++i)
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)
@@ -51,12 +53,13 @@ void Thread::run()
                 }
                 else
                 {
+                    //Debug发现此函数有问题
                     Mainmap->exist(i, j);
                 }
             }
         }
         emit ChangeScreen();
         Sleep(500);
-        */
+
     }
 }

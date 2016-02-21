@@ -24,10 +24,9 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(int , int , QWidget *parent = 0);
-    ~MainWindow()=default;
+    ~MainWindow();
 protected:
     void paintEvent(QPaintEvent *);
-    void timerEvent(QTimerEvent *);
 private slots:
     void Change();
     void Start();
