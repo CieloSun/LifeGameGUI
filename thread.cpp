@@ -53,7 +53,6 @@ void Thread::run()
                 }
                 else
                 {
-                    //Debug发现此函数有问题
                     Mainmap->exist(i, j);
                 }
             }

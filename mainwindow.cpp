@@ -13,16 +13,15 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     Ox = this->width() / 6.5;
     Oy = this->height() / 10;
 
-
-    Mainmap = new cell::cellMap(MapWidth, MapHeight);
-    Mainmap->loadMap();
-    threadRun=new Thread(Mainmap);
-
     ui->setupUi(this);
     int WindowWidth = this->geometry().width() * 2;
     int WindowHeight = this->geometry().height() * 2;
     this->resize(QSize(WindowWidth, WindowHeight));
 
+    Mainmap = new cell::cellMap(MapWidth, MapHeight);
+    Mainmap->loadMap();
+    threadRun=new Thread(Mainmap);
+    //TODO
     connect(threadRun,SIGNAL(ChangeScreen()),this,SLOT(Change()));
     connect(ui->actionStart, SIGNAL(triggered(bool)), this, SLOT(Start()));
     connect(ui->actionPause,SIGNAL(triggered(bool)),this,SLOT(Stop()));

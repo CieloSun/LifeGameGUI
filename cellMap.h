@@ -34,11 +34,7 @@ public:
     static void runMap(cellMap *);
 
     static void pauseMap(cellMap *);
-/*
-    static void startMap(cellMap *);
 
-    static void resumeMap(cellMap *);
-*/
     void outputMap(std::ostream &);
 
     void saveMapToFile(std::ostream &);
