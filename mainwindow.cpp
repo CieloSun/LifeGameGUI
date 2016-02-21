@@ -12,7 +12,6 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     WIDTH = this->width() / MapWidth;
     Ox = this->width() / 6.5;
     Oy = this->height() / 10;
-    myTimerId = 0;
 
 
     Mainmap = new cell::cellMap(MapWidth, MapHeight);
@@ -24,7 +23,10 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     int WindowHeight = this->geometry().height() * 2;
     this->resize(QSize(WindowWidth, WindowHeight));
 
+    connect(threadRun,SIGNAL(ChangeScreen()),this,SLOT(Change()));
     connect(ui->actionStart, SIGNAL(triggered(bool)), this, SLOT(Start()));
+    connect(ui->actionPause,SIGNAL(triggered(bool)),this,SLOT(Stop()));
+    connect(ui->actionResume,SIGNAL(triggered(bool)),this,SLOT(Resume()));
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionSave,SIGNAL(triggered(bool)),this,SLOT(Save()));
     connect(ui->actionOpen,SIGNAL(triggered(bool)),this,SLOT(Load()));
@@ -53,7 +55,6 @@ void MainWindow::paintEvent(QPaintEvent *)
     {
         for (int j = 0; j < MapHeight; ++j)
         {
-            //Mainmap->outputMap(std::cout);此条证明BUG，并没有载入后运行
             if (Mainmap->cget(i, j).getState() == cell::cell::LIVE)
             {
                 painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
@@ -63,10 +64,15 @@ void MainWindow::paintEvent(QPaintEvent *)
     painter->end();
 }
 
+void MainWindow::Change()
+{
+    update();
+    updateGeometry();
+}
+
 void MainWindow::Start()
 {
     threadRun->start();
-    myTimerId = startTimer(30);
 }
 
 void MainWindow::Stop()
@@ -77,17 +83,10 @@ void MainWindow::Stop()
     }
 }
 
-void MainWindow::timerEvent(QTimerEvent *event)
+void MainWindow::Resume()
 {
-    if (event->timerId() == myTimerId)
-    {
-        update();
-        updateGeometry();
-    }
-    else
-    {
-        QWidget::timerEvent(event);
-    }
+    threadRun->resume();
+    threadRun->start();
 }
 
 void MainWindow::Save()

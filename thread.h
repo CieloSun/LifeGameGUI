@@ -3,61 +3,32 @@
 #include "cellMap.h"
 #include "windows.h"
 
+#include<QMutex>
 #include<QThread>
 class Thread :public QThread
 {
     Q_OBJECT
 public:
-    Thread(cell::cellMap* _Mainmap):Mainmap(_Mainmap)
-    {
-        stopped=false;
-    }
-    Thread()
-    {
-        stopped=false;
-    }
+    explicit Thread(cell::cellMap* _Mainmap);
+    void setMap(cell::cellMap* _Mainmap);
 
-    Thread(Thread const&)=delete;
-    Thread& operator=(Thread const&)=delete;
+    void stop();
+    void resume();
 
-    void setMap(cell::cellMap* _Mainmap)
-    {
-        Mainmap=_Mainmap;
-    }
+    ~Thread()=default;
 
-    void stop()
-    {
-        stopped=true;
-    }
+signals:
+    void ChangeScreen();
 
 
 protected:
-    void run()
-    {
-        while (!stopped)
-        {
-            for (int i = 0; i < Mainmap->getWidth(); ++i)
-            {
-                for (int j = 0; j < Mainmap->getHeight(); ++j)
-                {
-                    if (Mainmap->cget(i,j).getType() == cell::cell::NOTHING)
-                    {
-                        Mainmap->burn(i, j);
-                    }
-                    else
-                    {
-                        Mainmap->exist(i, j);
-                    }
-                }
-            }
-            Sleep(500);
-        }
-    }
+    void run();
 
 
 private:
     volatile bool stopped;
     cell::cellMap* Mainmap;
+    QMutex mutex;
 };
 
 #endif // THREAD_H

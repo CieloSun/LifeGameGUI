@@ -24,13 +24,15 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(int , int , QWidget *parent = 0);
-    ~MainWindow();
+    ~MainWindow()=default;
 protected:
     void paintEvent(QPaintEvent *);
     void timerEvent(QTimerEvent *);
 private slots:
+    void Change();
     void Start();
     void Stop();
+    void Resume();
     void Save();
     void Load();
 private:
@@ -41,7 +43,6 @@ private:
     QPainter *painter;
     cell::cellMap *Mainmap;
     Thread *threadRun;
-    int myTimerId;
     int WIDTH;
     int Ox;
     int Oy;
