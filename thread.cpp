@@ -33,15 +33,6 @@ void Thread::run()
             stopped=false;
             break;
         }
-        //测试线程
-        /*
-        static int counter=0;
-        counter++;
-        std::cerr<<counter<<std::endl;
-        emit ChangeScreen();
-        Sleep(500);
-        */
-        //
 
         for (int i = 0; i < Mainmap->getWidth(); ++i)
         {

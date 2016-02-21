@@ -48,30 +48,62 @@ public:
     {
         return state;
     }
+
+    void setType(int _type)
+    {
+        type=_type;
+    }
     int getType()
     {
         return type;
+    }
+
+    void setLiveNumber(int _liveNumber)
+    {
+        liveNumber=_liveNumber;
     }
     int getLiveNumber()
     {
         return liveNumber;
     }
+
+    void setDeadNumber(int _deadNumber)
+    {
+        deadNumber=_deadNumber;
+    }
+
     int getDeadNumber()
     {
         return deadNumber;
+    }
+
+    void setRange(int _range)
+    {
+        range=_range;
     }
     int getRange()
     {
         return range;
     }
+
+    void setAgeLimit(int _ageLimit)
+    {
+        ageLimit=_ageLimit;
+    }
     int getAgeLimit()
     {
         return ageLimit;
+    }
+
+    void setAfterDeadLimit(int _afterDeadLimit)
+    {
+        afterDeadLimit=_afterDeadLimit;
     }
     int getAfterDeadLimit()
     {
         return afterDeadLimit;
     }
+
     void setAge(int _age)
     {
         age = _age;
@@ -80,6 +112,7 @@ public:
     {
         return age;
     }
+
     void setAfterDead(int _afterDead)
     {
         afterDead = _afterDead;

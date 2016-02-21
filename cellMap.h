@@ -21,9 +21,13 @@ public:
 
     void loadMap(double = 0.5, double = 0.1, double = 0.02);
     std::vector<cell> count(int my_x, int my_y, int my_range, int ob_type, int ob_state);
+
     bool burn(int x, int y);
+
     bool eat(cell& op1, cell& op2);
+
     void exist(int x, int y);
+
     cell cget(int x, int y)
     {
         return array[x][y];
@@ -47,6 +51,7 @@ private:
     int producerAmount;
     int consumerAmount;
     int highConsumerAmount;
+    double evolution;
     cell array[MaxWidth][MaxHeight];
     //bool pause;
 };

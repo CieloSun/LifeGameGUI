@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-const int defaultWidth = 50;
-const int defaultHeight = 50;
+const int defaultWidth = 20;
+const int defaultHeight = 10;
 
 int main(int argc, char *argv[])
 {

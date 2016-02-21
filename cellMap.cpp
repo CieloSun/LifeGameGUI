@@ -19,7 +19,8 @@ cell::cellMap::cellMap(int _width, int _height)
     producerAmount = 0;
     consumerAmount = 0;
     highConsumerAmount = 0;
-    //pause = false;
+    //默认突变概率0.1
+    evolution=0.1;
 }
 
 //设置完毕，生成初始态
@@ -109,6 +110,44 @@ bool cell::cellMap::burn(int x, int y)
     int motherIndex = distribution(engine);
     //无性繁殖
     array[x][y].copy(countVector[motherIndex]);
+    //有一定概率进行突变
+    std::uniform_real_distribution<double> distribution2(0, 1);
+    std::default_random_engine engine2(seed);
+    if(distribution2(engine2)<evolution)
+    {
+        //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
+        std::uniform_int_distribution<int> distribution3(0,7);
+        std::default_random_engine engine3(seed);
+        switch(distribution3(engine3))
+        {
+        case 0:
+            cget(x,y).setDeadNumber(cget(x,y).getDeadNumber()+1);
+            break;
+        case 1:
+            cget(x,y).setDeadNumber(cget(x,y).getDeadNumber()-1);
+            break;
+        case 2:
+            cget(x,y).setRange(cget(x,y).getRange()+1);
+            break;
+        case 3:
+            cget(x,y).setRange(cget(x,y).getRange()-1);
+            break;
+        case 4:
+            cget(x,y).setAgeLimit(cget(x,y).getAgeLimit()+1);
+            break;
+        case 5:
+            cget(x,y).setAgeLimit(cget(x,y).getAgeLimit()-1);
+            break;
+        case 6:
+            cget(x,y).setAfterDeadLimit(cget(x,y).getAfterDeadLimit()+1);
+            break;
+        case 7:
+            cget(x,y).setAfterDeadLimit(cget(x,y).getAfterDeadLimit()-1);
+            break;
+        default:
+            break;
+        }
+    }
     return true;
 }
 //检查是否有捕食关系,第一个参数是捕食者，默认为LIVE状态
