@@ -156,10 +156,13 @@ void cell::cellMap::exist(int x, int y)
                 {
                     for (int j = y - array[x][y].getRange(); j <= y + array[x][y].getRange(); ++j)
                     {
-                        if (eat(array[x][y], array[i][j]))
+                        if (0 <= i && i < width && 0 <= j && j <= height)
                         {
-                            array[x][y].init();
-                            full = true;
+                            if (eat(array[x][y], array[i][j]))
+                            {
+                                array[x][y].init();
+                                full = true;
+                            }
                         }
                     }
                 }
@@ -187,51 +190,7 @@ void cell::cellMap::exist(int x, int y)
         }
     }
 }
-/*
-void cell::cellMap::runMap(cellMap *ob)
-{
-    while (!ob->pause)
-    {
-        for (int i = 0; i < ob->width; ++i)
-        {
-            for (int j = 0; j < ob->height; ++j)
-            {
-                if (ob->array[i][j].getType() == cell::NOTHING)
-                {
-                    ob->burn(i, j);
-                }
-                else
-                {
-                    ob->exist(i, j);
-                }
-            }
-        }
-        Sleep(500);
-        //ob.outputMap(std::cout);
-    }
 
-}
-
-void cell::cellMap::startMap(cellMap *ob)
-{
-    std::thread t(runMap, ob);
-    t.detach();
-}
-
-
-
-void cell::cellMap::resumeMap(cellMap *ob)
-{
-    ob->pause = false;
-    startMap(ob);
-}
-
-
-void cell::cellMap::pauseMap(cellMap *ob)
-{
-    ob->pause = true;
-}
-*/
 void cell::cellMap::outputMap(std::ostream &os)
 {
     if (os)
@@ -267,18 +226,5 @@ void cell::cellMap::saveMapToFile(std::ostream &os)
 
 void cell::cellMap::loadMapFromFile(std::istream &os)
 {
-    /*
-    os >> width >> height;
-    for (int i = 0; i < width; ++i)
-    {
-        for (int j = 0; j < height; ++j)
-        {
-            os >> array[i][j].state >>  array[i][j].type;
-            os >> array[i][j].range >> array[i][j].liveNumber;
-            os >> array[i][j].deadNumber >> array[i][j].ageLimit;
-            os >> array[i][j].age >> array[i][j].afterDeadLimit;
-            os >> array[i][j].afterDead;
-        }
-    }
-    */
+    //TODO
 }

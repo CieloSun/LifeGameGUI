@@ -91,6 +91,7 @@ void MainWindow::Resume()
 
 void MainWindow::Save()
 {
+    //TODO
 
     std::fstream file("savedata.dat");
     if(file)
@@ -104,6 +105,7 @@ void MainWindow::Save()
 
 void MainWindow::Load()
 {
+    //TODO
 
     std::fstream file("savedata.dat");
     if(file)
