@@ -24,10 +24,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(int , int , QWidget *parent = 0);//TODO
+    explicit MainWindow(int =cell::DefaultWidth , int =cell::DefaultHeight , QWidget *parent = 0);//TODO
     ~MainWindow();
 protected:
     void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *);//TODO
 private slots:
     void Change();
     void Start();

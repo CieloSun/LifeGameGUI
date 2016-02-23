@@ -86,17 +86,6 @@ void MainWindow::Stop()
     }
 }
 
-void MainWindow::Save()
-{
-    //TODO
-    //建议此二SLOT设计为调用一个对话框，让用户设置文件名，进行存储，调用SaveFunction(QString fileName)
-    //和LoadFunction(QString fileName)
-}
-void MainWindow::Load()
-{
-    //TODO，同上
-}
-
 void MainWindow::Resume()
 {
     threadRun->resume();
@@ -157,6 +146,19 @@ void MainWindow::LoadFunction(QString fileName)
     }
 }
 
+
+
+void MainWindow::Save()
+{
+    //TODO
+    //建议此二SLOT设计为调用一个对话框，让用户设置文件名，进行存储，调用SaveFunction(QString fileName)
+    //和LoadFunction(QString fileName)
+}
+void MainWindow::Load()
+{
+    //TODO，同上
+}
+
 void MainWindow::End()
 {
     if(threadRun->isRunning())
@@ -178,6 +180,12 @@ void MainWindow::ChangeByUser(int selection)
 {
     //TODO
     //通过selection的不同来对环境进行不同的设置，是否使用你们发挥一下
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *)
+{
+    //TODO,利用点击时的坐标（找出一种算法）来反向计算出其表示的数组对应index，利用浮出提示/信息栏来显示出对应的信息
+    //调用信息可以使用cell类中的各种get函数
 }
 
 
