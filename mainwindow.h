@@ -7,6 +7,7 @@
 #include "cellMap.h"
 #include "ui_mainwindow.h"
 #include "thread.h"
+#include <QString>
 
 namespace cell
 {
@@ -32,9 +33,13 @@ private slots:
     void Start();
     void Stop();
     void Resume();
-    void Save();
-    void Load();
+    void End();//TODO
+    void ChangeByUser(int selection);//TODO
+    void Save();//TODO
+    void Load();//TODO
 private:
+    void SaveFunction(QString fileName);
+    void LoadFunction(QString fileName);
     int MapWidth;
     int MapHeight;
 

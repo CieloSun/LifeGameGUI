@@ -14,18 +14,18 @@ public:
 
     void stop();
     void resume();
+    void setSpeed(int _speed);
 
     ~Thread()=default;
 
 signals:
     void ChangeScreen();
-
-
 protected:
     void run();
 
 
 private:
+    volatile int speed;
     volatile bool stopped;
     cell::cellMap* Mainmap;
     QMutex mutex;

@@ -2,36 +2,39 @@
 #include<iostream>
 namespace cell
 {
+
+//物种三个状态
+static const int EMPTY = 0;
+static const int LIVE = 1;
+static const int DEAD = 2;
+//三种物种
+static const int NOTHING = 0;
+static const int PRODUCER = 1;
+static const int CONSUMER = 2;
+static const int HIGH_CONSUMER = 3;
+//生产者参数
+static const int PRODUCER_LN = 1;
+static const int PRODUCER_DN = 8;
+static const int PRODUCER_RANGE = 2;
+static const int PRODUCER_AGE = 5;
+static const int PRODUCER_AFTER_DEAD = 1;
+//消费者参数
+static const int CONSUMER_LN = 2;
+static const int CONSUMER_DN = 5;
+static const int CONSUMER_RANGE = 3;
+static const int CONSUMER_AGE = 20;
+static const int CONSUMER_AFTER_DEAD = 2;
+//高级消费者参数
+static const int HIGH_CONSUMER_LN = 3;
+static const int HIGH_CONSUMER_DN = 4;
+static const int HIGH_CONSUMER_RANGE = 4;
+static const int HIGH_CONSUMER_AGE = 50;
+static const int HIGH_CONSUMER_AFTER_DEAD = 3;
+
 class cell
 {
 public:
-    //物种三个状态
-    static const int EMPTY = 0;
-    static const int LIVE = 1;
-    static const int DEAD = 2;
-    //三种物种
-    static const int NOTHING = 0;
-    static const int PRODUCER = 1;
-    static const int CONSUMER = 2;
-    static const int HIGH_CONSUMER = 3;
-    //生产者参数
-    static const int PRODUCER_LN = 1;
-    static const int PRODUCER_DN = 6;
-    static const int PRODUCER_RANGE = 1;
-    static const int PRODUCER_AGE = 5;
-    static const int PRODUCER_AFTER_DEAD = 1;
-    //消费者参数
-    static const int CONSUMER_LN = 2;
-    static const int CONSUMER_DN = 5;
-    static const int CONSUMER_RANGE = 2;
-    static const int CONSUMER_AGE = 20;
-    static const int CONSUMER_AFTER_DEAD = 2;
-    //高级消费者参数
-    static const int HIGH_CONSUMER_LN = 3;
-    static const int HIGH_CONSUMER_DN = 4;
-    static const int HIGH_CONSUMER_RANGE = 3;
-    static const int HIGH_CONSUMER_AGE = 50;
-    static const int HIGH_CONSUMER_AFTER_DEAD = 3;
+
 
 
     cell(int _state = EMPTY, int _type = NOTHING);
@@ -39,12 +42,12 @@ public:
     cell(cell const&) = default;
     cell& operator=(cell const&) = delete;
     void copy(cell const&);
-
+    //  所有变量都提供了set函数和get函数
     void setState(int _state)
     {
         state = _state;
     }
-    int getState()
+    int getState() const
     {
         return state;
     }
@@ -53,7 +56,7 @@ public:
     {
         type=_type;
     }
-    int getType()
+    int getType() const
     {
         return type;
     }
@@ -62,7 +65,7 @@ public:
     {
         liveNumber=_liveNumber;
     }
-    int getLiveNumber()
+    int getLiveNumber() const
     {
         return liveNumber;
     }
@@ -72,7 +75,7 @@ public:
         deadNumber=_deadNumber;
     }
 
-    int getDeadNumber()
+    int getDeadNumber() const
     {
         return deadNumber;
     }
@@ -81,7 +84,7 @@ public:
     {
         range=_range;
     }
-    int getRange()
+    int getRange() const
     {
         return range;
     }
@@ -90,7 +93,7 @@ public:
     {
         ageLimit=_ageLimit;
     }
-    int getAgeLimit()
+    int getAgeLimit() const
     {
         return ageLimit;
     }
@@ -99,7 +102,7 @@ public:
     {
         afterDeadLimit=_afterDeadLimit;
     }
-    int getAfterDeadLimit()
+    int getAfterDeadLimit() const
     {
         return afterDeadLimit;
     }
@@ -108,7 +111,7 @@ public:
     {
         age = _age;
     }
-    int getAge()
+    int getAge() const
     {
         return age;
     }
@@ -117,7 +120,7 @@ public:
     {
         afterDead = _afterDead;
     }
-    int getAfterDead()
+    int getAfterDead() const
     {
         return afterDead;
     }

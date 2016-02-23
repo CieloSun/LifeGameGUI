@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <fstream>
+#include<QFile>
+#include<QString>
 #include <QMessageBox>
 
 MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
@@ -54,7 +55,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     {
         for (int j = 0; j < MapHeight; ++j)
         {
-            if (Mainmap->cget(i, j).getState() == cell::cell::LIVE)
+            if (Mainmap->cget(i, j).getState() == cell::LIVE)
             {
                 painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
             }
@@ -82,39 +83,85 @@ void MainWindow::Stop()
     }
 }
 
+void MainWindow::Save()
+{
+    //TODO
+    //建议此二SLOT设计为调用一个对话框，让用户设置文件名，进行存储，调用SaveFunction(QString fileName)
+    //和LoadFunction(QString fileName)
+}
+void MainWindow::Load()
+{
+    //TODO，同上
+}
+
 void MainWindow::Resume()
 {
     threadRun->resume();
     threadRun->start();
 }
 
-void MainWindow::Save()
+void MainWindow::SaveFunction(QString fileName)
 {
-    //TODO
-
-    std::fstream file("savedata.dat");
-    if(file)
+    QFile file(fileName);
+    if(!file.open((QIODevice::WriteOnly)))
     {
-        Mainmap->saveMapToFile(file);
-        QMessageBox::information(this,"Hint",QString::fromStdString("You have save it successfully"),QMessageBox::Cancel);
+        std::cerr<<"Cannot open file or writing: "<<qPrintable(file.errorString())<<std::endl;
+        return;
     }
-    file.close();
-
+    QDataStream out(&file);
+    out.setVersion(QDataStream::Qt_5_4);
+    out<<quint32(0x12345678)<<MapWidth<<MapHeight;
+    for(int i=0;i<MapWidth;++i)
+    {
+        for(int j=0;j<MapHeight;++j)
+        {
+            out<<quint32(0x12345678)<<Mainmap->cget(i,j).getType()<<'\t'<<Mainmap->cget(i,j).getState()<<'\t'
+              <<Mainmap->cget(i,j).getRange()<<'\t'<<Mainmap->cget(i,j).getLiveNumber()<<'\t'
+             <<Mainmap->cget(i,j).getDeadNumber()<<'\t'<<Mainmap->cget(i,j).getAgeLimit()<<'\t'
+            <<Mainmap->cget(i,j).getAge()<<'\t'<<Mainmap->cget(i,j).getAfterDeadLimit()<<'\t'
+            <<Mainmap->cget(i,j).getAfterDead();
+        }
+    }
 }
 
-void MainWindow::Load()
+void MainWindow::LoadFunction(QString fileName)
 {
-    //TODO
-
-    std::fstream file("savedata.dat");
-    if(file)
+    QFile file(fileName);
+    if(!file.open((QIODevice::ReadOnly)))
     {
-        Mainmap->loadMapFromFile(file);
-        QMessageBox::information(this,"Hint",QString::fromStdString("You have load it successfully"),QMessageBox::Cancel);
+        std::cerr<<"Cannot open file or reading: "<<qPrintable(file.errorString())<<std::endl;
+        return;
     }
-    else QMessageBox::critical(this,"Error",QString::fromStdString("No save data"),QMessageBox::Cancel);
-    file.close();
+    QDataStream in(&file);
+    in.setVersion(QDataStream::Qt_5_4);
+    in>>MapWidth>>MapHeight;
+    int _type,_state,_range,_liveNumber,_deadNumber,_ageLimit,_age,_afterDeadLimit,_afterDead;
+    for(int i=0;i<MapWidth;++i)
+    {
+        for(int j=0;j<MapHeight;++j)
+        {
+            in>>_type>>_state>>_range>>_liveNumber>>_deadNumber>>_ageLimit>>_age>>_afterDeadLimit>>_afterDead;
+            Mainmap->cget(i,j).setType(_type);
+            Mainmap->cget(i,j).setState(_state);
+            Mainmap->cget(i,j).setRange(_range);
+            Mainmap->cget(i,j).setLiveNumber(_liveNumber);
+            Mainmap->cget(i,j).setDeadNumber(_deadNumber);
+            Mainmap->cget(i,j).setAgeLimit(_ageLimit);
+            Mainmap->cget(i,j).setAge(_age);
+            Mainmap->cget(i,j).setAfterDeadLimit(_afterDeadLimit);
+            Mainmap->cget(i,j).setAfterDead(_afterDead);
+        }
+    }
+}
 
+void MainWindow::End()
+{
+    //调出一个结果统计报告页面并询问是否存储
+}
+
+void MainWindow::ChangeByUser(int selection)
+{
+    //通过selection的不同来对环境进行不同的设置，是否使用你们发挥一下
 }
 
 

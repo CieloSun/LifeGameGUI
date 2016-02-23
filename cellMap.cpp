@@ -1,6 +1,7 @@
 ﻿#include "cellMap.h"
 #include "iostream"//调试用
 
+
 //构造函数
 cell::cellMap::cellMap(int _width, int _height)
     : width(_width), height(_height)
@@ -10,8 +11,7 @@ cell::cellMap::cellMap(int _width, int _height)
     {
         for (int j = 0; j < height; ++j)
         {
-            array[i][j].init();
-
+            cget(i,j).init();
         }
     }
 
@@ -40,24 +40,22 @@ void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double h
     {
         for (int j = 0; j < height; ++j)
         {
-            //std::cout << "test" << std::endl;
             double freq = distribution(engine);
-            //std::cout << freq << std::endl;随机数没问题
             if (freq < highConsumer_freq)
             {
-                array[i][j].init(cell::LIVE, cell::HIGH_CONSUMER);
+                cget(i,j).init(LIVE, HIGH_CONSUMER);
             }
             else if (freq < highConsumer_freq + consumer_freq)
             {
-                array[i][j].init(cell::LIVE, cell::CONSUMER);
+                cget(i,j).init(LIVE, CONSUMER);
             }
             else if (freq < sum_freq)
             {
-                array[i][j].init(cell::LIVE, cell::PRODUCER);
+                cget(i,j).init(LIVE, PRODUCER);
             }
             else
             {
-                array[i][j].init();
+                cget(i,j).init();
             }
         }
     }
@@ -73,7 +71,7 @@ std::vector<cell::cell> cell::cellMap::count(int my_x, int my_y, int my_range, i
         {
             if (0 <= i && i < width && 0 <= j && j <= height)
             {
-                if (array[i][j].getType() == ob_type || array[i][j].getState() == ob_state)
+                if (cget(i,j).getType() == ob_type || cget(i,j).getState() == ob_state)
                 {
                     countVector.push_back(array[i][j]);
                 }
@@ -88,18 +86,18 @@ bool cell::cellMap::burn(int x, int y)
     //新建随机种子
     time_t seed = time(0);
     //先检查高级消费者
-    std::vector<cell> countVector = count(x, y, cell::HIGH_CONSUMER_RANGE, cell::HIGH_CONSUMER, cell::LIVE);
-    if (countVector.size() < cell::HIGH_CONSUMER_LN)
+    std::vector<cell> countVector = count(x, y, HIGH_CONSUMER_RANGE, HIGH_CONSUMER, LIVE);
+    if (countVector.size() < HIGH_CONSUMER_LN)
     {
         countVector.clear();
         //再检查初级消费者
-        countVector = count(x, y, cell::CONSUMER_RANGE, cell::CONSUMER, cell::LIVE);
-        if (countVector.size() < cell::CONSUMER_LN)
+        countVector = count(x, y, CONSUMER_RANGE, CONSUMER, LIVE);
+        if (countVector.size() < CONSUMER_LN)
         {
             countVector.clear();
             //最后检查生产者
-            countVector = count(x, y, cell::PRODUCER_RANGE, cell::PRODUCER, cell::LIVE);
-            if (countVector.size() < cell::PRODUCER_LN)
+            countVector = count(x, y, PRODUCER_RANGE, PRODUCER, LIVE);
+            if (countVector.size() < PRODUCER_LN)
             {
                 return false;
             }
@@ -109,7 +107,7 @@ bool cell::cellMap::burn(int x, int y)
     std::default_random_engine engine(seed);
     int motherIndex = distribution(engine);
     //无性繁殖
-    array[x][y].copy(countVector[motherIndex]);
+    cget(x,y).copy(countVector[motherIndex]);
     //有一定概率进行突变
     std::uniform_real_distribution<double> distribution2(0, 1);
     std::default_random_engine engine2(seed);
@@ -153,19 +151,19 @@ bool cell::cellMap::burn(int x, int y)
 //检查是否有捕食关系,第一个参数是捕食者，默认为LIVE状态
 bool cell::cellMap::eat(cell& op1, cell& op2)
 {
-    if (op1.getType() != cell::PRODUCER)
+    if (op1.getType() != PRODUCER)
     {
-        if (op2.getState() == cell::LIVE)
+        if (op2.getState() == LIVE)
         {
-            if ((op1.getType() == cell::HIGH_CONSUMER && op2.getType() == cell::CONSUMER)
-                    || (op1.getType() == cell::CONSUMER && op2.getType() == cell::PRODUCER))
+            if ((op1.getType() == HIGH_CONSUMER && op2.getType() == CONSUMER)
+                    || (op1.getType() == CONSUMER && op2.getType() == PRODUCER))
             {
                 return true;
             }
         }
-        else if (op2.getState() == cell::DEAD)
+        else if (op2.getState() == DEAD)
         {
-            if (!(op1.getType() == cell::HIGH_CONSUMER && op2.getType() == cell::PRODUCER))
+            if (!(op1.getType() == HIGH_CONSUMER && op2.getType() == PRODUCER))
             {
                 return true;
             }
@@ -177,29 +175,29 @@ bool cell::cellMap::eat(cell& op1, cell& op2)
 void cell::cellMap::exist(int x, int y)
 {
     //自然死亡
-    if (array[x][y].getState() == cell::LIVE)
+    if (cget(x,y).getState() == LIVE)
     {
-        if (array[x][y].getAge() >= array[x][y].getAgeLimit())
+        if (cget(x,y).getAge() >= cget(x,y).getAgeLimit())
         {
-            array[x][y].setState(cell::DEAD);
+            cget(x,y).setState(DEAD);
         }
         else
         {
             //年龄增长
-            array[x][y].setAge(array[x][y].getAge() + 1);
+            cget(x,y).setAge(cget(x,y).getAge() + 1);
             //判断捕食
-            if (array[x][y].getType() != cell::PRODUCER)
+            if (cget(x,y).getType() != PRODUCER)
             {
                 bool full = false;
-                for (int i = x - array[x][y].getRange(); i <= x + array[x][y].getRange(); ++i)
+                for (int i = x - cget(x,y).getRange(); i <= x + cget(x,y).getRange(); ++i)
                 {
-                    for (int j = y - array[x][y].getRange(); j <= y + array[x][y].getRange(); ++j)
+                    for (int j = y - cget(x,y).getRange(); j <= y + cget(x,y).getRange(); ++j)
                     {
                         if (0 <= i && i < width && 0 <= j && j <= height)
                         {
                             if (eat(array[x][y], array[i][j]))
                             {
-                                array[x][y].init();
+                                cget(x,y).init();
                                 full = true;
                             }
                         }
@@ -207,25 +205,25 @@ void cell::cellMap::exist(int x, int y)
                 }
                 if (!full)
                 {
-                    array[x][y].setState(cell::DEAD);
+                    cget(x,y).setState(DEAD);
                 }
             }
             //判断竞争
-            if ((count(x, y, array[x][y].getRange(), array[x][y].getType(), cell::LIVE).size()) >= array[x][y].getDeadNumber())
+            if ((count(x, y, cget(x,y).getRange(), cget(x,y).getType(), LIVE).size()) >= cget(x,y).getDeadNumber())
             {
-                array[x][y].setState(cell::DEAD);
+                cget(x,y).setState(DEAD);
             }
         }
     }
-    else if (array[x][y].getState() == cell::DEAD)
+    else if (cget(x,y).getState() == DEAD)
     {
-        if (array[x][y].getAfterDead() >= array[x][y].getAfterDeadLimit())
+        if (cget(x,y).getAfterDead() >= cget(x,y).getAfterDeadLimit())
         {
-            array[x][y].init();
+            cget(x,y).init();
         }
         else
         {
-            array[x][y].setAfterDead(array[x][y].getAfterDead() + 1);
+            cget(x,y).setAfterDead(cget(x,y).getAfterDead() + 1);
         }
     }
 }
@@ -239,31 +237,9 @@ void cell::cellMap::outputMap(std::ostream &os)
         {
             for (int j = 0; j < height; ++j)
             {
-                os << array[i][j].getType() << " " << array[i][j].getState() << "  ";
+                os << cget(i,j).getType() << " " << cget(i,j).getState() << "  ";
             }
             os << std::endl;
         }
     }
-}
-
-void cell::cellMap::saveMapToFile(std::ostream &os)
-{
-    os << width << " " << height << std::endl;
-    for (int i = 0; i < width; ++i)
-    {
-        for (int j = 0; j < height; ++j)
-        {
-            os << array[i][j].getState() << " " <<  array[i][j].getType() << " "
-               << array[i][j].getRange() << " " << array[i][j].getLiveNumber() << " "
-               << array[i][j].getDeadNumber() << " " << array[i][j].getAgeLimit() << " "
-               << array[i][j].getAge() << " " << array[i][j].getAfterDeadLimit() << " "
-               << array[i][j].getAfterDead() << std::endl;
-        }
-        os << std::endl;
-    }
-}
-
-void cell::cellMap::loadMapFromFile(std::istream &os)
-{
-    //TODO
 }
