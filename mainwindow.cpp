@@ -27,6 +27,8 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     connect(threadRun,SIGNAL(ChangeScreen()),this,SLOT(Change()));
     connect(threadRun,SIGNAL(End()),this,SLOT(End()));
     connect(ui->actionStart, SIGNAL(triggered(bool)), this, SLOT(Start()));
+    connect(ui->actionRestart,SIGNAL(triggered(bool)),this,SLOT(Restart()));
+    connect(ui->actionSetting,SIGNAL(triggered(bool)),this,SLOT(Setting()));
     connect(ui->actionPause,SIGNAL(triggered(bool)),this,SLOT(Stop()));
     connect(ui->actionResume,SIGNAL(triggered(bool)),this,SLOT(Resume()));
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
@@ -77,6 +79,8 @@ void MainWindow::Start()
 {
     threadRun->start();
 }
+
+
 
 void MainWindow::Stop()
 {
@@ -147,7 +151,26 @@ void MainWindow::LoadFunction(QString fileName)
 }
 
 
+void MainWindow::ReStartFunction(int _W,int _H,int _sp,double p_N,double c_N,double h_N)
+{
 
+    have_run_times=0;
+    MapWidth=_W;
+    MapHeight=_H;
+    //TODO
+    //这里的设置地图方法也要按你们调试的重写以便调节图
+    WIDTH = this->width() / MapWidth;
+    Ox = this->width() / 6.5;
+    Oy = this->height() / 10;
+    int WindowWidth = this->geometry().width() * 2;
+    int WindowHeight = this->geometry().height() * 2;
+    this->resize(QSize(WindowWidth, WindowHeight));
+    //
+    Mainmap = new cell::cellMap(MapWidth, MapHeight);
+    Mainmap->loadMap(p_N,c_N,h_N);
+    threadRun=new Thread(Mainmap);
+    threadRun->setSpeed(_sp);
+}
 void MainWindow::Save()
 {
     //TODO
@@ -184,8 +207,21 @@ void MainWindow::ChangeByUser(int selection)
 
 void MainWindow::mousePressEvent(QMouseEvent *)
 {
-    //TODO,利用点击时的坐标（找出一种算法）来反向计算出其表示的数组对应index，利用浮出提示/信息栏来显示出对应的信息
+    //TODO
+    //利用点击时的坐标（找出一种算法）来反向计算出其表示的数组对应index，利用浮出提示/信息栏来显示出对应的信息
     //调用信息可以使用cell类中的各种get函数
+}
+
+void MainWindow::Restart()
+{
+    //TODO
+    //利用对话框来获取数据调用RestartFunction(int,int,int,doule,double,double)
+}
+
+void MainWindow::Setting()
+{
+    //TODO
+    //同样是利用对话框（甚至是和Restart同一个对话框）来调用RestartFunction即可。
 }
 
 

@@ -32,15 +32,19 @@ protected:
 private slots:
     void Change();
     void Start();
+    void Restart();//TODO
     void Stop();
     void Resume();
     void End();//TODO
     void ChangeByUser(int selection);//TODO
     void Save();//TODO
     void Load();//TODO
+    void Setting();//TODO
 private:
     void SaveFunction(QString fileName);
     void LoadFunction(QString fileName);
+    void ReStartFuction(int =cell::DefaultWidth , int =cell::DefaultHeight ,int =cell::NORMAL_SPEED,
+                 double = 0.5, double = 0.1, double = 0.02);//TODO
     int MapWidth;
     int MapHeight;
 

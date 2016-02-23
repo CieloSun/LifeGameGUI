@@ -26,6 +26,7 @@ public:
     cellMap(int = DefaultWidth, int = DefaultHeight);
 
     void loadMap(double = 0.5, double = 0.1, double = 0.02);
+
     std::vector<cell> count(int my_x, int my_y, int my_range, int ob_type, int ob_state);
 
     bool burn(int x, int y);
@@ -48,9 +49,10 @@ public:
 
     void outputMap(std::ostream &);
 
-    //void saveMapToFile(std::ostream &);
-
-    //void loadMapFromFile(std::istream &);
+    void setEvolution(double _evolution)
+    {
+        evolution=_evolution;
+    }
 
 private:
     int width;
