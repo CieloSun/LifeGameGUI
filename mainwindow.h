@@ -24,7 +24,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(int , int , QWidget *parent = 0);
+    explicit MainWindow(int , int , QWidget *parent = 0);//TODO
     ~MainWindow();
 protected:
     void paintEvent(QPaintEvent *);

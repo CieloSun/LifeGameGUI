@@ -159,8 +159,14 @@ void MainWindow::LoadFunction(QString fileName)
 
 void MainWindow::End()
 {
+    if(threadRun->isRunning())
+    {
+        threadRun->stop();
+    }
+    //TODO
     //调出一个结果统计报告页面并询问是否存储
     //报告包括每个物种的现存数量，空地的数量，总运行次数,建议以一个对话框显示，并提供退出和重新开始两个按钮
+    //如果想实时获取数据，可以把这四个变量改为类变量
     int nothing_number=threadRun->getNothingNumber();
     int producer_number=threadRun->getProducerNumber();
     int consumer_number=threadRun->getConsumerNumber();
@@ -170,6 +176,7 @@ void MainWindow::End()
 
 void MainWindow::ChangeByUser(int selection)
 {
+    //TODO
     //通过selection的不同来对环境进行不同的设置，是否使用你们发挥一下
 }
 

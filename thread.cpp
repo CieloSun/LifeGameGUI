@@ -69,7 +69,7 @@ void Thread::run()
                 if(Mainmap->cget(i,j).getType()!=cell::NOTHING)
                 {
                     have_living=true;
-                    goto start_game;
+                    goto start_game;//利用goto跳出多重循环
                 }
             }
         }
@@ -78,6 +78,7 @@ void Thread::run()
         {
             stopped=true;
             emit End();
+            break;
         }
         //每轮正式进行则初始化
         nothing_number=0;
