@@ -151,7 +151,7 @@ void MainWindow::LoadFunction(QString fileName)
 }
 
 
-void MainWindow::ReStartFunction(int _W,int _H,int _sp,double p_N,double c_N,double h_N)
+void MainWindow::ReStartFuction(int _W,int _H,int _sp,double p_N,double c_N,double h_N)
 {
 
     have_run_times=0;

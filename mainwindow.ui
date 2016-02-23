@@ -37,6 +37,8 @@
     <addaction name="actionStart"/>
     <addaction name="actionPause"/>
     <addaction name="actionResume"/>
+    <addaction name="actionEnd"/>
+    <addaction name="actionRestart"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -94,6 +96,16 @@
   <action name="actionSetting">
    <property name="text">
     <string>Setting</string>
+   </property>
+  </action>
+  <action name="actionEnd">
+   <property name="text">
+    <string>End</string>
+   </property>
+  </action>
+  <action name="actionRestart">
+   <property name="text">
+    <string>Restart</string>
    </property>
   </action>
  </widget>
