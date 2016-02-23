@@ -55,9 +55,6 @@ public:
 private:
     int width;
     int height;
-    int producerAmount;
-    int consumerAmount;
-    int highConsumerAmount;
     double evolution;
     cell array[MaxWidth][MaxHeight];
 };

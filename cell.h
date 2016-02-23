@@ -14,7 +14,7 @@ static const int CONSUMER = 2;
 static const int HIGH_CONSUMER = 3;
 //生产者参数
 static const int PRODUCER_LN = 1;
-static const int PRODUCER_DN = 8;
+static const int PRODUCER_DN = 6;
 static const int PRODUCER_RANGE = 2;
 static const int PRODUCER_AGE = 5;
 static const int PRODUCER_AFTER_DEAD = 1;

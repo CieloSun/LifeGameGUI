@@ -8,6 +8,7 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    have_run_times=0;
     MapWidth = _width;
     MapHeight = _height;
     WIDTH = this->width() / MapWidth;
@@ -24,6 +25,7 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     threadRun=new Thread(Mainmap);
     //TODO
     connect(threadRun,SIGNAL(ChangeScreen()),this,SLOT(Change()));
+    connect(threadRun,SIGNAL(End()),this,SLOT(End()));
     connect(ui->actionStart, SIGNAL(triggered(bool)), this, SLOT(Start()));
     connect(ui->actionPause,SIGNAL(triggered(bool)),this,SLOT(Stop()));
     connect(ui->actionResume,SIGNAL(triggered(bool)),this,SLOT(Resume()));
@@ -68,6 +70,7 @@ void MainWindow::Change()
 {
     update();
     updateGeometry();
+    have_run_times++;
 }
 
 void MainWindow::Start()
@@ -157,6 +160,12 @@ void MainWindow::LoadFunction(QString fileName)
 void MainWindow::End()
 {
     //调出一个结果统计报告页面并询问是否存储
+    //报告包括每个物种的现存数量，空地的数量，总运行次数,建议以一个对话框显示，并提供退出和重新开始两个按钮
+    int nothing_number=threadRun->getNothingNumber();
+    int producer_number=threadRun->getProducerNumber();
+    int consumer_number=threadRun->getConsumerNumber();
+    int high_consumer_number=threadRun->getHighConsumerNumber();
+    //四个数据都已经在这里获取，你们想办法利用。
 }
 
 void MainWindow::ChangeByUser(int selection)

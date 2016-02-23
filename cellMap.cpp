@@ -14,11 +14,6 @@ cell::cellMap::cellMap(int _width, int _height)
             cget(i,j).init();
         }
     }
-
-
-    producerAmount = 0;
-    consumerAmount = 0;
-    highConsumerAmount = 0;
     //默认突变概率0.1
     evolution=0.1;
 }

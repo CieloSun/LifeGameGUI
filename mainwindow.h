@@ -50,7 +50,7 @@ private:
     int WIDTH;
     int Ox;
     int Oy;
-
+    unsigned long long have_run_times;
 };
 
 #endif // MAINWINDOW_H
