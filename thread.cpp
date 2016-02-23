@@ -32,26 +32,22 @@ void Thread::resume()
     stopped=false;
 }
 
-int Thread::getNothingNumber()
+int Thread::getNothingNumber() const
 {
-    QMutexLocker locker(&mutex);
     return nothing_number;
 }
-int Thread::getProducerNumber()
+int Thread::getProducerNumber() const
 {
-    QMutexLocker locker(&mutex);
     return producer_number;
 }
 
-int Thread::getConsumerNumber()
+int Thread::getConsumerNumber() const
 {
-    QMutexLocker locker(&mutex);
     return consumer_number;
 }
 
-int Thread::getHighConsumerNumber()
+int Thread::getHighConsumerNumber() const
 {
-    QMutexLocker locker(&mutex);
     return high_consumer_number;
 }
 
