@@ -1,8 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "enddialog.h"
+#include "savedialog.h"
 #include<QFile>
 #include<QString>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QTextDocument>
 
 MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     QMainWindow(parent),
@@ -10,10 +14,10 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
 {
     have_run_times=0;
     MapWidth = _width;
-    MapHeight = _height;
-    WIDTH = this->width() / MapWidth;
-    Ox = this->width() / 6.5;
-    Oy = this->height() / 10;
+    MapHeight = _height*0.8;
+    WIDTH = this->width()*1.5 / MapWidth;
+    Ox = this->width() / 10;
+    Oy = this->height() /9;
 
     ui->setupUi(this);
     int WindowWidth = this->geometry().width() * 2;
@@ -24,49 +28,51 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     Mainmap->loadMap();
     threadRun=new Thread(Mainmap);
     //TODO
+
     connect(threadRun,SIGNAL(ChangeScreen()),this,SLOT(Change()));
     connect(threadRun,SIGNAL(End()),this,SLOT(End()));
     connect(ui->actionStart, SIGNAL(triggered(bool)), this, SLOT(Start()));
     connect(ui->actionRestart,SIGNAL(triggered(bool)),this,SLOT(Restart()));
     connect(ui->actionSetting,SIGNAL(triggered(bool)),this,SLOT(Setting()));
     connect(ui->actionPause,SIGNAL(triggered(bool)),this,SLOT(Stop()));
+    connect(ui->actionEnd,SIGNAL(triggered(bool)),this,SLOT(End()));
     connect(ui->actionResume,SIGNAL(triggered(bool)),this,SLOT(Resume()));
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionSave,SIGNAL(triggered(bool)),this,SLOT(Save()));
     connect(ui->actionOpen,SIGNAL(triggered(bool)),this,SLOT(Load()));
-}
-MainWindow::~MainWindow()
-{
-    delete ui;
+
 }
 
-void MainWindow::paintEvent(QPaintEvent *)
-{
-    painter = new QPainter;
-    painter->begin(this);
-    painter->setPen(QPen(Qt::darkGreen, WIDTH / 10, Qt::DotLine));
-    for (int i = 0; i <= MapHeight; ++i)
-    {
-        painter->drawLine(Ox, Oy + WIDTH * i, Ox + WIDTH * MapWidth, Oy + WIDTH * i);
-    }
-    for (int i = 0; i <= MapWidth; ++i)
-    {
-        painter->drawLine(Ox + WIDTH * i, Oy, Ox + WIDTH * i, Oy + WIDTH * MapHeight);
-    }
 
-    painter->setBrush(QBrush(Qt::black, Qt::SolidPattern));
-    for (int i = 0; i < MapWidth; ++i)
-    {
-        for (int j = 0; j < MapHeight; ++j)
-        {
-            if (Mainmap->cget(i, j).getState() == cell::LIVE)
-            {
-                painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
-            }
-        }
-    }
-    painter->end();
+void MainWindow::ReStartFunction(int _sp,double p_N,double c_N,double h_N)
+{
+    //TODO
+    //这里的设置地图方法也要按你们调试的重写以便调节图
+
+    have_run_times=0;
+//    MapWidth=_W;
+//    MapHeight=_H*0.8;
+
+//    WIDTH = this->width()*1.5 / MapWidth;
+//    Ox = this->width() / 10;
+//    Oy = this->height() /9;
+//    int WindowWidth = this->geometry().width() * 2;
+//    int WindowHeight = this->geometry().height() * 2;
+//    this->resize(QSize(WindowWidth, WindowHeight));
+
+    Mainmap = new cell::cellMap(MapWidth, MapHeight);
+    Mainmap->loadMap(p_N,c_N,h_N);
+    threadRun=new Thread(Mainmap);
+    threadRun->setSpeed(_sp);
 }
+
+void MainWindow::Restart()
+{
+    threadRun->start();
+    //TODO
+    //利用对话框来获取数据调用RestartFunction(int,int,int,doule,double,double)
+}
+
 
 void MainWindow::Change()
 {
@@ -120,6 +126,28 @@ void MainWindow::SaveFunction(QString fileName)
     }
 }
 
+void MainWindow::Save()
+{
+    QString filename=QFileDialog::getSaveFileName(this);
+    SaveFunction(filename);
+    //TODO
+    //建议此二SLOT设计为调用一个对话框，让用户设置文件名，进行存储，调用SaveFunction(QString fileName)
+
+}
+
+//void MainWindow::setCurrentFile(const QString fileName)
+//{
+//    //fileName=file_name;
+//    text->document()->setModified(false);
+//    setWindowModified(false);
+//    QString titleName=fileName;
+//    if(titleName.isEmpty())
+//    {
+//        titleName="Untitle.txt";
+//    }
+//    setWindowFilePath(titleName);
+//}
+
 void MainWindow::LoadFunction(QString fileName)
 {
     QFile file(fileName);
@@ -150,44 +178,22 @@ void MainWindow::LoadFunction(QString fileName)
     }
 }
 
-
-void MainWindow::ReStartFuction(int _W,int _H,int _sp,double p_N,double c_N,double h_N)
-{
-
-    have_run_times=0;
-    MapWidth=_W;
-    MapHeight=_H;
-    //TODO
-    //这里的设置地图方法也要按你们调试的重写以便调节图
-    WIDTH = this->width() / MapWidth;
-    Ox = this->width() / 6.5;
-    Oy = this->height() / 10;
-    int WindowWidth = this->geometry().width() * 2;
-    int WindowHeight = this->geometry().height() * 2;
-    this->resize(QSize(WindowWidth, WindowHeight));
-    //
-    Mainmap = new cell::cellMap(MapWidth, MapHeight);
-    Mainmap->loadMap(p_N,c_N,h_N);
-    threadRun=new Thread(Mainmap);
-    threadRun->setSpeed(_sp);
-}
-void MainWindow::Save()
-{
-    //TODO
-    //建议此二SLOT设计为调用一个对话框，让用户设置文件名，进行存储，调用SaveFunction(QString fileName)
-    //和LoadFunction(QString fileName)
-}
 void MainWindow::Load()
 {
-    //TODO，同上
+    QString name=QFileDialog::getOpenFileName(this);
+    QString filename=QFileInfo(name).fileName();
+    LoadFunction(filename);
 }
 
 void MainWindow::End()
 {
+    MyEndDialog *edialog=new MyEndDialog();
     if(threadRun->isRunning())
     {
         threadRun->stop();
     }
+     edialog->show();
+
     //TODO
     //调出一个结果统计报告页面并询问是否存储
     //报告包括每个物种的现存数量，空地的数量，总运行次数,建议以一个对话框显示，并提供退出和重新开始两个按钮
@@ -196,8 +202,20 @@ void MainWindow::End()
     int producer_number=threadRun->getProducerNumber();
     int consumer_number=threadRun->getConsumerNumber();
     int high_consumer_number=threadRun->getHighConsumerNumber();
-    //四个数据都已经在这里获取，你们想办法利用。
+
+    QString nothing_text=QString::number(nothing_number);
+    edialog->nothingShow->setText(nothing_text);
+    QString producer_text=QString::number(producer_number);
+    edialog->producerShow->setText(producer_text);
+    QString consumer_text=QString::number(consumer_number);
+    edialog->consumerShow->setText(consumer_text);
+    QString high_consumer_text=QString::number(high_consumer_number);
+    edialog->highShow->setText(high_consumer_text);
+
+    connect(edialog->yesButton,SIGNAL(clicked()),edialog,SLOT(save()));
+    connect(edialog->noButton,SIGNAL(clicked()),edialog,SLOT(close()));
 }
+
 
 void MainWindow::ChangeByUser(int selection)
 {
@@ -212,11 +230,6 @@ void MainWindow::mousePressEvent(QMouseEvent *)
     //调用信息可以使用cell类中的各种get函数
 }
 
-void MainWindow::Restart()
-{
-    //TODO
-    //利用对话框来获取数据调用RestartFunction(int,int,int,doule,double,double)
-}
 
 void MainWindow::Setting()
 {
@@ -225,4 +238,72 @@ void MainWindow::Setting()
 }
 
 
+void MainWindow::paintEvent(QPaintEvent *)
+{
+    painter = new QPainter;
+    painter->begin(this);
+    painter->setPen(QPen(Qt::darkGreen, WIDTH / 20, Qt::DotLine));
+    for (int i = 0; i <= MapHeight; ++i)
+    {
+        painter->drawLine(Ox, Oy + WIDTH * i, Ox + WIDTH * MapWidth, Oy + WIDTH * i);
+    }
+    for (int i = 0; i <= MapWidth; ++i)
+    {
+        painter->drawLine(Ox + WIDTH * i, Oy, Ox + WIDTH * i, Oy + WIDTH * MapHeight);
+    }
+
+
+    for (int i = 0; i < MapWidth; ++i)
+    {
+        for (int j = 0; j < MapHeight; ++j)
+        {
+            if(Mainmap->cget(i, j).getState() == cell::LIVE)
+            {
+                if (Mainmap->cget(i, j).getType() == cell::PRODUCER)
+                {
+                    //painter->setBrush(QBrush(Qt::green, Qt::SolidPattern));
+                    //painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
+
+                    QPixmap pixmap;
+                    pixmap.load("D:/GitHub/LifeGameGUI/glass.png");
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.8, WIDTH*0.8,pixmap);
+
+                }
+                if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
+                {
+                    //painter->setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
+                    //painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
+
+                    QPixmap pixmap;
+                    pixmap.load("D:/GitHub/LifeGameGUI/deer.png");
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.8, WIDTH*0.8,pixmap);
+                }
+                if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
+                {
+                    painter->setBrush(QBrush(Qt::darkYellow, Qt::SolidPattern));
+                    painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
+                }
+            }
+            else if (Mainmap->cget(i, j).getState() == cell::DEAD)
+            {
+                 painter->setBrush(QBrush(Qt::gray, Qt::SolidPattern));
+                painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
+            }
+        }
+    }
+
+    painter->end();
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+
+//void MainWindow::on_action_connect_triggered()
+//{
+//    EndDialog dialog;
+//    dialog.exec();
+//}
 

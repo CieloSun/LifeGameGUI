@@ -16,16 +16,24 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     cell.cpp \
     cellMap.cpp \
-    thread.cpp
+    thread.cpp \
+    enddialog.cpp \
+    savedialog.cpp
 
 HEADERS  += \
     targetver.h \
     cell.h \
     mainwindow.h \
     cellMap.h \
-    thread.h
+    thread.h \
+    enddialog.h \
+    savedialog.h
 
 FORMS    += mainwindow.ui \
-    dialog.ui
+    enddialog.ui \
+    savedialog.ui
 
 CONFIG   +=c++11
+
+RESOURCES += \
+    image.qrc

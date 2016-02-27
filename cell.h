@@ -34,9 +34,6 @@ static const int HIGH_CONSUMER_AFTER_DEAD = 3;
 class cell
 {
 public:
-
-
-
     cell(int _state = EMPTY, int _type = NOTHING);
     void init(int _state = EMPTY, int _type = NOTHING);
     cell(cell const&) = default;

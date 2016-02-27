@@ -4,10 +4,15 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QTimer>
+#include "enddialog.h"
 #include "cellMap.h"
 #include "ui_mainwindow.h"
 #include "thread.h"
+#include "savedialog.h"
 #include <QString>
+#include <QPlainTextEdit>
+
+//class EndDialog;
 
 namespace cell
 {
@@ -40,18 +45,23 @@ private slots:
     void Save();//TODO
     void Load();//TODO
     void Setting();//TODO
+    //void setCurrentFile(const QString fileName);
+
 private:
     void SaveFunction(QString fileName);
     void LoadFunction(QString fileName);
-    void ReStartFuction(int =cell::DefaultWidth , int =cell::DefaultHeight ,int =cell::NORMAL_SPEED,
-                 double = 0.5, double = 0.1, double = 0.02);//TODO
+    void ReStartFunction(int =cell::NORMAL_SPEED,double = 0.5, double = 0.1, double = 0.02);//TODO
     int MapWidth;
     int MapHeight;
+    QPlainTextEdit *text;
 
     Ui::MainWindow *ui;
     QPainter *painter;
     cell::cellMap *Mainmap;
     Thread *threadRun;
+    MyEndDialog *edialog;
+
+
     int WIDTH;
     int Ox;
     int Oy;
