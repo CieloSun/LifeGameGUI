@@ -170,9 +170,21 @@ bool cell::cellMap::eat(cell& op1, cell& op2)
 //检查存在个体的格子
 void cell::cellMap::exist(int x, int y)
 {
-    //自然死亡
-    if (cget(x,y).getState() == LIVE)
+    if (cget(x,y).getState() == DEAD)
     {
+        if (cget(x,y).getAfterDead() >= cget(x,y).getAfterDeadLimit())
+        {
+            cget(x,y).init(EMPTY,NOTHING);
+        }
+        else
+        {
+            cget(x,y).setAfterDead(cget(x,y).getAfterDead() + 1);
+        }
+    }
+
+    else if (cget(x,y).getState() == LIVE)
+    {
+        //自然死亡
         if (cget(x,y).getAge() >= cget(x,y).getAgeLimit())
         {
             cget(x,y).setState(DEAD);
@@ -209,17 +221,6 @@ void cell::cellMap::exist(int x, int y)
             {
                 cget(x,y).setState(DEAD);
             }
-        }
-    }
-    else if (cget(x,y).getState() == DEAD)
-    {
-        if (cget(x,y).getAfterDead() >= cget(x,y).getAfterDeadLimit())
-        {
-            cget(x,y).init();
-        }
-        else
-        {
-            cget(x,y).setAfterDead(cget(x,y).getAfterDead() + 1);
         }
     }
 }

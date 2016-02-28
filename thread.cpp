@@ -59,7 +59,7 @@ void Thread::run()
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)
             {
-                if(Mainmap->cget(i,j).getType()!=cell::NOTHING||cell::DEAD)
+                if(Mainmap->cget(i,j).getType()!=cell::NOTHING)
                 {
                     have_living=true;
                     goto start_game;//利用goto跳出多重循环
@@ -73,7 +73,22 @@ void Thread::run()
             emit End();
             break;
         }
-        //每轮正式进行则初始化
+        for (int i = 0; i < Mainmap->getWidth(); ++i)
+        {
+            for (int j = 0; j < Mainmap->getHeight(); ++j)
+            {
+                if (Mainmap->cget(i,j).getType() == cell::NOTHING)
+                {
+                    Mainmap->cget(i,j).init(cell::EMPTY,cell::NOTHING);
+                    Mainmap->burn(i, j);
+                }
+                else
+                {
+                    Mainmap->exist(i, j);
+                }
+            }
+        }
+        //每轮进行初始化
         nothing_number=0;
         producer_number=0;
         consumer_number=0;
@@ -85,14 +100,12 @@ void Thread::run()
                 if (Mainmap->cget(i,j).getType() == cell::NOTHING)
                 {
                     nothing_number++;
-                    Mainmap->burn(i, j);
                 }
                 else
                 {
                     if (Mainmap->cget(i,j).getType() == cell::PRODUCER) producer_number++;
                     else if (Mainmap->cget(i,j).getType() == cell::CONSUMER) consumer_number++;
                     else if (Mainmap->cget(i,j).getType() == cell::HIGH_CONSUMER) high_consumer_number++;
-                    Mainmap->exist(i, j);
                 }
             }
         }
