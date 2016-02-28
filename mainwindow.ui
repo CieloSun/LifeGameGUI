@@ -100,7 +100,7 @@
   </action>
   <action name="actionEnd">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>End</string>

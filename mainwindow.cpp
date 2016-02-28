@@ -14,10 +14,10 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
 {
     have_run_times=0;
     MapWidth = _width;
-    MapHeight = _height*0.8;
-    WIDTH = this->width()*1.5 / MapWidth;
+    MapHeight = _height*0.6;
+    WIDTH = this->width()*2 / MapWidth;
     Ox = this->width() / 10;
-    Oy = this->height() /9;
+    Oy = this->height() /6;
 
     ui->setupUi(this);
     int WindowWidth = this->geometry().width() * 2;
@@ -265,8 +265,8 @@ void MainWindow::paintEvent(QPaintEvent *)
                     //painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
 
                     QPixmap pixmap;
-                    pixmap.load("D:/GitHub/LifeGameGUI/glass.png");
-                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.8, WIDTH*0.8,pixmap);
+                    pixmap.load(":/image/glass_3.png");
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.7, WIDTH*0.7,pixmap);
 
                 }
                 if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
@@ -275,21 +275,37 @@ void MainWindow::paintEvent(QPaintEvent *)
                     //painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
 
                     QPixmap pixmap;
-                    pixmap.load("D:/GitHub/LifeGameGUI/deer.png");
+                    pixmap.load(":image/jerry.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.8, WIDTH*0.8,pixmap);
                 }
                 if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
                 {
-                    painter->setBrush(QBrush(Qt::darkYellow, Qt::SolidPattern));
-                    painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
+                    QPixmap pixmap;
+                    pixmap.load(":image/eagle_2.png");
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH, WIDTH,pixmap);
                 }
             }
             else if (Mainmap->cget(i, j).getState() == cell::DEAD)
             {
-                 painter->setBrush(QBrush(Qt::gray, Qt::SolidPattern));
-                painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
+                if(Mainmap->cget(i, j).getType() == cell::PRODUCER)
+                {
+                    QPixmap pixmap;
+                    pixmap.load(":image/dead_leaf_2.png");
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.6, WIDTH*0.6,pixmap);
+                }
+                else
+                {
+                    QPixmap pixmap;
+                    pixmap.load(":image/tomb.png");
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.6, WIDTH*0.6,pixmap);
+              }
+
+//                painter->setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
+//                painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
+
             }
         }
+
     }
 
     painter->end();
