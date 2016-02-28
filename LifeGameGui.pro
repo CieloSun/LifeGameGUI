@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     cellMap.cpp \
     thread.cpp \
     enddialog.cpp \
-    savedialog.cpp
+    savedialog.cpp \
+    myrestartdialog.cpp
 
 HEADERS  += \
     targetver.h \
@@ -27,11 +28,13 @@ HEADERS  += \
     cellMap.h \
     thread.h \
     enddialog.h \
-    savedialog.h
+    savedialog.h \
+    myrestartdialog.h
 
 FORMS    += mainwindow.ui \
     enddialog.ui \
-    savedialog.ui
+    savedialog.ui \
+    myrestartdialog.ui
 
 CONFIG   +=c++11
 
