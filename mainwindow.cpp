@@ -135,6 +135,8 @@ void MainWindow::SaveFunction(QString fileName)
     QDataStream out(&file);
     out.setVersion(QDataStream::Qt_5_4);
     */
+    std::fstream setup(fileName.toStdString(), std::ios::out);
+    setup.close();
     std::fstream out(fileName.toStdString());
     out<<MapWidth<<'\t'<<MapHeight<<'\n';
     for(int i=0;i<MapWidth;++i)
@@ -210,6 +212,7 @@ void MainWindow::LoadFunction(QString fileName)
     QDataStream in(&file);
     in.setVersion(QDataStream::Qt_5_4);
     */
+
     std::fstream in(fileName.toStdString());
     in>>MapWidth>>MapHeight;
     int _type,_state,_range,_liveNumber,_deadNumber,_ageLimit,_age,_afterDeadLimit,_afterDead;
