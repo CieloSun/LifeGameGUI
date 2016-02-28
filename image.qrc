@@ -9,5 +9,6 @@
         <file>glass_3.png</file>
         <file>eagle_2.png</file>
         <file>tomb.png</file>
+        <file>ground.png</file>
     </qresource>
 </RCC>

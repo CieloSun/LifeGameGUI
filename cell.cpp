@@ -32,7 +32,7 @@ void cell::cell::init(int _state, int _type)
         afterDeadLimit = HIGH_CONSUMER_AFTER_DEAD;
         break;
     default:
-        liveNumber = deadNumber = range = 0;
+        ageLimit=afterDeadLimit=liveNumber = deadNumber = range = 0;
         break;
     }
     age = 0;

@@ -6,11 +6,11 @@
 Thread::Thread(cell::cellMap* _Mainmap):Mainmap(_Mainmap)
 {
     stopped=false;
-    speed=cell::NORMAL_SPEED;
 }
 
 void Thread::setMap(cell::cellMap* _Mainmap)
 {
+    QMutexLocker locker(&mutex);
     Mainmap=_Mainmap;
 }
 
@@ -19,13 +19,6 @@ void Thread::stop()
     QMutexLocker locker(&mutex);
     stopped=true;
 }
-
-void Thread::setSpeed(int _speed)
-{
-    QMutexLocker locker(&mutex);
-    speed=_speed;
-}
-
 void Thread::resume()
 {
     QMutexLocker locker(&mutex);
@@ -66,7 +59,7 @@ void Thread::run()
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)
             {
-                if(Mainmap->cget(i,j).getType()!=cell::NOTHING)
+                if(Mainmap->cget(i,j).getType()!=cell::NOTHING||cell::DEAD)
                 {
                     have_living=true;
                     goto start_game;//利用goto跳出多重循环
@@ -104,7 +97,14 @@ void Thread::run()
             }
         }
         emit ChangeScreen();
-        Sleep(speed);
-
+        Sleep(Mainmap->getSpeed());
     }
+}
+
+void Thread::restart(int _sp, double p_N, double c_N, double h_N)
+{
+    QMutexLocker locker(&mutex);
+    Mainmap->loadMap(p_N,c_N,h_N);
+    Mainmap->setSpeed(_sp);
+    emit ChangeScreen();
 }

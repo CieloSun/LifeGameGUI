@@ -54,9 +54,20 @@ public:
         evolution=_evolution;
     }
 
+    void setSpeed(int _speed)
+    {
+        speed=_speed;
+    }
+
+    int getSpeed() const
+    {
+        return speed;
+    }
+
 private:
     int width;
     int height;
+    int speed;
     double evolution;
     cell array[MaxWidth][MaxHeight];
 };

@@ -11,11 +11,12 @@ cell::cellMap::cellMap(int _width, int _height)
     {
         for (int j = 0; j < height; ++j)
         {
-            cget(i,j).init();
+            cget(i,j).init(EMPTY,NOTHING);
         }
     }
     //默认突变概率0.1
     evolution=0.1;
+    speed=NORMAL_SPEED;
 }
 
 //设置完毕，生成初始态
@@ -50,7 +51,7 @@ void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double h
             }
             else
             {
-                cget(i,j).init();
+                cget(i,j).init(EMPTY,NOTHING);
             }
         }
     }

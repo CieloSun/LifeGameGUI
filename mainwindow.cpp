@@ -48,25 +48,8 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
 
 void MainWindow::ReStartFunction(int _sp,double p_N,double c_N,double h_N)
 {
-    //TODO
-    //这里的设置地图方法也要按你们调试的重写以便调节图
-
     have_run_times=0;
-//    MapWidth=_W;
-//    MapHeight=_H*0.8;
-
-//    WIDTH = this->width()*1.5 / MapWidth;
-//    Ox = this->width() / 10;
-//    Oy = this->height() /9;
-//    int WindowWidth = this->geometry().width() * 2;
-//    int WindowHeight = this->geometry().height() * 2;
-//    this->resize(QSize(WindowWidth, WindowHeight));
-
-    Mainmap = new cell::cellMap(MapWidth, MapHeight);
-    Mainmap->loadMap(p_N,c_N,h_N);
-    threadRun=new Thread(Mainmap);
-    threadRun->setSpeed(_sp);
-
+    threadRun->restart(_sp,p_N,c_N,h_N);
 }
 
 void MainWindow::Restart()
@@ -93,10 +76,6 @@ void MainWindow::Restart()
         ReStartFunction(speed_v,producer_f,consumer_f,highConsumer_f);
 
     }
-
-    threadRun->start();
-    update();
-    updateGeometry();
     have_run_times++;
     //TODO
     //利用对话框来获取数据调用RestartFunction(int,int,int,doule,double,double)
@@ -133,16 +112,6 @@ void MainWindow::Resume()
 
 void MainWindow::SaveFunction(QString fileName)
 {
-    /*
-    QFile file(fileName);
-    if(!file.open((QIODevice::WriteOnly)))
-    {
-        std::cerr<<"Cannot open file or writing: "<<qPrintable(file.errorString())<<std::endl;
-        return;
-    }
-    QDataStream out(&file);
-    out.setVersion(QDataStream::Qt_5_4);
-    */
     std::fstream setup(fileName.toStdString(), std::ios::out);
     setup.close();
     std::fstream out(fileName.toStdString());
@@ -164,37 +133,9 @@ void MainWindow::Save()
 {
     QString filename=QFileDialog::getSaveFileName(this);
     SaveFunction(filename);
-    //TODO
-    //建议此二SLOT设计为调用一个对话框，让用户设置文件名，进行存储，调用SaveFunction(QString fileName)
-
 }
-
-//void MainWindow::setCurrentFile(const QString fileName)
-//{
-//    //fileName=file_name;
-//    text->document()->setModified(false);
-//    setWindowModified(false);
-//    QString titleName=fileName;
-//    if(titleName.isEmpty())
-//    {
-//        titleName="Untitle.txt";
-//    }
-//    setWindowFilePath(titleName);
-//}
-
 void MainWindow::LoadFunction(QString fileName)
 {
-    /*
-    QFile file(fileName);
-    if(!file.open((QIODevice::ReadOnly)))
-    {
-        std::cerr<<"Cannot open file or reading: "<<qPrintable(file.errorString())<<std::endl;
-        return;
-    }
-    QDataStream in(&file);
-    in.setVersion(QDataStream::Qt_5_4);
-    */
-
     std::fstream in(fileName.toStdString());
     in>>MapWidth>>MapHeight;
     int _type,_state,_range,_liveNumber,_deadNumber,_ageLimit,_age,_afterDeadLimit,_afterDead;
@@ -297,9 +238,7 @@ void MainWindow::Setting()
         double producer_f =sdialog->producerSpinBox->value();
         double consumer_f =sdialog->consumerSpinBox->value();
         double highConsumer_f=sdialog->highSpinBox->value();
-        Mainmap->loadMap(producer_f,consumer_f,highConsumer_f);
-        //threadRun=new Thread(Mainmap);
-        threadRun->setSpeed(speed_v);
+        ReStartFunction(speed_v,producer_f,consumer_f,highConsumer_f);
     }
     //TODO
     //同样是利用对话框（甚至是和Restart同一个对话框）来调用RestartFunction即可。
@@ -329,9 +268,6 @@ void MainWindow::paintEvent(QPaintEvent *)
             {
                 if (Mainmap->cget(i, j).getType() == cell::PRODUCER)
                 {
-                    //painter->setBrush(QBrush(Qt::green, Qt::SolidPattern));
-                    //painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
-
                     QPixmap pixmap;
                     pixmap.load(":/image/glass_3.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.7, WIDTH*0.7,pixmap);
@@ -339,9 +275,6 @@ void MainWindow::paintEvent(QPaintEvent *)
                 }
                 if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
                 {
-                    //painter->setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
-                    //painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
-
                     QPixmap pixmap;
                     pixmap.load(":image/jerry.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.8, WIDTH*0.8,pixmap);
@@ -367,10 +300,6 @@ void MainWindow::paintEvent(QPaintEvent *)
                     pixmap.load(":image/tomb.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.6, WIDTH*0.6,pixmap);
               }
-
-//                painter->setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
-//                painter->drawEllipse(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH / 2, WIDTH / 2);
-
             }
         }
 
@@ -383,11 +312,3 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
-//void MainWindow::on_action_connect_triggered()
-//{
-//    EndDialog dialog;
-//    dialog.exec();
-//}
-

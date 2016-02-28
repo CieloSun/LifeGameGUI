@@ -14,7 +14,7 @@ public:
 
     void stop();
     void resume();
-    void setSpeed(int _speed);
+    void restart(int _sp,double p_N,double c_N,double h_N);
     int getNothingNumber() const;
     int getProducerNumber() const;
     int getConsumerNumber() const;
@@ -36,7 +36,6 @@ private:
     volatile int producer_number;
     volatile int consumer_number;
     volatile int high_consumer_number;
-    volatile int speed;
     volatile bool stopped;
     cell::cellMap* Mainmap;
     QMutex mutex;
