@@ -9,6 +9,7 @@
 #include "ui_mainwindow.h"
 #include "thread.h"
 #include "savedialog.h"
+#include "myrestartdialog.h"
 #include <QString>
 #include <QPlainTextEdit>
 
@@ -46,6 +47,7 @@ private slots:
     void Load();//TODO
     void Setting();//TODO
     //void setCurrentFile(const QString fileName);
+    //void okSlot();
 
 private:
     void SaveFunction(QString fileName);
@@ -60,6 +62,7 @@ private:
     cell::cellMap *Mainmap;
     Thread *threadRun;
     MyEndDialog *edialog;
+    MyRestartDialog *sdialog;
 
 
     int WIDTH;

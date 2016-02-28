@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "enddialog.h"
 #include "savedialog.h"
+#include "myrestartdialog.h"
 #include<QFile>
 #include<QString>
 #include<fstream>
@@ -65,11 +66,38 @@ void MainWindow::ReStartFunction(int _sp,double p_N,double c_N,double h_N)
     Mainmap->loadMap(p_N,c_N,h_N);
     threadRun=new Thread(Mainmap);
     threadRun->setSpeed(_sp);
+
 }
 
 void MainWindow::Restart()
 {
+    int speed_v;
+    sdialog=new MyRestartDialog();
+    connect(sdialog->restartButton,SIGNAL(clicked()),sdialog,SLOT(accept()));
+    //threadRun->stop();
+
+    if(sdialog->exec()==QDialog::Accepted)
+    {
+        //threadRun->stop();
+        int speed_text=sdialog->speedComboBox->currentIndex();
+        if(speed_text ==1)
+            speed_v=500;
+        else if(speed_text==2)
+            speed_v=1000;
+        else if(speed_text==3)
+            speed_v=100;
+
+        double producer_f =sdialog->producerSpinBox->value();
+        double consumer_f =sdialog->consumerSpinBox->value();
+        double highConsumer_f=sdialog->highSpinBox->value();
+        ReStartFunction(speed_v,producer_f,consumer_f,highConsumer_f);
+
+    }
+
     threadRun->start();
+    update();
+    updateGeometry();
+    have_run_times++;
     //TODO
     //利用对话框来获取数据调用RestartFunction(int,int,int,doule,double,double)
 }
@@ -105,26 +133,6 @@ void MainWindow::Resume()
 
 void MainWindow::SaveFunction(QString fileName)
 {
-//    QFile file(fileName);
-//    if(!file.open((QIODevice::WriteOnly)))
-//    {
-//        std::cerr<<"Cannot open file or writing: "<<qPrintable(file.errorString())<<std::endl;
-//        return;
-//    }
-//    QDataStream out(&file);
-//    out.setVersion(QDataStream::Qt_5_4);
-//    out<<quint32(0x12345678)<<MapWidth<<MapHeight;
-//    for(int i=0;i<MapWidth;++i)
-//    {
-//        for(int j=0;j<MapHeight;++j)
-//        {
-//            out<<quint32(0x12345678)<<Mainmap->cget(i,j).getType()<<'\t'<<Mainmap->cget(i,j).getState()<<'\t'
-//              <<Mainmap->cget(i,j).getRange()<<'\t'<<Mainmap->cget(i,j).getLiveNumber()<<'\t'
-//             <<Mainmap->cget(i,j).getDeadNumber()<<'\t'<<Mainmap->cget(i,j).getAgeLimit()<<'\t'
-//            <<Mainmap->cget(i,j).getAge()<<'\t'<<Mainmap->cget(i,j).getAfterDeadLimit()<<'\t'
-//            <<Mainmap->cget(i,j).getAfterDead();
-//        }
-//    }
     /*
     QFile file(fileName);
     if(!file.open((QIODevice::WriteOnly)))
@@ -176,32 +184,6 @@ void MainWindow::Save()
 
 void MainWindow::LoadFunction(QString fileName)
 {
-//    QFile file(fileName);
-//    if(!file.open((QIODevice::ReadOnly)))
-//    {
-//        std::cerr<<"Cannot open file or reading: "<<qPrintable(file.errorString())<<std::endl;
-//        return;
-//    }
-//    QDataStream in(&file);
-//    in.setVersion(QDataStream::Qt_5_4);
-//    in>>MapWidth>>MapHeight;
-//    int _type,_state,_range,_liveNumber,_deadNumber,_ageLimit,_age,_afterDeadLimit,_afterDead;
-//    for(int i=0;i<MapWidth;++i)
-//    {
-//        for(int j=0;j<MapHeight;++j)
-//        {
-//            in>>_type>>_state>>_range>>_liveNumber>>_deadNumber>>_ageLimit>>_age>>_afterDeadLimit>>_afterDead;
-//            Mainmap->cget(i,j).setType(_type);
-//            Mainmap->cget(i,j).setState(_state);
-//            Mainmap->cget(i,j).setRange(_range);
-//            Mainmap->cget(i,j).setLiveNumber(_liveNumber);
-//            Mainmap->cget(i,j).setDeadNumber(_deadNumber);
-//            Mainmap->cget(i,j).setAgeLimit(_ageLimit);
-//            Mainmap->cget(i,j).setAge(_age);
-//            Mainmap->cget(i,j).setAfterDeadLimit(_afterDeadLimit);
-//            Mainmap->cget(i,j).setAfterDead(_afterDead);
-//        }
-//    }
     /*
     QFile file(fileName);
     if(!file.open((QIODevice::ReadOnly)))
@@ -296,6 +278,29 @@ void MainWindow::mousePressEvent(QMouseEvent *)
 
 void MainWindow::Setting()
 {
+    int speed_v;
+    sdialog=new MyRestartDialog();
+    sdialog->restartButton->setText("Set");
+    connect(sdialog->restartButton,SIGNAL(clicked()),sdialog,SLOT(accept()));
+
+    if(sdialog->exec()==QDialog::Accepted)
+    {
+        //threadRun->stop();
+        int speed_text=sdialog->speedComboBox->currentIndex();
+        if(speed_text ==1)
+            speed_v=500;
+        else if(speed_text==2)
+            speed_v=1000;
+        else if(speed_text==3)
+            speed_v=100;
+
+        double producer_f =sdialog->producerSpinBox->value();
+        double consumer_f =sdialog->consumerSpinBox->value();
+        double highConsumer_f=sdialog->highSpinBox->value();
+        Mainmap->loadMap(producer_f,consumer_f,highConsumer_f);
+        //threadRun=new Thread(Mainmap);
+        threadRun->setSpeed(speed_v);
+    }
     //TODO
     //同样是利用对话框（甚至是和Restart同一个对话框）来调用RestartFunction即可。
 }
