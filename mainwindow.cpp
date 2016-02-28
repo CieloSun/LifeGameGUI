@@ -4,6 +4,7 @@
 #include "savedialog.h"
 #include<QFile>
 #include<QString>
+#include<fstream>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextDocument>
@@ -104,6 +105,27 @@ void MainWindow::Resume()
 
 void MainWindow::SaveFunction(QString fileName)
 {
+//    QFile file(fileName);
+//    if(!file.open((QIODevice::WriteOnly)))
+//    {
+//        std::cerr<<"Cannot open file or writing: "<<qPrintable(file.errorString())<<std::endl;
+//        return;
+//    }
+//    QDataStream out(&file);
+//    out.setVersion(QDataStream::Qt_5_4);
+//    out<<quint32(0x12345678)<<MapWidth<<MapHeight;
+//    for(int i=0;i<MapWidth;++i)
+//    {
+//        for(int j=0;j<MapHeight;++j)
+//        {
+//            out<<quint32(0x12345678)<<Mainmap->cget(i,j).getType()<<'\t'<<Mainmap->cget(i,j).getState()<<'\t'
+//              <<Mainmap->cget(i,j).getRange()<<'\t'<<Mainmap->cget(i,j).getLiveNumber()<<'\t'
+//             <<Mainmap->cget(i,j).getDeadNumber()<<'\t'<<Mainmap->cget(i,j).getAgeLimit()<<'\t'
+//            <<Mainmap->cget(i,j).getAge()<<'\t'<<Mainmap->cget(i,j).getAfterDeadLimit()<<'\t'
+//            <<Mainmap->cget(i,j).getAfterDead();
+//        }
+//    }
+    /*
     QFile file(fileName);
     if(!file.open((QIODevice::WriteOnly)))
     {
@@ -112,16 +134,18 @@ void MainWindow::SaveFunction(QString fileName)
     }
     QDataStream out(&file);
     out.setVersion(QDataStream::Qt_5_4);
-    out<<quint32(0x12345678)<<MapWidth<<MapHeight;
+    */
+    std::fstream out(fileName.toStdString());
+    out<<MapWidth<<'\t'<<MapHeight<<'\n';
     for(int i=0;i<MapWidth;++i)
     {
         for(int j=0;j<MapHeight;++j)
         {
-            out<<quint32(0x12345678)<<Mainmap->cget(i,j).getType()<<'\t'<<Mainmap->cget(i,j).getState()<<'\t'
+            out<<Mainmap->cget(i,j).getType()<<'\t'<<Mainmap->cget(i,j).getState()<<'\t'
               <<Mainmap->cget(i,j).getRange()<<'\t'<<Mainmap->cget(i,j).getLiveNumber()<<'\t'
              <<Mainmap->cget(i,j).getDeadNumber()<<'\t'<<Mainmap->cget(i,j).getAgeLimit()<<'\t'
             <<Mainmap->cget(i,j).getAge()<<'\t'<<Mainmap->cget(i,j).getAfterDeadLimit()<<'\t'
-            <<Mainmap->cget(i,j).getAfterDead();
+            <<Mainmap->cget(i,j).getAfterDead()<<'\n';
         }
     }
 }
@@ -150,6 +174,33 @@ void MainWindow::Save()
 
 void MainWindow::LoadFunction(QString fileName)
 {
+//    QFile file(fileName);
+//    if(!file.open((QIODevice::ReadOnly)))
+//    {
+//        std::cerr<<"Cannot open file or reading: "<<qPrintable(file.errorString())<<std::endl;
+//        return;
+//    }
+//    QDataStream in(&file);
+//    in.setVersion(QDataStream::Qt_5_4);
+//    in>>MapWidth>>MapHeight;
+//    int _type,_state,_range,_liveNumber,_deadNumber,_ageLimit,_age,_afterDeadLimit,_afterDead;
+//    for(int i=0;i<MapWidth;++i)
+//    {
+//        for(int j=0;j<MapHeight;++j)
+//        {
+//            in>>_type>>_state>>_range>>_liveNumber>>_deadNumber>>_ageLimit>>_age>>_afterDeadLimit>>_afterDead;
+//            Mainmap->cget(i,j).setType(_type);
+//            Mainmap->cget(i,j).setState(_state);
+//            Mainmap->cget(i,j).setRange(_range);
+//            Mainmap->cget(i,j).setLiveNumber(_liveNumber);
+//            Mainmap->cget(i,j).setDeadNumber(_deadNumber);
+//            Mainmap->cget(i,j).setAgeLimit(_ageLimit);
+//            Mainmap->cget(i,j).setAge(_age);
+//            Mainmap->cget(i,j).setAfterDeadLimit(_afterDeadLimit);
+//            Mainmap->cget(i,j).setAfterDead(_afterDead);
+//        }
+//    }
+    /*
     QFile file(fileName);
     if(!file.open((QIODevice::ReadOnly)))
     {
@@ -158,6 +209,8 @@ void MainWindow::LoadFunction(QString fileName)
     }
     QDataStream in(&file);
     in.setVersion(QDataStream::Qt_5_4);
+    */
+    std::fstream in(fileName.toStdString());
     in>>MapWidth>>MapHeight;
     int _type,_state,_range,_liveNumber,_deadNumber,_ageLimit,_age,_afterDeadLimit,_afterDead;
     for(int i=0;i<MapWidth;++i)
@@ -176,6 +229,8 @@ void MainWindow::LoadFunction(QString fileName)
             Mainmap->cget(i,j).setAfterDead(_afterDead);
         }
     }
+    update();
+    updateGeometry();
 }
 
 void MainWindow::Load()
