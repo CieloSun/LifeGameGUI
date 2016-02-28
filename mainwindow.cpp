@@ -238,8 +238,13 @@ void MainWindow::LoadFunction(QString fileName)
 
 void MainWindow::Load()
 {
+    SaveFunction(QString::fromStdString("savedata"));
     QString name=QFileDialog::getOpenFileName(this);
     QString filename=QFileInfo(name).fileName();
+    if(!filename.size())
+    {
+        filename=QString::fromStdString("savedata");
+    }
     LoadFunction(filename);
 }
 
