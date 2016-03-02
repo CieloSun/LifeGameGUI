@@ -30,7 +30,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(int =cell::DefaultWidth , int =cell::DefaultHeight , QWidget *parent = 0);//TODO
+    explicit MainWindow(int = cell::DefaultWidth , int = cell::DefaultHeight , QWidget *parent = 0); //TODO
     ~MainWindow();
 protected:
     void paintEvent(QPaintEvent *);
@@ -52,7 +52,7 @@ private slots:
 private:
     void SaveFunction(QString fileName);
     void LoadFunction(QString fileName);
-    void ReStartFunction(int =cell::NORMAL_SPEED,double = 0.5, double = 0.1, double = 0.02);//TODO
+    void ReStartFunction(int = cell::NORMAL_SPEED, double = 0.5, double = 0.1, double = 0.02); //TODO
     int MapWidth;
     int MapHeight;
     QPlainTextEdit *text;

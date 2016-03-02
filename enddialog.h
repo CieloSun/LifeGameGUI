@@ -5,7 +5,7 @@
 #include <QString>
 
 #include <ui_enddialog.h>
-class MyEndDialog : public QDialog,public Ui::EndDialog
+class MyEndDialog : public QDialog, public Ui::EndDialog
 {
     Q_OBJECT
 public:

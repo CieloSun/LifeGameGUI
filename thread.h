@@ -5,7 +5,7 @@
 
 #include<QMutex>
 #include<QThread>
-class Thread :public QThread
+class Thread : public QThread
 {
     Q_OBJECT
 public:
@@ -14,14 +14,14 @@ public:
 
     void stop();
     void resume();
-    void restart(int _sp,double p_N,double c_N,double h_N);
+    void restart(int _sp, double p_N, double c_N, double h_N);
     int getNothingNumber() const;
     int getProducerNumber() const;
     int getConsumerNumber() const;
     int getHighConsumerNumber() const;
 
 
-    ~Thread()=default;
+    ~Thread() = default;
 
 signals:
     void ChangeScreen();

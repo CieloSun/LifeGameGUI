@@ -51,7 +51,7 @@ public:
 
     void setType(int _type)
     {
-        type=_type;
+        type = _type;
     }
     int getType() const
     {
@@ -60,7 +60,7 @@ public:
 
     void setLiveNumber(int _liveNumber)
     {
-        liveNumber=_liveNumber;
+        liveNumber = _liveNumber;
     }
     int getLiveNumber() const
     {
@@ -69,7 +69,7 @@ public:
 
     void setDeadNumber(int _deadNumber)
     {
-        deadNumber=_deadNumber;
+        deadNumber = _deadNumber;
     }
 
     int getDeadNumber() const
@@ -79,7 +79,7 @@ public:
 
     void setRange(int _range)
     {
-        range=_range;
+        range = _range;
     }
     int getRange() const
     {
@@ -88,7 +88,7 @@ public:
 
     void setAgeLimit(int _ageLimit)
     {
-        ageLimit=_ageLimit;
+        ageLimit = _ageLimit;
     }
     int getAgeLimit() const
     {
@@ -97,7 +97,7 @@ public:
 
     void setAfterDeadLimit(int _afterDeadLimit)
     {
-        afterDeadLimit=_afterDeadLimit;
+        afterDeadLimit = _afterDeadLimit;
     }
     int getAfterDeadLimit() const
     {

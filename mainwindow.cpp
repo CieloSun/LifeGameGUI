@@ -14,12 +14,12 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    have_run_times=0;
+    have_run_times = 0;
     MapWidth = _width;
-    MapHeight = _height*0.6;
-    WIDTH = this->width()*2 / MapWidth;
+    MapHeight = _height * 0.6;
+    WIDTH = this->width() * 2 / MapWidth;
     Ox = this->width() / 10;
-    Oy = this->height() /6;
+    Oy = this->height() / 6;
 
     ui->setupUi(this);
     int WindowWidth = this->geometry().width() * 2;
@@ -28,52 +28,58 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
 
     Mainmap = new cell::cellMap(MapWidth, MapHeight);
     Mainmap->loadMap();
-    threadRun=new Thread(Mainmap);
+    threadRun = new Thread(Mainmap);
     //TODO
 
-    connect(threadRun,SIGNAL(ChangeScreen()),this,SLOT(Change()));
-    connect(threadRun,SIGNAL(End()),this,SLOT(End()));
+    connect(threadRun, SIGNAL(ChangeScreen()), this, SLOT(Change()));
+    connect(threadRun, SIGNAL(End()), this, SLOT(End()));
     connect(ui->actionStart, SIGNAL(triggered(bool)), this, SLOT(Start()));
-    connect(ui->actionRestart,SIGNAL(triggered(bool)),this,SLOT(Restart()));
-    connect(ui->actionSetting,SIGNAL(triggered(bool)),this,SLOT(Setting()));
-    connect(ui->actionPause,SIGNAL(triggered(bool)),this,SLOT(Stop()));
-    connect(ui->actionEnd,SIGNAL(triggered(bool)),this,SLOT(End()));
-    connect(ui->actionResume,SIGNAL(triggered(bool)),this,SLOT(Resume()));
+    connect(ui->actionRestart, SIGNAL(triggered(bool)), this, SLOT(Restart()));
+    connect(ui->actionSetting, SIGNAL(triggered(bool)), this, SLOT(Setting()));
+    connect(ui->actionPause, SIGNAL(triggered(bool)), this, SLOT(Stop()));
+    connect(ui->actionEnd, SIGNAL(triggered(bool)), this, SLOT(End()));
+    connect(ui->actionResume, SIGNAL(triggered(bool)), this, SLOT(Resume()));
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
-    connect(ui->actionSave,SIGNAL(triggered(bool)),this,SLOT(Save()));
-    connect(ui->actionOpen,SIGNAL(triggered(bool)),this,SLOT(Load()));
+    connect(ui->actionSave, SIGNAL(triggered(bool)), this, SLOT(Save()));
+    connect(ui->actionOpen, SIGNAL(triggered(bool)), this, SLOT(Load()));
 
 }
 
 
-void MainWindow::ReStartFunction(int _sp,double p_N,double c_N,double h_N)
+void MainWindow::ReStartFunction(int _sp, double p_N, double c_N, double h_N)
 {
-    have_run_times=0;
-    threadRun->restart(_sp,p_N,c_N,h_N);
+    have_run_times = 0;
+    threadRun->restart(_sp, p_N, c_N, h_N);
 }
 
 void MainWindow::Restart()
 {
     int speed_v;
-    sdialog=new MyRestartDialog();
-    connect(sdialog->restartButton,SIGNAL(clicked()),sdialog,SLOT(accept()));
+    sdialog = new MyRestartDialog();
+    connect(sdialog->restartButton, SIGNAL(clicked()), sdialog, SLOT(accept()));
     //threadRun->stop();
 
-    if(sdialog->exec()==QDialog::Accepted)
+    if (sdialog->exec() == QDialog::Accepted)
     {
         //threadRun->stop();
-        int speed_text=sdialog->speedComboBox->currentIndex();
-        if(speed_text ==1)
-            speed_v=500;
-        else if(speed_text==2)
-            speed_v=1000;
-        else if(speed_text==3)
-            speed_v=100;
+        int speed_text = sdialog->speedComboBox->currentIndex();
+        if (speed_text == 1)
+        {
+            speed_v = 500;
+        }
+        else if (speed_text == 2)
+        {
+            speed_v = 1000;
+        }
+        else if (speed_text == 3)
+        {
+            speed_v = 100;
+        }
 
-        double producer_f =sdialog->producerSpinBox->value();
-        double consumer_f =sdialog->consumerSpinBox->value();
-        double highConsumer_f=sdialog->highSpinBox->value();
-        ReStartFunction(speed_v,producer_f,consumer_f,highConsumer_f);
+        double producer_f = sdialog->producerSpinBox->value();
+        double consumer_f = sdialog->consumerSpinBox->value();
+        double highConsumer_f = sdialog->highSpinBox->value();
+        ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
 
     }
     have_run_times++;
@@ -98,7 +104,7 @@ void MainWindow::Start()
 
 void MainWindow::Stop()
 {
-    if(threadRun->isRunning())
+    if (threadRun->isRunning())
     {
         threadRun->stop();
     }
@@ -115,44 +121,44 @@ void MainWindow::SaveFunction(QString fileName)
     std::fstream setup(fileName.toStdString(), std::ios::out);
     setup.close();
     std::fstream out(fileName.toStdString());
-    out<<MapWidth<<'\t'<<MapHeight<<'\n';
-    for(int i=0;i<MapWidth;++i)
+    out << MapWidth << '\t' << MapHeight << '\n';
+    for (int i = 0; i < MapWidth; ++i)
     {
-        for(int j=0;j<MapHeight;++j)
+        for (int j = 0; j < MapHeight; ++j)
         {
-            out<<Mainmap->cget(i,j).getType()<<'\t'<<Mainmap->cget(i,j).getState()<<'\t'
-              <<Mainmap->cget(i,j).getRange()<<'\t'<<Mainmap->cget(i,j).getLiveNumber()<<'\t'
-             <<Mainmap->cget(i,j).getDeadNumber()<<'\t'<<Mainmap->cget(i,j).getAgeLimit()<<'\t'
-            <<Mainmap->cget(i,j).getAge()<<'\t'<<Mainmap->cget(i,j).getAfterDeadLimit()<<'\t'
-            <<Mainmap->cget(i,j).getAfterDead()<<'\n';
+            out << Mainmap->cget(i, j).getType() << '\t' << Mainmap->cget(i, j).getState() << '\t'
+                << Mainmap->cget(i, j).getRange() << '\t' << Mainmap->cget(i, j).getLiveNumber() << '\t'
+                << Mainmap->cget(i, j).getDeadNumber() << '\t' << Mainmap->cget(i, j).getAgeLimit() << '\t'
+                << Mainmap->cget(i, j).getAge() << '\t' << Mainmap->cget(i, j).getAfterDeadLimit() << '\t'
+                << Mainmap->cget(i, j).getAfterDead() << '\n';
         }
     }
 }
 
 void MainWindow::Save()
 {
-    QString filename=QFileDialog::getSaveFileName(this);
+    QString filename = QFileDialog::getSaveFileName(this);
     SaveFunction(filename);
 }
 void MainWindow::LoadFunction(QString fileName)
 {
     std::fstream in(fileName.toStdString());
-    in>>MapWidth>>MapHeight;
-    int _type,_state,_range,_liveNumber,_deadNumber,_ageLimit,_age,_afterDeadLimit,_afterDead;
-    for(int i=0;i<MapWidth;++i)
+    in >> MapWidth >> MapHeight;
+    int _type, _state, _range, _liveNumber, _deadNumber, _ageLimit, _age, _afterDeadLimit, _afterDead;
+    for (int i = 0; i < MapWidth; ++i)
     {
-        for(int j=0;j<MapHeight;++j)
+        for (int j = 0; j < MapHeight; ++j)
         {
-            in>>_type>>_state>>_range>>_liveNumber>>_deadNumber>>_ageLimit>>_age>>_afterDeadLimit>>_afterDead;
-            Mainmap->cget(i,j).setType(_type);
-            Mainmap->cget(i,j).setState(_state);
-            Mainmap->cget(i,j).setRange(_range);
-            Mainmap->cget(i,j).setLiveNumber(_liveNumber);
-            Mainmap->cget(i,j).setDeadNumber(_deadNumber);
-            Mainmap->cget(i,j).setAgeLimit(_ageLimit);
-            Mainmap->cget(i,j).setAge(_age);
-            Mainmap->cget(i,j).setAfterDeadLimit(_afterDeadLimit);
-            Mainmap->cget(i,j).setAfterDead(_afterDead);
+            in >> _type >> _state >> _range >> _liveNumber >> _deadNumber >> _ageLimit >> _age >> _afterDeadLimit >> _afterDead;
+            Mainmap->cget(i, j).setType(_type);
+            Mainmap->cget(i, j).setState(_state);
+            Mainmap->cget(i, j).setRange(_range);
+            Mainmap->cget(i, j).setLiveNumber(_liveNumber);
+            Mainmap->cget(i, j).setDeadNumber(_deadNumber);
+            Mainmap->cget(i, j).setAgeLimit(_ageLimit);
+            Mainmap->cget(i, j).setAge(_age);
+            Mainmap->cget(i, j).setAfterDeadLimit(_afterDeadLimit);
+            Mainmap->cget(i, j).setAfterDead(_afterDead);
         }
     }
     update();
@@ -162,44 +168,44 @@ void MainWindow::LoadFunction(QString fileName)
 void MainWindow::Load()
 {
     SaveFunction(QString::fromStdString("savedata"));
-    QString name=QFileDialog::getOpenFileName(this);
-    QString filename=QFileInfo(name).fileName();
-    if(!filename.size())
+    QString name = QFileDialog::getOpenFileName(this);
+    QString filename = QFileInfo(name).fileName();
+    if (!filename.size())
     {
-        filename=QString::fromStdString("savedata");
+        filename = QString::fromStdString("savedata");
     }
     LoadFunction(filename);
 }
 
 void MainWindow::End()
 {
-    MyEndDialog *edialog=new MyEndDialog();
-    if(threadRun->isRunning())
+    MyEndDialog *edialog = new MyEndDialog();
+    if (threadRun->isRunning())
     {
         threadRun->stop();
     }
-     edialog->show();
+    edialog->show();
 
     //TODO
     //调出一个结果统计报告页面并询问是否存储
     //报告包括每个物种的现存数量，空地的数量，总运行次数,建议以一个对话框显示，并提供退出和重新开始两个按钮
     //如果想实时获取数据，可以把这四个变量改为类变量
-    int nothing_number=threadRun->getNothingNumber();
-    int producer_number=threadRun->getProducerNumber();
-    int consumer_number=threadRun->getConsumerNumber();
-    int high_consumer_number=threadRun->getHighConsumerNumber();
+    int nothing_number = threadRun->getNothingNumber();
+    int producer_number = threadRun->getProducerNumber();
+    int consumer_number = threadRun->getConsumerNumber();
+    int high_consumer_number = threadRun->getHighConsumerNumber();
 
-    QString nothing_text=QString::number(nothing_number);
+    QString nothing_text = QString::number(nothing_number);
     edialog->nothingShow->setText(nothing_text);
-    QString producer_text=QString::number(producer_number);
+    QString producer_text = QString::number(producer_number);
     edialog->producerShow->setText(producer_text);
-    QString consumer_text=QString::number(consumer_number);
+    QString consumer_text = QString::number(consumer_number);
     edialog->consumerShow->setText(consumer_text);
-    QString high_consumer_text=QString::number(high_consumer_number);
+    QString high_consumer_text = QString::number(high_consumer_number);
     edialog->highShow->setText(high_consumer_text);
 
-    connect(edialog->yesButton,SIGNAL(clicked()),edialog,SLOT(save()));
-    connect(edialog->noButton,SIGNAL(clicked()),edialog,SLOT(close()));
+    connect(edialog->yesButton, SIGNAL(clicked()), edialog, SLOT(save()));
+    connect(edialog->noButton, SIGNAL(clicked()), edialog, SLOT(close()));
 }
 
 
@@ -220,25 +226,31 @@ void MainWindow::mousePressEvent(QMouseEvent *)
 void MainWindow::Setting()
 {
     int speed_v;
-    sdialog=new MyRestartDialog();
+    sdialog = new MyRestartDialog();
     sdialog->restartButton->setText("Set");
-    connect(sdialog->restartButton,SIGNAL(clicked()),sdialog,SLOT(accept()));
+    connect(sdialog->restartButton, SIGNAL(clicked()), sdialog, SLOT(accept()));
 
-    if(sdialog->exec()==QDialog::Accepted)
+    if (sdialog->exec() == QDialog::Accepted)
     {
         //threadRun->stop();
-        int speed_text=sdialog->speedComboBox->currentIndex();
-        if(speed_text ==1)
-            speed_v=500;
-        else if(speed_text==2)
-            speed_v=1000;
-        else if(speed_text==3)
-            speed_v=100;
+        int speed_text = sdialog->speedComboBox->currentIndex();
+        if (speed_text == 1)
+        {
+            speed_v = 500;
+        }
+        else if (speed_text == 2)
+        {
+            speed_v = 1000;
+        }
+        else if (speed_text == 3)
+        {
+            speed_v = 100;
+        }
 
-        double producer_f =sdialog->producerSpinBox->value();
-        double consumer_f =sdialog->consumerSpinBox->value();
-        double highConsumer_f=sdialog->highSpinBox->value();
-        ReStartFunction(speed_v,producer_f,consumer_f,highConsumer_f);
+        double producer_f = sdialog->producerSpinBox->value();
+        double consumer_f = sdialog->consumerSpinBox->value();
+        double highConsumer_f = sdialog->highSpinBox->value();
+        ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
     }
     //TODO
     //同样是利用对话框（甚至是和Restart同一个对话框）来调用RestartFunction即可。
@@ -264,42 +276,42 @@ void MainWindow::paintEvent(QPaintEvent *)
     {
         for (int j = 0; j < MapHeight; ++j)
         {
-            if(Mainmap->cget(i, j).getState() == cell::LIVE)
+            if (Mainmap->cget(i, j).getState() == cell::LIVE)
             {
                 if (Mainmap->cget(i, j).getType() == cell::PRODUCER)
                 {
                     QPixmap pixmap;
                     pixmap.load(":/image/glass_3.png");
-                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.7, WIDTH*0.7,pixmap);
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.7, WIDTH * 0.7, pixmap);
 
                 }
                 if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
                 {
                     QPixmap pixmap;
                     pixmap.load(":image/jerry.png");
-                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.8, WIDTH*0.8,pixmap);
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.8, WIDTH * 0.8, pixmap);
                 }
                 if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
                 {
                     QPixmap pixmap;
                     pixmap.load(":image/eagle_2.png");
-                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH, WIDTH,pixmap);
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH, WIDTH, pixmap);
                 }
             }
             else if (Mainmap->cget(i, j).getState() == cell::DEAD)
             {
-                if(Mainmap->cget(i, j).getType() == cell::PRODUCER)
+                if (Mainmap->cget(i, j).getType() == cell::PRODUCER)
                 {
                     QPixmap pixmap;
                     pixmap.load(":image/dead_leaf_2.png");
-                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.6, WIDTH*0.6,pixmap);
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.6, WIDTH * 0.6, pixmap);
                 }
                 else
                 {
                     QPixmap pixmap;
                     pixmap.load(":image/tomb.png");
-                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH*0.6, WIDTH*0.6,pixmap);
-              }
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.6, WIDTH * 0.6, pixmap);
+                }
             }
         }
 

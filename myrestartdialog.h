@@ -5,7 +5,7 @@
 
 #include <ui_myrestartdialog.h>
 
-class MyRestartDialog : public QDialog,public Ui::MyRestartDialog
+class MyRestartDialog : public QDialog, public Ui::MyRestartDialog
 {
     Q_OBJECT
 

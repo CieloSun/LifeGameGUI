@@ -5,7 +5,7 @@
 #include <QString>
 #include <ui_savedialog.h>
 
-class MySaveDialog : public QDialog,public Ui::SaveDialog
+class MySaveDialog : public QDialog, public Ui::SaveDialog
 {
     Q_OBJECT
 

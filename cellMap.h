@@ -14,9 +14,9 @@ static const int MaxHeight = 1000;
 static const int DefaultWidth = 200;
 static const int DefaultHeight = 100;
 
-static const int FAST_SPEED=100;
-static const int NORMAL_SPEED=500;
-static const int SLOW_SPPED=1000;
+static const int FAST_SPEED = 100;
+static const int NORMAL_SPEED = 500;
+static const int SLOW_SPPED = 1000;
 
 class cellMap
 {
@@ -29,7 +29,7 @@ public:
 
     std::vector<cell> count(int my_x, int my_y, int my_range, int ob_type, int ob_state);
 
-    bool burn(int x, int y);
+    void burn(int x, int y);
 
     bool eat(cell& op1, cell& op2);
 
@@ -40,23 +40,27 @@ public:
         return array[x][y];
     }
 
-    int getWidth(){return width;}
-    int getHeight(){return height;}
+    int getWidth()
+    {
+        return width;
+    }
+    int getHeight()
+    {
+        return height;
+    }
 
     static void runMap(cellMap *);
 
     static void pauseMap(cellMap *);
 
-    void outputMap(std::ostream &);
-
     void setEvolution(double _evolution)
     {
-        evolution=_evolution;
+        evolution = _evolution;
     }
 
     void setSpeed(int _speed)
     {
-        speed=_speed;
+        speed = _speed;
     }
 
     int getSpeed() const

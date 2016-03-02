@@ -3,26 +3,26 @@
 
 
 
-Thread::Thread(cell::cellMap* _Mainmap):Mainmap(_Mainmap)
+Thread::Thread(cell::cellMap* _Mainmap): Mainmap(_Mainmap)
 {
-    stopped=false;
+    stopped = false;
 }
 
 void Thread::setMap(cell::cellMap* _Mainmap)
 {
     QMutexLocker locker(&mutex);
-    Mainmap=_Mainmap;
+    Mainmap = _Mainmap;
 }
 
 void Thread::stop()
 {
     QMutexLocker locker(&mutex);
-    stopped=true;
+    stopped = true;
 }
 void Thread::resume()
 {
     QMutexLocker locker(&mutex);
-    stopped=false;
+    stopped = false;
 }
 
 int Thread::getNothingNumber() const
@@ -49,27 +49,27 @@ void Thread::run()
     forever
     {
         QMutexLocker locker(&mutex);
-        if(stopped)
+        if (stopped)
         {
-            stopped=false;
+            stopped = false;
             break;
         }
-        bool have_living=false;
+        bool have_living = false;
         for (int i = 0; i < Mainmap->getWidth(); ++i)
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)
             {
-                if(Mainmap->cget(i,j).getType()!=cell::NOTHING)
+                if (Mainmap->cget(i, j).getType() != cell::NOTHING)
                 {
-                    have_living=true;
+                    have_living = true;
                     goto start_game;//利用goto跳出多重循环
                 }
             }
         }
-        start_game:
-        if(have_living==false)
+start_game:
+        if (have_living == false)
         {
-            stopped=true;
+            stopped = true;
             emit End();
             break;
         }
@@ -77,9 +77,9 @@ void Thread::run()
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)
             {
-                if (Mainmap->cget(i,j).getType() == cell::NOTHING)
+                if (Mainmap->cget(i, j).getType() == cell::NOTHING)
                 {
-                    Mainmap->cget(i,j).init(cell::EMPTY,cell::NOTHING);
+                    Mainmap->cget(i, j).init(cell::EMPTY, cell::NOTHING);
                     Mainmap->burn(i, j);
                 }
                 else
@@ -89,23 +89,32 @@ void Thread::run()
             }
         }
         //每轮进行初始化
-        nothing_number=0;
-        producer_number=0;
-        consumer_number=0;
-        high_consumer_number=0;
+        nothing_number = 0;
+        producer_number = 0;
+        consumer_number = 0;
+        high_consumer_number = 0;
         for (int i = 0; i < Mainmap->getWidth(); ++i)
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)
             {
-                if (Mainmap->cget(i,j).getType() == cell::NOTHING)
+                if (Mainmap->cget(i, j).getType() == cell::NOTHING)
                 {
                     nothing_number++;
                 }
                 else
                 {
-                    if (Mainmap->cget(i,j).getType() == cell::PRODUCER) producer_number++;
-                    else if (Mainmap->cget(i,j).getType() == cell::CONSUMER) consumer_number++;
-                    else if (Mainmap->cget(i,j).getType() == cell::HIGH_CONSUMER) high_consumer_number++;
+                    if (Mainmap->cget(i, j).getType() == cell::PRODUCER)
+                    {
+                        producer_number++;
+                    }
+                    else if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
+                    {
+                        consumer_number++;
+                    }
+                    else if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
+                    {
+                        high_consumer_number++;
+                    }
                 }
             }
         }
@@ -117,7 +126,7 @@ void Thread::run()
 void Thread::restart(int _sp, double p_N, double c_N, double h_N)
 {
     QMutexLocker locker(&mutex);
-    Mainmap->loadMap(p_N,c_N,h_N);
-    Mainmap->setSpeed(_sp);
+    Mainmap->loadMap(p_N, c_N, h_N);
+    //Mainmap->setSpeed(_sp);
     emit ChangeScreen();
 }

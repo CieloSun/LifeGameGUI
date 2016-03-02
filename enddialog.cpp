@@ -4,9 +4,9 @@
 MyEndDialog::MyEndDialog(QWidget *parent) :
     QDialog(parent)
 {
-   setupUi(this);
+    setupUi(this);
 
-   //connect(yesButton,SIGNAL(clicked))
+    //connect(yesButton,SIGNAL(clicked))
 }
 
 MyEndDialog::~MyEndDialog()
