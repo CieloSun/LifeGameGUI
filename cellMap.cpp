@@ -15,8 +15,9 @@ cell::cellMap::cellMap(int _width, int _height)
         }
     }
     //默认突变概率0.1
-    evolution = 0.1;
+    evolution = 0.0;
     speed = NORMAL_SPEED;
+    loadMap();
 }
 
 //设置完毕，生成初始态
@@ -104,49 +105,41 @@ void cell::cellMap::burn(int x, int y)
                 }
             }
         }
-        std::uniform_int_distribution<int> distribution(0, countVector.size());
         std::default_random_engine engine(seed);
+        std::uniform_int_distribution<int> distribution(0, countVector.size());
+
         int motherIndex = distribution(engine);
         //无性繁殖
         cget(x, y).copy(countVector[motherIndex]);
 
         //有一定概率进行突变
         std::uniform_real_distribution<double> distribution2(0, 1);
-        std::default_random_engine engine2(seed);
-        if (distribution2(engine2) < evolution)
+        if (distribution2(engine) < evolution)
         {
             //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
-            std::uniform_int_distribution<int> distribution3(0, 7);
-            std::default_random_engine engine3(seed);
-            switch (distribution3(engine3))
+            std::uniform_int_distribution<int> distribution3(0,3);
+            std::uniform_int_distribution<int> distribution4(0,4);
+            std::uniform_int_distribution<int> distribution5(1, 3);
+            std::uniform_int_distribution<int> distribution6(0,10);
+            std::uniform_int_distribution<int> distribution7(0,10);
+            switch(distribution3(engine))
             {
             case 0:
-                cget(x, y).setDeadNumber(cget(x, y).getDeadNumber() + 1);
+                cget(x,y).setDeadNumber(distribution4(engine));
                 break;
             case 1:
-                cget(x, y).setDeadNumber(cget(x, y).getDeadNumber() - 1);
+                cget(x,y).setRange(distribution5(engine));
                 break;
             case 2:
-                cget(x, y).setRange(cget(x, y).getRange() + 1);
+                cget(x,y).setAgeLimit(distribution6(engine));
                 break;
             case 3:
-                cget(x, y).setRange(cget(x, y).getRange() - 1);
-                break;
-            case 4:
-                cget(x, y).setAgeLimit(cget(x, y).getAgeLimit() + 1);
-                break;
-            case 5:
-                cget(x, y).setAgeLimit(cget(x, y).getAgeLimit() - 1);
-                break;
-            case 6:
-                cget(x, y).setAfterDeadLimit(cget(x, y).getAfterDeadLimit() + 1);
-                break;
-            case 7:
-                cget(x, y).setAfterDeadLimit(cget(x, y).getAfterDeadLimit() - 1);
+                cget(x,y).setAfterDeadLimit(distribution7(engine));
                 break;
             default:
                 break;
             }
+
         }
     }
 }

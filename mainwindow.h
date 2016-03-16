@@ -48,6 +48,7 @@ private slots:
     void Setting();//TODO
     //void setCurrentFile(const QString fileName);
     //void okSlot();
+    void Test();
 
 private:
     void SaveFunction(QString fileName);

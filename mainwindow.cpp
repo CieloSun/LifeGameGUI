@@ -27,7 +27,7 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     this->resize(QSize(WindowWidth, WindowHeight));
 
     Mainmap = new cell::cellMap(MapWidth, MapHeight);
-    Mainmap->loadMap();
+    //Mainmap->loadMap();
     threadRun = new Thread(Mainmap);
     //TODO
 
@@ -42,6 +42,7 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
     connect(ui->actionSave, SIGNAL(triggered(bool)), this, SLOT(Save()));
     connect(ui->actionOpen, SIGNAL(triggered(bool)), this, SLOT(Load()));
+    connect(ui->actionTest, SIGNAL(triggered(bool)), this, SLOT(Test()));
 
 }
 
@@ -114,6 +115,17 @@ void MainWindow::Resume()
 {
     threadRun->resume();
     threadRun->start();
+}
+
+void MainWindow::Test()
+{
+    threadRun->resume();
+    threadRun->start();
+    Sleep(1000);
+    if (threadRun->isRunning())
+    {
+        threadRun->stop();
+    }
 }
 
 void MainWindow::SaveFunction(QString fileName)
