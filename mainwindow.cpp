@@ -135,7 +135,7 @@ void MainWindow::SaveFunction(QString fileName)
                 << Mainmap->cget(i, j).getRange() << '\t' << Mainmap->cget(i, j).getLiveNumber() << '\t'
                 << Mainmap->cget(i, j).getDeadNumber() << '\t' << Mainmap->cget(i, j).getAgeLimit() << '\t'
                 << Mainmap->cget(i, j).getAge() << '\t' << Mainmap->cget(i, j).getAfterDeadLimit() << '\t'
-                << Mainmap->cget(i, j).getAfterDead() << '\n';
+                << Mainmap->cget(i, j).getAfterDead() << '\t'<<Mainmap->cget(i, j).getProduceAge() << '\n';
         }
     }
 }
@@ -149,12 +149,13 @@ void MainWindow::LoadFunction(QString fileName)
 {
     std::fstream in(fileName.toStdString());
     in >> MapWidth >> MapHeight;
-    int _type, _state, _range, _liveNumber, _deadNumber, _ageLimit, _age, _afterDeadLimit, _afterDead;
+    int _type, _state, _range, _liveNumber, _deadNumber, _ageLimit, _age, _afterDeadLimit, _afterDead,_produceAge;
     for (int i = 0; i < MapWidth; ++i)
     {
         for (int j = 0; j < MapHeight; ++j)
         {
-            in >> _type >> _state >> _range >> _liveNumber >> _deadNumber >> _ageLimit >> _age >> _afterDeadLimit >> _afterDead;
+            in >> _type >> _state >> _range >> _liveNumber >> _deadNumber >> _ageLimit
+                    >> _age >> _afterDeadLimit >> _afterDead>>_produceAge;
             Mainmap->cget(i, j).setType(_type);
             Mainmap->cget(i, j).setState(_state);
             Mainmap->cget(i, j).setRange(_range);
@@ -164,6 +165,7 @@ void MainWindow::LoadFunction(QString fileName)
             Mainmap->cget(i, j).setAge(_age);
             Mainmap->cget(i, j).setAfterDeadLimit(_afterDeadLimit);
             Mainmap->cget(i, j).setAfterDead(_afterDead);
+            Mainmap->cget(i, j).setProduceAge(_produceAge);
         }
     }
     update();

@@ -101,6 +101,7 @@ void cell::cellMap::burn(int x, int y)
             countVector.clear();
             //最后检查生产者
             countVector = count(x, y, PRODUCER_RANGE, PRODUCER, LIVE);
+
             if (countVector.size() < PRODUCER_LN)
             {
                 countVector.clear();
@@ -154,17 +155,14 @@ void cell::cellMap::burn(int x, int y)
 //检查是否有捕食关系,第一个参数是捕食者，默认为LIVE状态
 bool cell::cellMap::eat(cell& op1, cell& op2)
 {
-    if (op1.getState() == LIVE)
+    if ((op1.getType() == HIGH_CONSUMER && op2.getType() == CONSUMER)
+            || (op1.getType() == CONSUMER && op2.getType() == PRODUCER))
     {
-        if ((op1.getType() == HIGH_CONSUMER && op2.getType() == CONSUMER)
-                || (op1.getType() == CONSUMER && op2.getType() == PRODUCER)
-                ||(op1.getType()==PRODUCER))
-        {
-            return true;
-        }
+        return true;
     }
-    return false;
+    else return false;
 }
+
 //检查存在个体的格子
 void cell::cellMap::exist(int x, int y)
 {
