@@ -84,7 +84,7 @@ start_game:
                 }
                 else
                 {
-                    //Mainmap->exist(i, j);
+                    Mainmap->exist(i, j);
                 }
             }
         }

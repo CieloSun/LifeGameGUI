@@ -115,10 +115,12 @@ void cell::cellMap::burn(int x, int y)
     int motherIndex = distribution(engine);
     //无性繁殖
     cget(x, y).copy(countVector[motherIndex]);
+    /*
     if(cget(x,y).getState()!=LIVE)
     {
         cget(x,y).init();
     }
+    */
 
     //有一定概率进行突变
 
@@ -219,6 +221,7 @@ void cell::cellMap::exist(int x, int y)
             }
         }
     }
+    //重置一些奇怪的现象
     else
     {
         cget(x,y).init();

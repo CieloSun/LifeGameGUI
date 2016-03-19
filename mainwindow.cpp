@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextDocument>
+#include <QToolTip>
 
 MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     QMainWindow(parent),
@@ -222,11 +223,71 @@ void MainWindow::ChangeByUser(int selection)
     //通过selection的不同来对环境进行不同的设置，是否使用你们发挥一下
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *)
+void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     //TODO
     //利用点击时的坐标（找出一种算法）来反向计算出其表示的数组对应index，利用浮出提示/信息栏来显示出对应的信息
     //调用信息可以使用cell类中的各种get函数
+    int x=(event->pos().rx()-Ox)/WIDTH;
+    int y=(event->pos().ry()-Oy)/WIDTH;
+    if(x>=0&&x<=MapWidth&&y>=0&&y<=MapHeight)
+    {
+        //_type, _state, _range, _liveNumber, _deadNumber, _ageLimit, _age, _afterDeadLimit, _afterDead,_produceAge;
+        QString typeString="Type: ";
+        switch(Mainmap->cget(x,y).getType())
+        {
+        case cell::NOTHING:
+            typeString+="Nothing";
+            break;
+        case cell::PRODUCER:
+            typeString+="Producer";
+            break;
+        case cell::CONSUMER:
+            typeString+="Consumer";
+            break;
+        case cell::HIGH_CONSUMER:
+            typeString+="High Consumer";
+            break;
+        default:
+            typeString+="Unknown";
+            break;
+        }
+        QString stateString="\nState: ";
+        switch(Mainmap->cget(x,y).getState())
+        {
+        case cell::EMPTY:
+            stateString+="Nothing";
+            break;
+        case cell::LIVE:
+            stateString+="Live";
+            break;
+        case cell::DEAD:
+            stateString+="Dead";
+            break;
+        default:
+            stateString+="Unknown";
+            break;
+        }
+        QString rangeString="\nRange: ";
+        rangeString+=QString::number(Mainmap->cget(x,y).getRange(),10);
+        QString liveNumberString="\nLive Number: ";
+        liveNumberString+=QString::number(Mainmap->cget(x,y).getLiveNumber(),10);
+        QString deadNumberString="\nDead Number: ";
+        deadNumberString+=QString::number(Mainmap->cget(x,y).getDeadNumber(),10);
+        QString ageLimitString="\nAge Limit: ";
+        ageLimitString+=QString::number(Mainmap->cget(x,y).getAgeLimit(),10);
+        QString ageString="\nAge: ";
+        ageString+=QString::number(Mainmap->cget(x,y).getAge(),10);
+        QString afterDeadLimitString="\nAfter Dead Limit: ";
+        afterDeadLimitString+=QString::number(Mainmap->cget(x,y).getAfterDeadLimit(),10);
+        QString afterDeadString="\nDead Years: ";
+        afterDeadString+=QString::number(Mainmap->cget(x,y).getAfterDead(),10);
+        QString produceAgeString="\nGrow up Age: ";
+        produceAgeString+=QString::number(Mainmap->cget(x,y).getProduceAge(),10);
+        QToolTip::showText(event->pos(),typeString+stateString+rangeString+liveNumberString+deadNumberString
+                           +ageLimitString+ageString+afterDeadLimitString+afterDeadString+produceAgeString);
+    }
+
 }
 
 
