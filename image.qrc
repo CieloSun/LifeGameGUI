@@ -10,5 +10,6 @@
         <file>eagle_2.png</file>
         <file>tomb.png</file>
         <file>ground.png</file>
+        <file>wolf.png</file>
     </qresource>
 </RCC>

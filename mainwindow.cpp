@@ -3,9 +3,9 @@
 #include "enddialog.h"
 #include "savedialog.h"
 #include "myrestartdialog.h"
-#include<QFile>
-#include<QString>
-#include<fstream>
+#include <QFile>
+#include <QString>
+#include <fstream>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextDocument>
@@ -16,20 +16,15 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
 {
     have_run_times = 0;
     MapWidth = _width;
-    MapHeight = _height * 0.6;
-    WIDTH = this->width() * 2 / MapWidth;
-    Ox = this->width() / 10;
-    Oy = this->height() / 6;
+    MapHeight = _height;
+    WIDTH = 50;
+    Ox = 8;
+    Oy = 30;
 
     ui->setupUi(this);
-    int WindowWidth = this->geometry().width() * 2;
-    int WindowHeight = this->geometry().height() * 2;
-    this->resize(QSize(WindowWidth, WindowHeight));
 
     Mainmap = new cell::cellMap(MapWidth, MapHeight);
-    //Mainmap->loadMap();
     threadRun = new Thread(Mainmap);
-    //TODO
 
     connect(threadRun, SIGNAL(ChangeScreen()), this, SLOT(Change()));
     connect(threadRun, SIGNAL(End()), this, SLOT(End()));
@@ -58,7 +53,6 @@ void MainWindow::Restart()
     int speed_v;
     sdialog = new MyRestartDialog();
     connect(sdialog->restartButton, SIGNAL(clicked()), sdialog, SLOT(accept()));
-    //threadRun->stop();
 
     if (sdialog->exec() == QDialog::Accepted)
     {
@@ -84,7 +78,6 @@ void MainWindow::Restart()
 
     }
     have_run_times++;
-    //TODO
     //利用对话框来获取数据调用RestartFunction(int,int,int,doule,double,double)
 }
 
@@ -288,27 +281,31 @@ void MainWindow::paintEvent(QPaintEvent *)
     {
         for (int j = 0; j < MapHeight; ++j)
         {
+            QPixmap pixmap;
+            pixmap.load(":image/ground.png");
+            painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH, WIDTH, pixmap);
             if (Mainmap->cget(i, j).getState() == cell::LIVE)
             {
+
                 if (Mainmap->cget(i, j).getType() == cell::PRODUCER)
                 {
                     QPixmap pixmap;
                     pixmap.load(":/image/glass_3.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.7, WIDTH * 0.7, pixmap);
-
                 }
-                if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
+                else if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
                 {
                     QPixmap pixmap;
-                    pixmap.load(":image/jerry.png");
+                    pixmap.load(":image/mouse.ico");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.8, WIDTH * 0.8, pixmap);
                 }
-                if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
+                else if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
                 {
                     QPixmap pixmap;
-                    pixmap.load(":image/eagle_2.png");
+                    pixmap.load(":image/wolf.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH, WIDTH, pixmap);
                 }
+
             }
             else if (Mainmap->cget(i, j).getState() == cell::DEAD)
             {

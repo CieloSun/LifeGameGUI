@@ -82,66 +82,65 @@ std::vector<cell::cell> cell::cellMap::count(int my_x, int my_y, int my_range, i
 //判断出生,传入一个空位置
 void cell::cellMap::burn(int x, int y)
 {
-    if (cget(x, y).getType() == NOTHING && cget(x, y).getState() == EMPTY)
+    //新建随机种子
+    unsigned int seed = (unsigned int)time(0);
+    //先检查高级消费者
+    std::vector<cell> countVector = count(x, y, HIGH_CONSUMER_RANGE, HIGH_CONSUMER, LIVE);
+    if (countVector.size() < HIGH_CONSUMER_LN)
     {
-        //新建随机种子
-        time_t seed = time(0);
-        //先检查高级消费者
-        std::vector<cell> countVector = count(x, y, HIGH_CONSUMER_RANGE, HIGH_CONSUMER, LIVE);
-        if (countVector.size() < HIGH_CONSUMER_LN)
+        countVector.clear();
+        //再检查初级消费者
+        countVector = count(x, y, CONSUMER_RANGE, CONSUMER, LIVE);
+        if (countVector.size() < CONSUMER_LN)
         {
             countVector.clear();
-            //再检查初级消费者
-            countVector = count(x, y, CONSUMER_RANGE, CONSUMER, LIVE);
-            if (countVector.size() < CONSUMER_LN)
+            //最后检查生产者
+            countVector = count(x, y, PRODUCER_RANGE, PRODUCER, LIVE);
+            if (countVector.size() < PRODUCER_LN)
             {
                 countVector.clear();
-                //最后检查生产者
-                countVector = count(x, y, PRODUCER_RANGE, PRODUCER, LIVE);
-                if (countVector.size() < PRODUCER_LN)
-                {
-                    countVector.clear();
-                    return;
-                }
+                return;
             }
-        }
-        std::default_random_engine engine(seed);
-        std::uniform_int_distribution<int> distribution(0, countVector.size());
-
-        int motherIndex = distribution(engine);
-        //无性繁殖
-        cget(x, y).copy(countVector[motherIndex]);
-
-        //有一定概率进行突变
-        std::uniform_real_distribution<double> distribution2(0, 1);
-        if (distribution2(engine) < evolution)
-        {
-            //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
-            std::uniform_int_distribution<int> distribution3(0,3);
-            std::uniform_int_distribution<int> distribution4(0,4);
-            std::uniform_int_distribution<int> distribution5(1, 3);
-            std::uniform_int_distribution<int> distribution6(0,10);
-            std::uniform_int_distribution<int> distribution7(0,10);
-            switch(distribution3(engine))
-            {
-            case 0:
-                cget(x,y).setDeadNumber(distribution4(engine));
-                break;
-            case 1:
-                cget(x,y).setRange(distribution5(engine));
-                break;
-            case 2:
-                cget(x,y).setAgeLimit(distribution6(engine));
-                break;
-            case 3:
-                cget(x,y).setAfterDeadLimit(distribution7(engine));
-                break;
-            default:
-                break;
-            }
-
         }
     }
+    std::default_random_engine engine(seed);
+    std::uniform_int_distribution<int> distribution(0, countVector.size());
+
+    int motherIndex = distribution(engine);
+    //无性繁殖
+    cget(x, y).copy(countVector[motherIndex]);
+
+    //有一定概率进行突变
+
+    std::uniform_real_distribution<double> distribution2(0, 1);
+    if (distribution2(engine) < evolution)
+    {
+        //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
+        std::uniform_int_distribution<int> distribution3(0, 4);
+        std::uniform_int_distribution<int> distribution4(0, 4);
+        std::uniform_int_distribution<int> distribution5(1, 4);
+        std::uniform_int_distribution<int> distribution6(0,10);
+        std::uniform_int_distribution<int> distribution7(0,10);
+        switch(distribution3(engine))
+        {
+        case 0:
+            cget(x,y).setDeadNumber(distribution4(engine));
+            break;
+        case 1:
+            cget(x,y).setRange(distribution5(engine));
+            break;
+        case 2:
+            cget(x,y).setAgeLimit(distribution6(engine));
+            break;
+        case 3:
+            cget(x,y).setAfterDeadLimit(distribution7(engine));
+            break;
+        default:
+            break;
+        }
+
+    }
+
 }
 //检查是否有捕食关系,第一个参数是捕食者，默认为LIVE状态
 bool cell::cellMap::eat(cell& op1, cell& op2)

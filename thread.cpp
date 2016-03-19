@@ -79,7 +79,7 @@ start_game:
             {
                 if (Mainmap->cget(i, j).getType() == cell::NOTHING||Mainmap->cget(i,j).getState()==cell::EMPTY)
                 {
-                    Mainmap->cget(i, j).init(cell::EMPTY, cell::NOTHING);
+                    Mainmap->cget(i,j).init();
                     Mainmap->burn(i, j);
                 }
                 else
@@ -127,6 +127,5 @@ void Thread::restart(int _sp, double p_N, double c_N, double h_N)
 {
     QMutexLocker locker(&mutex);
     Mainmap->loadMap(p_N, c_N, h_N);
-    //Mainmap->setSpeed(_sp);
     emit ChangeScreen();
 }
