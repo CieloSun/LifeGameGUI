@@ -315,10 +315,16 @@ void MainWindow::paintEvent(QPaintEvent *)
                     pixmap.load(":image/dead_leaf_2.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.6, WIDTH * 0.6, pixmap);
                 }
-                else
+                else if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
                 {
                     QPixmap pixmap;
                     pixmap.load(":image/tomb.png");
+                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.6, WIDTH * 0.6, pixmap);
+                }
+                else if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
+                {
+                    QPixmap pixmap;
+                    pixmap.load(":image/skull.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.6, WIDTH * 0.6, pixmap);
                 }
             }
