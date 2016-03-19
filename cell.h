@@ -18,21 +18,21 @@ static const int PRODUCER_DN = 8;
 static const int PRODUCER_RANGE = 1;
 static const int PRODUCER_AGE = 2;
 static const int PRODUCER_AFTER_DEAD = 1;
-static const int PRODUCER_PRODUCE_AGE=0;
+static const int PRODUCER_PRODUCE_AGE = 0;
 //消费者参数
 static const int CONSUMER_LN = 2;
 static const int CONSUMER_DN = 5;
 static const int CONSUMER_RANGE = 1;
 static const int CONSUMER_AGE = 3;
 static const int CONSUMER_AFTER_DEAD = 1;
-static const int CONSUMER_PRODUCE_AGE=1;
+static const int CONSUMER_PRODUCE_AGE = 1;
 //高级消费者参数
 static const int HIGH_CONSUMER_LN = 2;
 static const int HIGH_CONSUMER_DN = 8;
 static const int HIGH_CONSUMER_RANGE = 1;
 static const int HIGH_CONSUMER_AGE = 10;
 static const int HIGH_CONSUMER_AFTER_DEAD = 2;
-static const int HIGH_CONSUMER_PRODUCE_AGE=2;
+static const int HIGH_CONSUMER_PRODUCE_AGE = 2;
 class cell
 {
 public:
@@ -126,7 +126,7 @@ public:
 
     void setProduceAge(int _produceAge)
     {
-        produceAge=_produceAge;
+        produceAge = _produceAge;
     }
     int getProduceAge()
     {

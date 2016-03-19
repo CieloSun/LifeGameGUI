@@ -68,12 +68,12 @@ std::vector<cell::cell> cell::cellMap::count(int my_x, int my_y, int my_range, i
         {
             if (0 <= i && i < width && 0 <= j && j <= height)
             {
-                if ((cget(i, j).getType() == ob_type || cget(i, j).getState() == ob_state)
+                if ((cget(i, j).getType() == ob_type && cget(i, j).getState() == ob_state)
                         && (i != my_x && j != my_y))
                     //修改后不再计算自己，防止出现奇怪的错误
                 {
                     //如果可育
-                    if(cget(i,j).getProduceAge()<=cget(i,j).getAge())
+                    if (cget(i, j).getProduceAge() <= cget(i, j).getAge())
                     {
                         countVector.push_back(array[i][j]);
                     }
@@ -87,68 +87,73 @@ std::vector<cell::cell> cell::cellMap::count(int my_x, int my_y, int my_range, i
 //判断出生,传入一个空位置
 void cell::cellMap::burn(int x, int y)
 {
-    //新建随机种子
-    unsigned int seed = (unsigned int)time(0);
-    //先检查高级消费者
-    std::vector<cell> countVector = count(x, y, HIGH_CONSUMER_RANGE, HIGH_CONSUMER, LIVE);
-    if (countVector.size() < HIGH_CONSUMER_LN)
+    if (cget(x, y).getState() == NOTHING)
     {
-        countVector.clear();
-        //再检查初级消费者
-        countVector = count(x, y, CONSUMER_RANGE, CONSUMER, LIVE);
-        if (countVector.size() < CONSUMER_LN)
+        //新建随机种子
+        unsigned int seed = (unsigned int)time(0) % 10000;
+        //std::cout<<seed<<std::endl;
+        //先检查高级消费者
+        std::vector<cell> countVector = count(x, y, HIGH_CONSUMER_RANGE, HIGH_CONSUMER, LIVE);
+        if (countVector.size() < HIGH_CONSUMER_LN)
         {
             countVector.clear();
-            //最后检查生产者
-            countVector = count(x, y, PRODUCER_RANGE, PRODUCER, LIVE);
-
-            if (countVector.size() < PRODUCER_LN)
+            //再检查初级消费者
+            countVector = count(x, y, CONSUMER_RANGE, CONSUMER, LIVE);
+            if (countVector.size() < CONSUMER_LN)
             {
                 countVector.clear();
-                return;
+                //最后检查生产者
+                countVector = count(x, y, PRODUCER_RANGE, PRODUCER, LIVE);
+
+                if (countVector.size() < PRODUCER_LN)
+                {
+                    countVector.clear();
+                    return;
+                }
             }
         }
-    }
-    std::default_random_engine engine(seed);
-    std::uniform_int_distribution<int> distribution(0, countVector.size());
+        std::default_random_engine engine(seed);
+        std::uniform_int_distribution<int> distribution(0, countVector.size());
 
-    int motherIndex = distribution(engine);
-    //无性繁殖
-    cget(x, y).copy(countVector[motherIndex]);
-    /*
-    if(cget(x,y).getState()!=LIVE)
-    {
-        cget(x,y).init();
-    }
-    */
+        int motherIndex = distribution(engine);
+        //无性繁殖
+        cget(x, y).copy(countVector[motherIndex]);
+        /*
+                if(cget(x,y).getState()!=LIVE)
+                {
+                    cget(x,y).init();
+                }
+                */
 
-    //有一定概率进行突变
+        //有一定概率进行突变
 
-    std::uniform_real_distribution<double> distribution2(0, 1);
-    if (distribution2(engine) < evolution)
-    {
-        //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
-        std::uniform_int_distribution<int> distribution3(0, 4);
-        std::uniform_int_distribution<int> distribution4(0, 4);
-        std::uniform_int_distribution<int> distribution5(1, 4);
-        std::uniform_int_distribution<int> distribution6(0,10);
-        std::uniform_int_distribution<int> distribution7(0,10);
-        switch(distribution3(engine))
+        std::uniform_real_distribution<double> distribution2(0, 1);
+        if (distribution2(engine) < evolution)
         {
-        case 0:
-            cget(x,y).setDeadNumber(distribution4(engine));
-            break;
-        case 1:
-            cget(x,y).setRange(distribution5(engine));
-            break;
-        case 2:
-            cget(x,y).setAgeLimit(distribution6(engine));
-            break;
-        case 3:
-            cget(x,y).setAfterDeadLimit(distribution7(engine));
-            break;
-        default:
-            break;
+            //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
+            std::uniform_int_distribution<int> distribution3(0, 4);
+            std::uniform_int_distribution<int> distribution4(0, 4);
+            std::uniform_int_distribution<int> distribution5(1, 4);
+            std::uniform_int_distribution<int> distribution6(0, 10);
+            std::uniform_int_distribution<int> distribution7(0, 10);
+            switch (distribution3(engine))
+            {
+            case 0:
+                cget(x, y).setDeadNumber(distribution4(engine));
+                break;
+            case 1:
+                cget(x, y).setRange(distribution5(engine));
+                break;
+            case 2:
+                cget(x, y).setAgeLimit(distribution6(engine));
+                break;
+            case 3:
+                cget(x, y).setAfterDeadLimit(distribution7(engine));
+                break;
+            default:
+                break;
+            }
+
         }
 
     }
@@ -162,7 +167,10 @@ bool cell::cellMap::eat(cell& op1, cell& op2)
     {
         return true;
     }
-    else return false;
+    else
+    {
+        return false;
+    }
 }
 
 //检查存在个体的格子
@@ -203,7 +211,7 @@ void cell::cellMap::exist(int x, int y)
                         {
                             if (eat(cget(x, y), cget(i, j)))
                             {
-                                cget(i,j).init();
+                                cget(i, j).init();
                                 full = true;
                             }
                         }
@@ -224,6 +232,6 @@ void cell::cellMap::exist(int x, int y)
     //重置一些奇怪的现象
     else
     {
-        cget(x,y).init();
+        //cget(x,y).init();
     }
 }

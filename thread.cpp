@@ -59,7 +59,7 @@ void Thread::run()
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)
             {
-                if (Mainmap->cget(i, j).getType() != cell::NOTHING&&Mainmap->cget(i,j).getState()!=cell::EMPTY)
+                if (Mainmap->cget(i, j).getType() != cell::NOTHING && Mainmap->cget(i, j).getState() != cell::EMPTY)
                 {
                     have_living = true;
                     goto start_game;//利用goto跳出多重循环
@@ -77,9 +77,9 @@ start_game:
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)
             {
-                if (Mainmap->cget(i, j).getType() == cell::NOTHING||Mainmap->cget(i,j).getState()==cell::EMPTY)
+                if (Mainmap->cget(i, j).getType() == cell::NOTHING || Mainmap->cget(i, j).getState() == cell::EMPTY)
                 {
-                    Mainmap->cget(i,j).init();
+                    Mainmap->cget(i, j).init();
                     Mainmap->burn(i, j);
                 }
                 else

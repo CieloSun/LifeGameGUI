@@ -16,7 +16,7 @@ void cell::cell::init(int _state, int _type)
         range = PRODUCER_RANGE;
         ageLimit = PRODUCER_AGE;
         afterDeadLimit = PRODUCER_AFTER_DEAD;
-        produceAge=PRODUCER_PRODUCE_AGE;
+        produceAge = PRODUCER_PRODUCE_AGE;
         break;
     case CONSUMER:
         liveNumber = CONSUMER_LN;
@@ -24,7 +24,7 @@ void cell::cell::init(int _state, int _type)
         range = CONSUMER_RANGE;
         ageLimit = CONSUMER_AGE;
         afterDeadLimit = CONSUMER_AFTER_DEAD;
-        produceAge=CONSUMER_PRODUCE_AGE;
+        produceAge = CONSUMER_PRODUCE_AGE;
         break;
     case HIGH_CONSUMER:
         liveNumber = HIGH_CONSUMER_LN;
@@ -32,7 +32,7 @@ void cell::cell::init(int _state, int _type)
         range = HIGH_CONSUMER_RANGE;
         ageLimit = HIGH_CONSUMER_AGE;
         afterDeadLimit = HIGH_CONSUMER_AFTER_DEAD;
-        produceAge=HIGH_CONSUMER_PRODUCE_AGE;
+        produceAge = HIGH_CONSUMER_PRODUCE_AGE;
         break;
     case NOTHING:
         liveNumber = 0;
@@ -40,7 +40,7 @@ void cell::cell::init(int _state, int _type)
         range = 0;
         ageLimit = 0;
         afterDeadLimit = 0;
-        produceAge=0;
+        produceAge = 0;
         break;
     default:
         break;
@@ -58,7 +58,7 @@ void cell::cell::copy(cell const & ob)
     deadNumber = ob.deadNumber;
     ageLimit = ob.ageLimit;
     afterDeadLimit = ob.afterDeadLimit;
-    produceAge=ob.produceAge;
+    produceAge = ob.produceAge;
     //复制即是新生
     age = 0;
     afterDead = 0;
