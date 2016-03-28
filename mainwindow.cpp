@@ -158,8 +158,14 @@ void MainWindow::LoadFunction(QString fileName)
         for (int j = 0; j < MapHeight; ++j)
         {
             in >> _type >> _state >> _range >> _liveNumber >> _deadNumber >> _ageLimit
-                    >> _age >> _afterDeadLimit >> _afterDead >> _produceAge>> _starvingTimeLimit
-                    >> _starvingTime;
+               >> _age >> _afterDeadLimit >> _afterDead >> _produceAge>> _starvingTimeLimit
+               >> _starvingTime;
+            /*
+            std::cout<< _type << _state << _range << _liveNumber << _deadNumber << _ageLimit
+                    << _age << _afterDeadLimit << _afterDead << _produceAge<< _starvingTimeLimit
+                    << _starvingTime<< std::endl;
+                    */
+
             Mainmap->cget(i, j).setType(_type);
             Mainmap->cget(i, j).setState(_state);
             Mainmap->cget(i, j).setRange(_range);
@@ -172,6 +178,7 @@ void MainWindow::LoadFunction(QString fileName)
             Mainmap->cget(i, j).setProduceAge(_produceAge);
             Mainmap->cget(i, j).setStarvingTimeLimit(_starvingTimeLimit);
             Mainmap->cget(i, j).setStarvingTime(_starvingTime);
+
         }
     }
     update();
@@ -342,6 +349,7 @@ void MainWindow::paintEvent(QPaintEvent *)
 {
     painter = new QPainter;
     painter->begin(this);
+    /*
     painter->setPen(QPen(Qt::darkGreen, WIDTH / 20, Qt::DotLine));
     for (int i = 0; i <= MapHeight; ++i)
     {
@@ -351,6 +359,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     {
         painter->drawLine(Ox + WIDTH * i, Oy, Ox + WIDTH * i, Oy + WIDTH * MapHeight);
     }
+    */
 
 
     for (int i = 0; i < MapWidth; ++i)
