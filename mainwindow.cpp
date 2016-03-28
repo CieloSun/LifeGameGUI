@@ -136,7 +136,8 @@ void MainWindow::SaveFunction(QString fileName)
                 << Mainmap->cget(i, j).getRange() << '\t' << Mainmap->cget(i, j).getLiveNumber() << '\t'
                 << Mainmap->cget(i, j).getDeadNumber() << '\t' << Mainmap->cget(i, j).getAgeLimit() << '\t'
                 << Mainmap->cget(i, j).getAge() << '\t' << Mainmap->cget(i, j).getAfterDeadLimit() << '\t'
-                << Mainmap->cget(i, j).getAfterDead() << '\t' << Mainmap->cget(i, j).getProduceAge() << '\n';
+                << Mainmap->cget(i, j).getAfterDead() << '\t' << Mainmap->cget(i, j).getProduceAge() << '\t'
+                << Mainmap->cget(i, j).getStarvingTimeLimit() << '\t' << Mainmap->cget(i, j).getStarvingTime() << '\n';
         }
     }
 }
@@ -150,13 +151,15 @@ void MainWindow::LoadFunction(QString fileName)
 {
     std::fstream in(fileName.toStdString());
     in >> MapWidth >> MapHeight;
-    int _type, _state, _range, _liveNumber, _deadNumber, _ageLimit, _age, _afterDeadLimit, _afterDead, _produceAge;
+    int _type, _state, _range, _liveNumber, _deadNumber, _ageLimit, _age, _afterDeadLimit, _afterDead, _produceAge,
+        _starvingTimeLimit, _starvingTime;
     for (int i = 0; i < MapWidth; ++i)
     {
         for (int j = 0; j < MapHeight; ++j)
         {
             in >> _type >> _state >> _range >> _liveNumber >> _deadNumber >> _ageLimit
-                    >> _age >> _afterDeadLimit >> _afterDead >> _produceAge;
+                    >> _age >> _afterDeadLimit >> _afterDead >> _produceAge>> _starvingTimeLimit
+                    >> _starvingTime;
             Mainmap->cget(i, j).setType(_type);
             Mainmap->cget(i, j).setState(_state);
             Mainmap->cget(i, j).setRange(_range);
@@ -167,6 +170,8 @@ void MainWindow::LoadFunction(QString fileName)
             Mainmap->cget(i, j).setAfterDeadLimit(_afterDeadLimit);
             Mainmap->cget(i, j).setAfterDead(_afterDead);
             Mainmap->cget(i, j).setProduceAge(_produceAge);
+            Mainmap->cget(i, j).setStarvingTimeLimit(_starvingTimeLimit);
+            Mainmap->cget(i, j).setStarvingTime(_starvingTime);
         }
     }
     update();
@@ -284,8 +289,13 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         afterDeadString += QString::number(Mainmap->cget(x, y).getAfterDead(), 10);
         QString produceAgeString = "\nGrow up Age: ";
         produceAgeString += QString::number(Mainmap->cget(x, y).getProduceAge(), 10);
+        QString starvingTimeLimitString = "\nStarving Limit: ";
+        starvingTimeLimitString += QString::number(Mainmap->cget(x, y).getStarvingTimeLimit(), 10);
+        QString starvingTimeString = "\nStarving Time: ";
+        starvingTimeString += QString::number(Mainmap->cget(x, y).getStarvingTime(), 10);
         QToolTip::showText(event->pos(), typeString + stateString + rangeString + liveNumberString + deadNumberString
-                           + ageLimitString + ageString + afterDeadLimitString + afterDeadString + produceAgeString);
+                           + ageLimitString + ageString + afterDeadLimitString + afterDeadString + produceAgeString
+                           + starvingTimeLimitString + starvingTimeString);
     }
 
 }
@@ -353,20 +363,36 @@ void MainWindow::paintEvent(QPaintEvent *)
                 if (Mainmap->cget(i, j).getType() == cell::PRODUCER)
                 {
                     QPixmap pixmap;
-                    pixmap.load(":/image/glass_3.png");
+                    pixmap.load(":/image/glass.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.7, WIDTH * 0.7, pixmap);
                 }
                 else if (Mainmap->cget(i, j).getType() == cell::CONSUMER)
                 {
                     QPixmap pixmap;
-                    pixmap.load(":image/mouse.ico");
-                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.8, WIDTH * 0.8, pixmap);
+                    if(Mainmap->cget(i, j).getAge() < Mainmap->cget(i, j).getProduceAge())
+                    {
+                        pixmap.load(":image/mouse_young.png");
+                        painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.7, WIDTH * 0.7, pixmap);
+                    }
+                    else
+                    {
+                        pixmap.load(":image/mouse.png");
+                        painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.8, WIDTH * 0.8, pixmap);
+                    }
                 }
                 else if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
                 {
                     QPixmap pixmap;
-                    pixmap.load(":image/wolf.png");
-                    painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH, WIDTH, pixmap);
+                    if(Mainmap->cget(i, j).getAge() < Mainmap->cget(i, j).getProduceAge())
+                    {
+                        pixmap.load(":image/wolf_young.png");
+                        painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.9, WIDTH * 0.9, pixmap);
+                    }
+                    else
+                    {
+                        pixmap.load(":image/wolf.png");
+                        painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH, WIDTH, pixmap);
+                    }
                 }
 
             }
@@ -375,7 +401,7 @@ void MainWindow::paintEvent(QPaintEvent *)
                 if (Mainmap->cget(i, j).getType() == cell::PRODUCER)
                 {
                     QPixmap pixmap;
-                    pixmap.load(":image/dead_leaf_2.png");
+                    pixmap.load(":image/dead_leaf.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.6, WIDTH * 0.6, pixmap);
                 }
                 else if (Mainmap->cget(i, j).getType() == cell::CONSUMER)

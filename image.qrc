@@ -1,15 +1,13 @@
 <RCC>
     <qresource prefix="/image">
-        <file>glass.png</file>
-        <file>mouse.ico</file>
         <file>skull.png</file>
-        <file>dead_leaf_2.png</file>
-        <file>eagle.png</file>
-        <file>jerry.png</file>
-        <file>glass_3.png</file>
-        <file>eagle_2.png</file>
+        <file>dead_leaf.png</file>
+        <file>glass.png</file>
         <file>tomb.png</file>
         <file>ground.png</file>
         <file>wolf.png</file>
+        <file>mouse_young.png</file>
+        <file>mouse.png</file>
+        <file>wolf_young.png</file>
     </qresource>
 </RCC>

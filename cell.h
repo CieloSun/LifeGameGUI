@@ -19,20 +19,23 @@ static const int PRODUCER_RANGE = 1;
 static const int PRODUCER_AGE = 2;
 static const int PRODUCER_AFTER_DEAD = 1;
 static const int PRODUCER_PRODUCE_AGE = 0;
+static const int PRODUCER_STARVING_TIME = 999;
 //消费者参数
 static const int CONSUMER_LN = 2;
 static const int CONSUMER_DN = 5;
 static const int CONSUMER_RANGE = 1;
-static const int CONSUMER_AGE = 3;
+static const int CONSUMER_AGE = 5;
 static const int CONSUMER_AFTER_DEAD = 1;
 static const int CONSUMER_PRODUCE_AGE = 1;
+static const int CONSUMER_STARVING_TIME= 2;
 //高级消费者参数
 static const int HIGH_CONSUMER_LN = 2;
-static const int HIGH_CONSUMER_DN = 8;
-static const int HIGH_CONSUMER_RANGE = 1;
+static const int HIGH_CONSUMER_DN = 3;
+static const int HIGH_CONSUMER_RANGE = 2;
 static const int HIGH_CONSUMER_AGE = 10;
 static const int HIGH_CONSUMER_AFTER_DEAD = 2;
 static const int HIGH_CONSUMER_PRODUCE_AGE = 2;
+static const int HIGH_CONSUMER_STARVING_TIME = 3;
 class cell
 {
 public:
@@ -128,9 +131,27 @@ public:
     {
         produceAge = _produceAge;
     }
-    int getProduceAge()
+    int getProduceAge() const
     {
         return produceAge;
+    }
+
+    void setStarvingTime(int _starvingTime)
+    {
+        starvingTime = _starvingTime;
+    }
+    int getStarvingTime() const
+    {
+        return starvingTime;
+    }
+
+    void setStarvingTimeLimit(int _starvingTimeLimit)
+    {
+        starvingTimeLimit = _starvingTimeLimit;
+    }
+    int getStarvingTimeLimit() const
+    {
+        return starvingTimeLimit;
     }
 
 private:
@@ -154,6 +175,10 @@ private:
     int afterDead;
     //可育年龄
     int produceAge;
+    //饥饿时间
+    int starvingTime;
+    //饥饿时限
+    int starvingTimeLimit;
 
 };
 }

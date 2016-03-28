@@ -15,7 +15,7 @@ cell::cellMap::cellMap(int _width, int _height)
         }
     }
     //默认突变概率0.1
-    evolution = 0.0;
+    evolution = 0.1;
     speed = NORMAL_SPEED;
     loadMap();
 }
@@ -118,24 +118,19 @@ void cell::cellMap::burn(int x, int y)
         int motherIndex = distribution(engine);
         //无性繁殖
         cget(x, y).copy(countVector[motherIndex]);
-        /*
-                if(cget(x,y).getState()!=LIVE)
-                {
-                    cget(x,y).init();
-                }
-                */
-
         //有一定概率进行突变
 
         std::uniform_real_distribution<double> distribution2(0, 1);
         if (distribution2(engine) < evolution)
         {
             //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
-            std::uniform_int_distribution<int> distribution3(0, 4);
+            std::uniform_int_distribution<int> distribution3(0, 5);
             std::uniform_int_distribution<int> distribution4(0, 4);
             std::uniform_int_distribution<int> distribution5(1, 4);
             std::uniform_int_distribution<int> distribution6(0, 10);
             std::uniform_int_distribution<int> distribution7(0, 10);
+            std::uniform_int_distribution<int> distribution8(0, 5);
+            std::uniform_int_distribution<int> distribution9(1, 5);
             switch (distribution3(engine))
             {
             case 0:
@@ -150,6 +145,12 @@ void cell::cellMap::burn(int x, int y)
             case 3:
                 cget(x, y).setAfterDeadLimit(distribution7(engine));
                 break;
+            case 4:
+                cget(x, y).setStarvingTimeLimit(distribution8(engine));
+                break;
+            case 5:
+                cget(x, y).setProduceAge(distribution9(engine));
+                break;
             default:
                 break;
             }
@@ -162,15 +163,13 @@ void cell::cellMap::burn(int x, int y)
 //检查是否有捕食关系,第一个参数是捕食者，默认为LIVE状态
 bool cell::cellMap::eat(cell& op1, cell& op2)
 {
-    if ((op1.getType() == HIGH_CONSUMER && op2.getType() == CONSUMER)
+    if(op2.getState() == DEAD) return true;
+    else if ((op1.getType() == HIGH_CONSUMER && op2.getType() == CONSUMER)
             || (op1.getType() == CONSUMER && op2.getType() == PRODUCER))
     {
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 //检查存在个体的格子
@@ -219,8 +218,10 @@ void cell::cellMap::exist(int x, int y)
                 }
                 if (!full)
                 {
-                    cget(x, y).setState(DEAD);
+                    cget(x, y).setStarvingTime(cget(x, y).getStarvingTime() + 1);
                 }
+                if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit())
+                    cget(x, y).setState(DEAD);
             }
             //判断竞争
             if ((count(x, y, cget(x, y).getRange(), cget(x, y).getType(), LIVE).size()) >= cget(x, y).getDeadNumber())
@@ -228,10 +229,5 @@ void cell::cellMap::exist(int x, int y)
                 cget(x, y).setState(DEAD);
             }
         }
-    }
-    //重置一些奇怪的现象
-    else
-    {
-        //cget(x,y).init();
     }
 }
