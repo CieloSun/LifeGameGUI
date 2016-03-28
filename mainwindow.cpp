@@ -216,8 +216,11 @@ void MainWindow::End()
     edialog->consumerShow->setText(consumer_text);
     QString high_consumer_text = QString::number(high_consumer_number);
     edialog->highShow->setText(high_consumer_text);
+    QString have_run_times_text = QString::number(have_run_times);
+    edialog->runShow->setText(have_run_times_text);
 
-    connect(edialog->yesButton, SIGNAL(clicked()), edialog, SLOT(save()));
+    connect(edialog->yesButton, SIGNAL(clicked()), this, SLOT(Restart()));
+    connect(edialog->yesButton, SIGNAL(clicked()), edialog, SLOT(close()));
     connect(edialog->noButton, SIGNAL(clicked()), edialog, SLOT(close()));
 }
 

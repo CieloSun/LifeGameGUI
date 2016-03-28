@@ -163,8 +163,8 @@ void cell::cellMap::burn(int x, int y)
 //检查是否有捕食关系,第一个参数是捕食者，默认为LIVE状态
 bool cell::cellMap::eat(cell& op1, cell& op2)
 {
-    if(op2.getState() == DEAD) return true;
-    else if ((op1.getType() == HIGH_CONSUMER && op2.getType() == CONSUMER)
+    //if(op2.getState() == DEAD) return true;
+    if ((op1.getType() == HIGH_CONSUMER && op2.getType() == CONSUMER)
             || (op1.getType() == CONSUMER && op2.getType() == PRODUCER))
     {
         return true;

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>216</width>
+    <width>343</width>
     <height>230</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>20</x>
      <y>30</y>
-     <width>171</width>
+     <width>201</width>
      <height>21</height>
     </rect>
    </property>
@@ -31,7 +31,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Do you want to save ?</string>
+    <string>Do you want to restart?</string>
    </property>
   </widget>
   <widget class="QWidget" name="layoutWidget">
@@ -39,11 +39,34 @@
     <rect>
      <x>20</x>
      <y>100</y>
-     <width>171</width>
+     <width>307</width>
      <height>111</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <item>
+       <widget class="QLabel" name="runLable">
+        <property name="font">
+         <font>
+          <family>Calibri</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>Have run times:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="runShow">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -143,8 +166,8 @@
     <rect>
      <x>120</x>
      <y>60</y>
-     <width>71</width>
-     <height>21</height>
+     <width>158</width>
+     <height>25</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5">
