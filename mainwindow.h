@@ -49,11 +49,14 @@ private slots:
     //void setCurrentFile(const QString fileName);
     //void okSlot();
     void Test();
+    void damageFunction();
+    void fineFunction();
 
 private:
     void SaveFunction(QString fileName);
     void LoadFunction(QString fileName);
     void ReStartFunction(int = cell::NORMAL_SPEED, double = 0.5, double = 0.1, double = 0.02); //TODO
+
     int MapWidth;
     int MapHeight;
     QPlainTextEdit *text;
@@ -67,6 +70,7 @@ private:
 
 
     int WIDTH;
+    int HEIGHT;
     int Ox;
     int Oy;
     unsigned long long have_run_times;

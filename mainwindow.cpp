@@ -11,14 +11,16 @@
 #include <QTextDocument>
 #include <QToolTip>
 
+
 MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     have_run_times = 0;
-    MapWidth = _width;
+    MapWidth = _width-7;
     MapHeight = _height;
     WIDTH = 50;
+    //HEIGHT=50;
     Ox = 8;
     Oy = 30;
 
@@ -27,18 +29,46 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     Mainmap = new cell::cellMap(MapWidth, MapHeight);
     threadRun = new Thread(Mainmap);
 
+    //connect(ui->startButton,SIGNAL(clicked(bool)),this,SLOT(Start()));
+
     connect(threadRun, SIGNAL(ChangeScreen()), this, SLOT(Change()));
     connect(threadRun, SIGNAL(End()), this, SLOT(End()));
-    connect(ui->actionStart, SIGNAL(triggered(bool)), this, SLOT(Start()));
-    connect(ui->actionRestart, SIGNAL(triggered(bool)), this, SLOT(Restart()));
-    connect(ui->actionSetting, SIGNAL(triggered(bool)), this, SLOT(Setting()));
-    connect(ui->actionPause, SIGNAL(triggered(bool)), this, SLOT(Stop()));
-    connect(ui->actionEnd, SIGNAL(triggered(bool)), this, SLOT(End()));
-    connect(ui->actionResume, SIGNAL(triggered(bool)), this, SLOT(Resume()));
-    connect(ui->actionExit, SIGNAL(triggered(bool)), this, SLOT(close()));
-    connect(ui->actionSave, SIGNAL(triggered(bool)), this, SLOT(Save()));
-    connect(ui->actionOpen, SIGNAL(triggered(bool)), this, SLOT(Load()));
-    connect(ui->actionTest, SIGNAL(triggered(bool)), this, SLOT(Test()));
+    connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(Start()));
+    connect(ui->restartButton, SIGNAL(clicked(bool)), this, SLOT(Restart()));
+    connect(ui->setButton, SIGNAL(clicked(bool)), this, SLOT(Setting()));
+    connect(ui->pauseButton, SIGNAL(clicked(bool)), this, SLOT(Stop()));
+    connect(ui->endButton, SIGNAL(clicked(bool)), this, SLOT(End()));
+    connect(ui->resumeButton, SIGNAL(clicked(bool)), this, SLOT(Resume()));
+    connect(ui->exitButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(Save()));
+    connect(ui->openButton, SIGNAL(clicked(bool)), this, SLOT(Load()));
+    connect(ui->damageButton,SIGNAL(clicked(bool)),this,SLOT(damageFunction()));
+    connect(ui->fineButton,SIGNAL(clicked(bool)),this,SLOT(fineFunction()));
+    //connect(ui->actionTest, SIGNAL(triggered(bool)), this, SLOT(Test()));
+
+    //QWidget *widget=new QWidget();
+    //parent->setAutoFillBackground(true);
+    QPalette palette;
+    //QPixmap pixmap(":image/bg3.png");
+    palette.setColor(QPalette::Background,QColor(188,209,202));
+    this->setPalette(palette);
+    this->show();
+
+    ui->startButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->pauseButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->resumeButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->restartButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->endButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->setButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->damageButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->fineButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->groupBox->setStyleSheet("color:#ffffff;border-radius:5px;border:1px outset #ffffff" );
+
+    ui->saveButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->openButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->aboutButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->exitButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
+    ui->groupBox2->setStyleSheet("color:#ffffff;border-radius:5px;border:1px outset #ffffff");
 
 }
 
@@ -47,6 +77,7 @@ void MainWindow::ReStartFunction(int _sp, double p_N, double c_N, double h_N)
 {
     have_run_times = 0;
     threadRun->restart(_sp, p_N, c_N, h_N);
+    threadRun->start();
 }
 
 void MainWindow::Restart()
@@ -79,6 +110,7 @@ void MainWindow::Restart()
 
     }
     have_run_times++;
+
     //利用对话框来获取数据调用RestartFunction(int,int,int,doule,double,double)
 }
 
@@ -231,7 +263,6 @@ void MainWindow::End()
     connect(edialog->noButton, SIGNAL(clicked()), edialog, SLOT(close()));
 }
 
-
 void MainWindow::ChangeByUser(int selection)
 {
     //TODO
@@ -315,7 +346,7 @@ void MainWindow::Setting()
 {
     int speed_v;
     sdialog = new MyRestartDialog();
-    sdialog->restartButton->setText("Set");
+    sdialog->restartButton->setText("设置");
     connect(sdialog->restartButton, SIGNAL(clicked()), sdialog, SLOT(accept()));
 
     if (sdialog->exec() == QDialog::Accepted)
@@ -344,6 +375,21 @@ void MainWindow::Setting()
     //同样是利用对话框（甚至是和Restart同一个对话框）来调用RestartFunction即可。
 }
 
+void MainWindow::damageFunction(){
+    int speed_v=500;
+    double producer_f=0.1;
+    double consumer_f=0.05;
+    double highConsumer_f=0.02;
+    ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
+}
+
+void MainWindow::fineFunction(){
+    int speed_v=500;
+    double producer_f=0.7;
+    double consumer_f=0.2;
+    double highConsumer_f=0.1;
+    ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
+}
 
 void MainWindow::paintEvent(QPaintEvent *)
 {
@@ -361,13 +407,19 @@ void MainWindow::paintEvent(QPaintEvent *)
     }
     */
 
+    QImage image;
+    image.load( ":image/bg.png" );
+
+    painter->drawImage(0,0, image);
+
+    QPixmap pixmap;
+    //pixmap.load(":image/bg2.png");
 
     for (int i = 0; i < MapWidth; ++i)
     {
         for (int j = 0; j < MapHeight; ++j)
         {
-            QPixmap pixmap;
-            pixmap.load(":image/ground.png");
+
             painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH, WIDTH, pixmap);
             if (Mainmap->cget(i, j).getState() == cell::LIVE)
             {
@@ -425,7 +477,7 @@ void MainWindow::paintEvent(QPaintEvent *)
                 else if (Mainmap->cget(i, j).getType() == cell::HIGH_CONSUMER)
                 {
                     QPixmap pixmap;
-                    pixmap.load(":image/skull.png");
+                    pixmap.load(":image/skull3.png");
                     painter->drawPixmap(Ox + WIDTH * i, Oy + WIDTH * j, WIDTH * 0.6, WIDTH * 0.6, pixmap);
                 }
             }

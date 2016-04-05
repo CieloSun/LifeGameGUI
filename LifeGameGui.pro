@@ -40,3 +40,5 @@ CONFIG   +=c++11
 
 RESOURCES += \
     image.qrc
+
+DISTFILES +=

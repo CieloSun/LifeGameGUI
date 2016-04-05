@@ -20,7 +20,6 @@ public:
     int getConsumerNumber() const;
     int getHighConsumerNumber() const;
 
-
     ~Thread() = default;
 
 signals:

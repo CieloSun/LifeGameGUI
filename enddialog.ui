@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>343</width>
-    <height>230</height>
+    <width>327</width>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QLabel" name="saveLabel">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>30</y>
      <width>201</width>
      <height>21</height>
@@ -24,24 +24,36 @@
    </property>
    <property name="font">
     <font>
-     <family>Calibri</family>
-     <pointsize>14</pointsize>
+     <family>黑体</family>
+     <pointsize>13</pointsize>
      <weight>50</weight>
+     <italic>false</italic>
      <bold>false</bold>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 13pt &quot;黑体&quot;;
+color: rgb(255, 255, 255);</string>
+   </property>
    <property name="text">
-    <string>Do you want to restart?</string>
+    <string>你想重新开始吗？</string>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>100</y>
-     <width>307</width>
-     <height>111</height>
+     <x>30</x>
+     <y>120</y>
+     <width>251</width>
+     <height>181</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 12pt &quot;黑体&quot;;
+color: rgb(255, 255, 255);</string>
+   </property>
+   <property name="title">
+    <string>上帝的数据库</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -50,16 +62,26 @@
        <widget class="QLabel" name="runLable">
         <property name="font">
          <font>
-          <family>Calibri</family>
+          <family>黑体</family>
+          <pointsize>11</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
-         <string>Have run times:</string>
+         <string>运行次数:</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="runShow">
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -73,16 +95,26 @@
        <widget class="QLabel" name="nothingLabel">
         <property name="font">
          <font>
-          <family>Calibri</family>
+          <family>黑体</family>
+          <pointsize>11</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
-         <string>Nothing Number：</string>
+         <string>空地数目：</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="nothingShow">
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -96,16 +128,26 @@
        <widget class="QLabel" name="producterLabel">
         <property name="font">
          <font>
-          <family>Calibri</family>
+          <family>黑体</family>
+          <pointsize>11</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
-         <string>Producer Number:</string>
+         <string>生产者数目:</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="producerShow">
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -119,16 +161,26 @@
        <widget class="QLabel" name="consumerLabel">
         <property name="font">
          <font>
-          <family>Calibri</family>
+          <family>黑体</family>
+          <pointsize>11</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
-         <string>Consumer Number:</string>
+         <string>初级消费者数目:</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="consumerShow">
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -142,16 +194,26 @@
        <widget class="QLabel" name="highLabel">
         <property name="font">
          <font>
-          <family>Calibri</family>
+          <family>黑体</family>
+          <pointsize>11</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
-         <string>High Number:</string>
+         <string>高级消费者数目:</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="highShow">
+        <property name="styleSheet">
+         <string notr="true">font: 11pt &quot;黑体&quot;;</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -161,43 +223,61 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QPushButton" name="yesButton">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>60</y>
-     <width>158</width>
-     <height>25</height>
+     <x>110</x>
+     <y>70</y>
+     <width>75</width>
+     <height>27</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_5">
-    <item>
-     <widget class="QPushButton" name="yesButton">
-      <property name="font">
-       <font>
-        <family>Calibri</family>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Yes</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="noButton">
-      <property name="font">
-       <font>
-        <family>Calibri</family>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>No</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>11</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;微软雅黑&quot;;
+background-color: rgb(94, 121, 80);
+border:0px;
+color: rgb(255, 255, 255);</string>
+   </property>
+   <property name="text">
+    <string>是的</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="noButton">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>70</y>
+     <width>75</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>11</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;微软雅黑&quot;;
+background-color: rgb(94, 121, 80);
+border:0px;
+color: rgb(255, 255, 255);</string>
+   </property>
+   <property name="text">
+    <string>不，我不想</string>
+   </property>
   </widget>
  </widget>
  <resources/>

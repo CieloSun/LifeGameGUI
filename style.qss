@@ -1,0 +1,32 @@
+QComboBox{
+
+border-radius:3px;
+}
+
+QComboBox::drop-down{
+subcontrol-origin: padding;
+subcontrol-position: top right;
+width: 20px;
+
+border-top-right-radius: 3px;
+border-bottom-right-radius: 3px;
+}
+QComboBox::down-arrow{
+image:url(:/image/arrow1.png);
+}
+
+
+QSpinBox{
+border-radius:3px;
+}
+
+QSpinBox::up-button{
+width: 20px;
+border-top-right-radius: 3px;
+}
+QSpinBox::up-arrow{
+image:url(:/image/arrow2.png);
+}
+QSpinBox::down-arrow{
+image:url(:/image/arrow1.png);
+}

@@ -8,5 +8,10 @@ int main(int argc, char *argv[])
     MainWindow w(27, 13);
     w.showMaximized();
 
+    QFile styleFile(":/style.qss");
+    styleFile.open(QIODevice::ReadOnly);
+    QString setStyleSheet(styleFile.readAll());;
+    a.setStyleSheet(setStyleSheet);
+
     return a.exec();
 }
