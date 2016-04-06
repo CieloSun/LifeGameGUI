@@ -58,7 +58,7 @@ void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double h
     }
 }
 //查询周围成年目标数量
-std::vector<cell::cell> cell::cellMap::count(int my_x, int my_y, int my_range, int ob_type, int ob_state)
+std::vector<cell::cell> cell::cellMap::count(int my_x, int my_y, int my_range, int ob_type, int ob_state, bool all=false)
 {
     std::vector<cell> countVector;
     countVector.clear();
@@ -66,14 +66,18 @@ std::vector<cell::cell> cell::cellMap::count(int my_x, int my_y, int my_range, i
     {
         for (int j = my_y - my_range; j <= my_y + my_range; ++j)
         {
-            if (0 <= i && i < width && 0 <= j && j <= height)
+            if (0 <= i && i < width && 0 <= j && j < height)
             {
                 if ((cget(i, j).getType() == ob_type && cget(i, j).getState() == ob_state)
                         && (i != my_x && j != my_y))
                     //修改后不再计算自己，防止出现奇怪的错误
                 {
+                    if(all)
+                    {
+                        countVector.push_back(array[i][j]);
+                    }
                     //如果可育
-                    if (cget(i, j).getProduceAge() <= cget(i, j).getAge())
+                    else if (cget(i, j).getProduceAge() <= cget(i, j).getAge())
                     {
                         countVector.push_back(array[i][j]);
                     }
@@ -172,6 +176,15 @@ bool cell::cellMap::eat(cell& op1, cell& op2)
     return false;
 }
 
+void cell::cellMap::move(cell& op, int x,int y)
+{
+    cget(x,y).copy(op);
+    cget(x,y).setAge(op.getAge());
+    cget(x,y).setStarvingTime(op.getStarvingTime());
+    op.init();
+    //std::cerr<<"debug"<<std::endl;
+}
+
 //检查存在个体的格子
 void cell::cellMap::exist(int x, int y)
 {
@@ -206,7 +219,7 @@ void cell::cellMap::exist(int x, int y)
                 {
                     for (int j = y - cget(x, y).getRange(); j <= y + cget(x, y).getRange(); ++j)
                     {
-                        if (0 <= i && i < width && 0 <= j && j <= height)
+                        if (0 <= i && i < width && 0 <= j && j < height)
                         {
                             if (eat(cget(x, y), cget(i, j)))
                             {
@@ -219,14 +232,49 @@ void cell::cellMap::exist(int x, int y)
                 if (!full)
                 {
                     cget(x, y).setStarvingTime(cget(x, y).getStarvingTime() + 1);
+                    int opx,opy;
+                    int my_range=cget(x,y).getRange();
+                    for (int i = x - my_range; i <=x + my_range; ++i)
+                    {
+                        for (int j = y - my_range; j <= y + my_range; ++j)
+                        {
+                            if (0 <= i && i < width && 0 <= j && j < height)
+                            {
+
+                                if(cget(x,y).getType()==CONSUMER)
+                                {
+                                    //TODO
+                                    if ((cget(i, j).getType() == NOTHING)&& (i != x && j != y))
+                                    {
+                                        opx=i;
+                                        opy=y;
+                                        move(cget(x,y),opx,opy);
+                                        goto breakCase;
+                                    }
+                                }
+                                else if(cget(x, y).getType()==HIGH_CONSUMER)
+                                {
+                                    //TODO
+                                    if ((cget(i, j).getType() == NOTHING)|| (cget(i, j).getType() == PRODUCER))
+                                    {
+                                        opx=i;
+                                        opy=y;
+                                        move(cget(x,y),opx,opy);
+                                        goto breakCase;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+breakCase:
+                    if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit()) cget(x, y).setState(DEAD);
                 }
-                if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit())
+                //判断竞争
+                if ((count(x, y, cget(x, y).getRange(), cget(x, y).getType(), LIVE, true).size()) >= cget(x, y).getDeadNumber())
+                {
                     cget(x, y).setState(DEAD);
-            }
-            //判断竞争
-            if ((count(x, y, cget(x, y).getRange(), cget(x, y).getType(), LIVE).size()) >= cget(x, y).getDeadNumber())
-            {
-                cget(x, y).setState(DEAD);
+                }
             }
         }
     }

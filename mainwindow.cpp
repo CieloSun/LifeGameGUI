@@ -10,18 +10,19 @@
 #include <QFileDialog>
 #include <QTextDocument>
 #include <QToolTip>
+#include <random>
 
 
 MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    damage=false;
     have_run_times = 0;
-    MapWidth = _width-7;
+    MapWidth = _width;
     MapHeight = _height;
     WIDTH = 50;
-    //HEIGHT=50;
-    Ox = 8;
+    Ox = 30;
     Oy = 30;
 
     ui->setupUi(this);
@@ -77,7 +78,7 @@ void MainWindow::ReStartFunction(int _sp, double p_N, double c_N, double h_N)
 {
     have_run_times = 0;
     threadRun->restart(_sp, p_N, c_N, h_N);
-    threadRun->start();
+    //threadRun->start();
 }
 
 void MainWindow::Restart()
@@ -156,24 +157,27 @@ void MainWindow::Test()
 
 void MainWindow::SaveFunction(QString fileName)
 {
-    std::fstream setup(fileName.toStdString(), std::ios::out);
-    setup.close();
-    std::fstream out(fileName.toStdString());
-    out << MapWidth << '\t' << MapHeight << '\n';
-    for (int i = 0; i < MapWidth; ++i)
+    std::ofstream out(fileName.toStdString());
+    for(int i=0;i<MapWidth;++i)
     {
-        for (int j = 0; j < MapHeight; ++j)
+        for(int j=0;j<MapHeight;++j)
         {
-            out << Mainmap->cget(i, j).getType() << '\t' << Mainmap->cget(i, j).getState() << '\t'
-                << Mainmap->cget(i, j).getRange() << '\t' << Mainmap->cget(i, j).getLiveNumber() << '\t'
-                << Mainmap->cget(i, j).getDeadNumber() << '\t' << Mainmap->cget(i, j).getAgeLimit() << '\t'
-                << Mainmap->cget(i, j).getAge() << '\t' << Mainmap->cget(i, j).getAfterDeadLimit() << '\t'
-                << Mainmap->cget(i, j).getAfterDead() << '\t' << Mainmap->cget(i, j).getProduceAge() << '\t'
-                << Mainmap->cget(i, j).getStarvingTimeLimit() << '\t' << Mainmap->cget(i, j).getStarvingTime() << '\n';
+            out<<Mainmap->cget(i,j).getType()<<'\t';
+            out<<Mainmap->cget(i,j).getState()<<'\t';
+            out<<Mainmap->cget(i,j).getRange()<<'\t';
+            out<<Mainmap->cget(i,j).getLiveNumber()<<'\t';
+            out<<Mainmap->cget(i,j).getDeadNumber()<<'\t';
+            out<<Mainmap->cget(i,j).getAge()<<'\t';
+            out<<Mainmap->cget(i,j).getAfterDead()<<'\t';
+            out<<Mainmap->cget(i,j).getProduceAge()<<'\t';
+            out<<Mainmap->cget(i,j).getStarvingTime()<<'\t';
+            out<<Mainmap->cget(i,j).getAgeLimit()<<'\t';
+            out<<Mainmap->cget(i,j).getAfterDeadLimit()<<'\t';
+            out<<Mainmap->cget(i,j).getStarvingTimeLimit()<<'\n';
         }
     }
+    out.close();
 }
-
 void MainWindow::Save()
 {
     QString filename = QFileDialog::getSaveFileName(this);
@@ -181,38 +185,31 @@ void MainWindow::Save()
 }
 void MainWindow::LoadFunction(QString fileName)
 {
-    std::fstream in(fileName.toStdString());
-    in >> MapWidth >> MapHeight;
-    int _type, _state, _range, _liveNumber, _deadNumber, _ageLimit, _age, _afterDeadLimit, _afterDead, _produceAge,
-        _starvingTimeLimit, _starvingTime;
-    for (int i = 0; i < MapWidth; ++i)
+    std::ifstream in(fileName.toStdString());
+    for(int i=0;i<MapWidth;++i)
     {
-        for (int j = 0; j < MapHeight; ++j)
+        for(int j=0;j<MapHeight;++j)
         {
-            in >> _type >> _state >> _range >> _liveNumber >> _deadNumber >> _ageLimit
-               >> _age >> _afterDeadLimit >> _afterDead >> _produceAge>> _starvingTimeLimit
-               >> _starvingTime;
-            /*
-            std::cout<< _type << _state << _range << _liveNumber << _deadNumber << _ageLimit
-                    << _age << _afterDeadLimit << _afterDead << _produceAge<< _starvingTimeLimit
-                    << _starvingTime<< std::endl;
-                    */
-
-            Mainmap->cget(i, j).setType(_type);
-            Mainmap->cget(i, j).setState(_state);
-            Mainmap->cget(i, j).setRange(_range);
-            Mainmap->cget(i, j).setLiveNumber(_liveNumber);
-            Mainmap->cget(i, j).setDeadNumber(_deadNumber);
-            Mainmap->cget(i, j).setAgeLimit(_ageLimit);
-            Mainmap->cget(i, j).setAge(_age);
-            Mainmap->cget(i, j).setAfterDeadLimit(_afterDeadLimit);
-            Mainmap->cget(i, j).setAfterDead(_afterDead);
-            Mainmap->cget(i, j).setProduceAge(_produceAge);
-            Mainmap->cget(i, j).setStarvingTimeLimit(_starvingTimeLimit);
-            Mainmap->cget(i, j).setStarvingTime(_starvingTime);
-
+            int _type,_state,_range,_liveNumber,_deadNumber,_age,
+                    _afterDead,_produceAge,_starvingTime,_ageLimit,_deadLimit,_starvingTimeLimit;
+            in>>_type>>_state>>_range>>_liveNumber>>_deadNumber>>_age
+                    >>_afterDead>>_produceAge>>_starvingTime>>_ageLimit>>_deadLimit>>_starvingTimeLimit;
+            Mainmap->cget(i,j).setType(_type);
+            Mainmap->cget(i,j).setState(_state);
+            Mainmap->cget(i,j).setRange(_range);
+            Mainmap->cget(i,j).setLiveNumber(_liveNumber);
+            Mainmap->cget(i,j).setDeadNumber(_deadNumber);
+            Mainmap->cget(i,j).setAge(_age);
+            Mainmap->cget(i,j).setAfterDead(_afterDead);
+            Mainmap->cget(i,j).setProduceAge(_produceAge);
+            Mainmap->cget(i,j).setStarvingTime(_starvingTime);
+            Mainmap->cget(i,j).setAgeLimit(_ageLimit);
+            Mainmap->cget(i,j).setAfterDeadLimit(_deadLimit);
+            Mainmap->cget(i,j).setStarvingTimeLimit(_starvingTimeLimit);
         }
     }
+
+    in.close();
     update();
     updateGeometry();
 }
@@ -225,6 +222,7 @@ void MainWindow::Load()
     if (!filename.size())
     {
         filename = QString::fromStdString("savedata");
+        std::cerr<<"Successful!"<<std::endl;
     }
     LoadFunction(filename);
 }
@@ -376,11 +374,28 @@ void MainWindow::Setting()
 }
 
 void MainWindow::damageFunction(){
-    int speed_v=500;
-    double producer_f=0.1;
-    double consumer_f=0.05;
-    double highConsumer_f=0.02;
-    ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
+    damage=true;
+    bool flag=false;
+    if(threadRun->isRunning())
+    {
+        threadRun->stop();
+        flag=true;
+    }
+    unsigned int seed = (unsigned int)time(0) % 10000;
+    std::default_random_engine engine(seed);
+    std::uniform_int_distribution<int> distribution(0,1);
+    for(int i=0;i<MapWidth;++i)
+    {
+        for(int j=0;j<MapHeight;++j)
+        {
+            if(distribution(engine))
+            {
+                if(Mainmap->cget(i,j).getState()==cell::LIVE) Mainmap->cget(i,j).setState(cell::DEAD);
+                else if(Mainmap->cget(i,j).getState()==cell::DEAD) Mainmap->cget(i,j).init();
+            }
+        }
+    }
+    if(flag) threadRun->start();
 }
 
 void MainWindow::fineFunction(){
@@ -395,26 +410,17 @@ void MainWindow::paintEvent(QPaintEvent *)
 {
     painter = new QPainter;
     painter->begin(this);
-    /*
-    painter->setPen(QPen(Qt::darkGreen, WIDTH / 20, Qt::DotLine));
-    for (int i = 0; i <= MapHeight; ++i)
-    {
-        painter->drawLine(Ox, Oy + WIDTH * i, Ox + WIDTH * MapWidth, Oy + WIDTH * i);
-    }
-    for (int i = 0; i <= MapWidth; ++i)
-    {
-        painter->drawLine(Ox + WIDTH * i, Oy, Ox + WIDTH * i, Oy + WIDTH * MapHeight);
-    }
-    */
-
     QImage image;
-    image.load( ":image/bg.png" );
+    if(damage)
+    {
+        image.load(":image/bg.jpg");
+        damage=false;
+    }
+    else image.load( ":image/bg.png" );
 
     painter->drawImage(0,0, image);
 
     QPixmap pixmap;
-    //pixmap.load(":image/bg2.png");
-
     for (int i = 0; i < MapWidth; ++i)
     {
         for (int j = 0; j < MapHeight; ++j)

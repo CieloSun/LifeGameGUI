@@ -74,6 +74,8 @@ private:
     int Ox;
     int Oy;
     unsigned long long have_run_times;
+
+    bool damage;
 };
 
 #endif // MAINWINDOW_H
