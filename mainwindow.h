@@ -8,7 +8,6 @@
 #include "cellMap.h"
 #include "ui_mainwindow.h"
 #include "thread.h"
-#include "savedialog.h"
 #include "myrestartdialog.h"
 #include <QString>
 #include <QPlainTextEdit>
@@ -42,7 +41,6 @@ private slots:
     void Stop();
     void Resume();
     void End();//TODO
-    void ChangeByUser(int selection);//TODO
     void Save();//TODO
     void Load();//TODO
     void Setting();//TODO

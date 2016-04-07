@@ -16,7 +16,7 @@ static const int DefaultHeight = 100;
 
 static const int FAST_SPEED = 100;
 static const int NORMAL_SPEED = 500;
-static const int SLOW_SPPED = 1000;
+static const int SLOW_SPEED = 1000;
 
 class cellMap
 {

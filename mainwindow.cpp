@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "enddialog.h"
-#include "savedialog.h"
 #include "myrestartdialog.h"
+#include "settingdialog.h"
 #include <QFile>
 #include <QString>
 #include <fstream>
@@ -93,21 +93,22 @@ void MainWindow::Restart()
         int speed_text = sdialog->speedComboBox->currentIndex();
         if (speed_text == 1)
         {
-            speed_v = 500;
+            speed_v = cell::NORMAL_SPEED;
         }
         else if (speed_text == 2)
         {
-            speed_v = 1000;
+            speed_v = cell::SLOW_SPEED;
         }
         else if (speed_text == 3)
         {
-            speed_v = 100;
+            speed_v = cell::FAST_SPEED;
         }
 
         double producer_f = sdialog->producerSpinBox->value();
         double consumer_f = sdialog->consumerSpinBox->value();
         double highConsumer_f = sdialog->highSpinBox->value();
         ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
+        //threadRun->resume();
 
     }
     have_run_times++;
@@ -261,12 +262,6 @@ void MainWindow::End()
     connect(edialog->noButton, SIGNAL(clicked()), edialog, SLOT(close()));
 }
 
-void MainWindow::ChangeByUser(int selection)
-{
-    //TODO
-    //通过selection的不同来对环境进行不同的设置，是否使用你们发挥一下
-}
-
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     //TODO
@@ -342,35 +337,113 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
 void MainWindow::Setting()
 {
-    int speed_v;
-    sdialog = new MyRestartDialog();
-    sdialog->restartButton->setText("设置");
-    connect(sdialog->restartButton, SIGNAL(clicked()), sdialog, SLOT(accept()));
-
-    if (sdialog->exec() == QDialog::Accepted)
+    SettingDialog *settingdialog = new SettingDialog();
+    if (threadRun->isRunning())
     {
-        //threadRun->stop();
-        int speed_text = sdialog->speedComboBox->currentIndex();
+        threadRun->stop();
+    }
+    settingdialog->show();
+
+    //TODO
+    //调出一个结果统计报告页面并询问是否存储
+    //报告包括每个物种的现存数量，空地的数量，总运行次数,建议以一个对话框显示，并提供退出和重新开始两个按钮
+    //如果想实时获取数据，可以把这四个变量改为类变量
+    int nothing_number = threadRun->getNothingNumber();
+    int producer_number = threadRun->getProducerNumber();
+    int consumer_number = threadRun->getConsumerNumber();
+    int high_consumer_number = threadRun->getHighConsumerNumber();
+
+    QString nothing_text = QString::number(nothing_number);
+    settingdialog->nothingShow->setText(nothing_text);
+    QString producer_text = QString::number(producer_number);
+    settingdialog->producerShow->setText(producer_text);
+    QString consumer_text = QString::number(consumer_number);
+    settingdialog->consumerShow->setText(consumer_text);
+    QString high_consumer_text = QString::number(high_consumer_number);
+    settingdialog->highShow->setText(high_consumer_text);
+    QString have_run_times_text = QString::number(have_run_times);
+    settingdialog->runShow->setText(have_run_times_text);
+
+    if(settingdialog->exec()==QDialog::Accepted)
+    {
+        int speed_text = settingdialog->speedComboBox->currentIndex();
         if (speed_text == 1)
         {
-            speed_v = 500;
+            Mainmap->setSpeed(cell::NORMAL_SPEED);
         }
         else if (speed_text == 2)
         {
-            speed_v = 1000;
+            Mainmap->setSpeed(cell::SLOW_SPEED);
         }
         else if (speed_text == 3)
         {
-            speed_v = 100;
+            Mainmap->setSpeed(cell::FAST_SPEED);
+        }
+        int producerAddNumber=settingdialog->ProducerBox->value();
+        int consumerAddNumber=settingdialog->ConsumerBox->value();
+        int highConsumerAddNumber=settingdialog->HighConsumerBox->value();
+        int sum=producerAddNumber+consumerAddNumber+highConsumerAddNumber;
+        if(sum>nothing_number)
+        {
+            QMessageBox::critical(this,"Error","There is no enough room to put these.");
+        }
+        else
+        {
+            size_t seed=time(0)%10000;
+            std::default_random_engine engine(seed);
+            std::uniform_int_distribution<int> distribution(cell::PRODUCER,cell::HIGH_CONSUMER);
+            for(int i=0;i<MapWidth;++i)
+            {
+                for(int j=0;j<MapHeight;++j)
+                {
+                    if(Mainmap->cget(i, j).getType()==cell::NOTHING)
+                    {
+                        int choose;
+                        bool flag=true;
+                        while(sum>=0)
+                        {
+                            do
+                            {
+                                choose=distribution(engine);
+                                if(choose==cell::PRODUCER)
+                                {
+                                    if(producerAddNumber<=0) flag=false;
+                                    else
+                                    {
+                                        flag=true;
+                                        --producerAddNumber;
+                                    }
+                                }
+                                else if(choose==cell::CONSUMER)
+                                {
+
+                                    if(consumerAddNumber<=0) flag=false;
+                                    else
+                                    {
+                                        flag=true;
+                                        --consumerAddNumber;
+                                    }
+                                }
+                                else
+                                {
+                                    if(highConsumerAddNumber<=0) flag=false;
+                                    else
+                                    {
+                                        flag=true;
+                                        --highConsumerAddNumber;
+                                    }
+                                }
+                            }while(!flag);
+                            sum=producerAddNumber+consumerAddNumber+highConsumerAddNumber;
+                            Mainmap->cget(i, j).init(cell::LIVE,choose);
+                        }
+                    }
+                }
+            }
         }
 
-        double producer_f = sdialog->producerSpinBox->value();
-        double consumer_f = sdialog->consumerSpinBox->value();
-        double highConsumer_f = sdialog->highSpinBox->value();
-        ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
     }
-    //TODO
-    //同样是利用对话框（甚至是和Restart同一个对话框）来调用RestartFunction即可。
+    threadRun->resume();
 }
 
 void MainWindow::damageFunction(){
