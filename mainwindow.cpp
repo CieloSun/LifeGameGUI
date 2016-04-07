@@ -74,40 +74,45 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
 }
 
 
-void MainWindow::ReStartFunction(int _sp, double p_N, double c_N, double h_N)
+void MainWindow::ReStartFunction(double p_N, double c_N, double h_N)
 {
     have_run_times = 0;
-    threadRun->restart(_sp, p_N, c_N, h_N);
+    threadRun->restart(p_N, c_N, h_N);
     //threadRun->start();
 }
 
 void MainWindow::Restart()
 {
-    int speed_v;
+
     sdialog = new MyRestartDialog();
     connect(sdialog->restartButton, SIGNAL(clicked()), sdialog, SLOT(accept()));
 
     if (sdialog->exec() == QDialog::Accepted)
     {
         //threadRun->stop();
+
+        int speed_v;
         int speed_text = sdialog->speedComboBox->currentIndex();
-        if (speed_text == 1)
+        if (speed_text == 0)
         {
             speed_v = cell::NORMAL_SPEED;
         }
-        else if (speed_text == 2)
+        else if (speed_text == 1)
         {
             speed_v = cell::SLOW_SPEED;
         }
-        else if (speed_text == 3)
+        else if (speed_text == 2)
         {
             speed_v = cell::FAST_SPEED;
         }
+        Mainmap->setSpeed(speed_v);
+
+
 
         double producer_f = sdialog->producerSpinBox->value();
         double consumer_f = sdialog->consumerSpinBox->value();
         double highConsumer_f = sdialog->highSpinBox->value();
-        ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
+        ReStartFunction(producer_f, consumer_f, highConsumer_f);
         //threadRun->resume();
 
     }
@@ -338,16 +343,13 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 void MainWindow::Setting()
 {
     SettingDialog *settingdialog = new SettingDialog();
+    bool flag=false;
     if (threadRun->isRunning())
     {
+        flag=true;
         threadRun->stop();
     }
     settingdialog->show();
-
-    //TODO
-    //调出一个结果统计报告页面并询问是否存储
-    //报告包括每个物种的现存数量，空地的数量，总运行次数,建议以一个对话框显示，并提供退出和重新开始两个按钮
-    //如果想实时获取数据，可以把这四个变量改为类变量
     int nothing_number = threadRun->getNothingNumber();
     int producer_number = threadRun->getProducerNumber();
     int consumer_number = threadRun->getConsumerNumber();
@@ -363,26 +365,28 @@ void MainWindow::Setting()
     settingdialog->highShow->setText(high_consumer_text);
     QString have_run_times_text = QString::number(have_run_times);
     settingdialog->runShow->setText(have_run_times_text);
-
     if(settingdialog->exec()==QDialog::Accepted)
     {
+
         int speed_text = settingdialog->speedComboBox->currentIndex();
-        if (speed_text == 1)
+        if (speed_text == 0)
         {
             Mainmap->setSpeed(cell::NORMAL_SPEED);
         }
-        else if (speed_text == 2)
+        else if (speed_text == 1)
         {
             Mainmap->setSpeed(cell::SLOW_SPEED);
         }
-        else if (speed_text == 3)
+        else if (speed_text == 2)
         {
             Mainmap->setSpeed(cell::FAST_SPEED);
         }
+
         int producerAddNumber=settingdialog->ProducerBox->value();
         int consumerAddNumber=settingdialog->ConsumerBox->value();
         int highConsumerAddNumber=settingdialog->HighConsumerBox->value();
         int sum=producerAddNumber+consumerAddNumber+highConsumerAddNumber;
+
         if(sum>nothing_number)
         {
             QMessageBox::critical(this,"Error","There is no enough room to put these.");
@@ -391,51 +395,41 @@ void MainWindow::Setting()
         {
             size_t seed=time(0)%10000;
             std::default_random_engine engine(seed);
-            std::uniform_int_distribution<int> distribution(cell::PRODUCER,cell::HIGH_CONSUMER);
-            for(int i=0;i<MapWidth;++i)
+            std::uniform_int_distribution<int> distribution(0, sum - 1);
+            std::vector<int> cellVector;
+            while(producerAddNumber-- > 0)
             {
-                for(int j=0;j<MapHeight;++j)
+                cellVector.push_back(cell::PRODUCER);
+            }
+            while(consumerAddNumber-- > 0)
+            {
+                cellVector.push_back(cell::CONSUMER);
+            }
+            while(highConsumerAddNumber-- > 0)
+            {
+                cellVector.push_back(cell::HIGH_CONSUMER);
+            }
+            if(cellVector.size())
+            {
+                int randomTimes=MapWidth*MapHeight;
+                while(randomTimes--)
                 {
-                    if(Mainmap->cget(i, j).getType()==cell::NOTHING)
-                    {
-                        int choose;
-                        bool flag=true;
-                        while(sum>=0)
-                        {
-                            do
-                            {
-                                choose=distribution(engine);
-                                if(choose==cell::PRODUCER)
-                                {
-                                    if(producerAddNumber<=0) flag=false;
-                                    else
-                                    {
-                                        flag=true;
-                                        --producerAddNumber;
-                                    }
-                                }
-                                else if(choose==cell::CONSUMER)
-                                {
+                    int a=distribution(engine);
+                    int b=distribution(engine);
+                    std::swap(cellVector[a],cellVector[b]);
+                }
 
-                                    if(consumerAddNumber<=0) flag=false;
-                                    else
-                                    {
-                                        flag=true;
-                                        --consumerAddNumber;
-                                    }
-                                }
-                                else
-                                {
-                                    if(highConsumerAddNumber<=0) flag=false;
-                                    else
-                                    {
-                                        flag=true;
-                                        --highConsumerAddNumber;
-                                    }
-                                }
-                            }while(!flag);
-                            sum=producerAddNumber+consumerAddNumber+highConsumerAddNumber;
-                            Mainmap->cget(i, j).init(cell::LIVE,choose);
+
+                for(int i=0;i<MapWidth;++i)
+                {
+                    for(int j=0;j<MapHeight;++j)
+                    {
+                        if(Mainmap->cget(i, j).getType()==cell::NOTHING)
+                        {
+                            int index = cellVector.size() - 1;
+                            int type=cellVector[index];
+                            cellVector.pop_back();
+                            Mainmap->cget(i, j).init(cell::LIVE,type);
                         }
                     }
                 }
@@ -443,7 +437,11 @@ void MainWindow::Setting()
         }
 
     }
-    threadRun->resume();
+    if(flag)
+    {
+      threadRun->resume();
+      threadRun->start();
+    }
 }
 
 void MainWindow::damageFunction(){
@@ -472,11 +470,10 @@ void MainWindow::damageFunction(){
 }
 
 void MainWindow::fineFunction(){
-    int speed_v=500;
     double producer_f=0.7;
     double consumer_f=0.2;
     double highConsumer_f=0.1;
-    ReStartFunction(speed_v, producer_f, consumer_f, highConsumer_f);
+    ReStartFunction(producer_f, consumer_f, highConsumer_f);
 }
 
 void MainWindow::paintEvent(QPaintEvent *)

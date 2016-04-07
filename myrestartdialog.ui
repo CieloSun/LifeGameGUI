@@ -119,12 +119,12 @@ padding:2px;
        </item>
        <item>
         <property name="text">
-         <string>加快速度</string>
+         <string>慢度</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>减慢速度</string>
+         <string>快速</string>
         </property>
        </item>
       </widget>

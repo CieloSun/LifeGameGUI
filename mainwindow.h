@@ -53,7 +53,7 @@ private slots:
 private:
     void SaveFunction(QString fileName);
     void LoadFunction(QString fileName);
-    void ReStartFunction(int = cell::NORMAL_SPEED, double = 0.5, double = 0.1, double = 0.02); //TODO
+    void ReStartFunction(double = 0.5, double = 0.1, double = 0.02); //TODO
 
     int MapWidth;
     int MapHeight;

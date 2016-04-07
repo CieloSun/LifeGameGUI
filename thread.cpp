@@ -119,14 +119,14 @@ start_game:
             }
         }
         emit ChangeScreen();
-        Sleep(Mainmap->getSpeed());
+        msleep(Mainmap->getSpeed());
     }
 }
 
-void Thread::restart(int _sp, double p_N, double c_N, double h_N)
+void Thread::restart(double p_N, double c_N, double h_N)
 {
     QMutexLocker locker(&mutex);
-    Mainmap->setSpeed(_sp);
+    //Mainmap->setSpeed(_sp);
     Mainmap->loadMap(p_N, c_N, h_N);
     emit ChangeScreen();
 }

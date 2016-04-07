@@ -14,7 +14,7 @@ public:
 
     void stop();
     void resume();
-    void restart(int _sp, double p_N, double c_N, double h_N);
+    void restart(double p_N, double c_N, double h_N);
     int getNothingNumber() const;
     int getProducerNumber() const;
     int getConsumerNumber() const;
