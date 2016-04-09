@@ -72,10 +72,10 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     ui->exitButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
     ui->groupBox2->setStyleSheet("color:#ffffff;border-radius:5px;border:1px outset #ffffff");
 
-//    QDialogButtonBox *dialogButtonBox;
-//    dialogButtonBox->setStandardButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-//    dialogButtonBox->button(QDialogButtonBox::Ok)->setText("执行");
-//    dialogButtonBox->button(QDialogButtonBox::Cancel)->setText("放弃");
+    //    QDialogButtonBox *dialogButtonBox;
+    //    dialogButtonBox->setStandardButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    //    dialogButtonBox->button(QDialogButtonBox::Ok)->setText("执行");
+    //    dialogButtonBox->button(QDialogButtonBox::Cancel)->setText("放弃");
 }
 
 
@@ -446,9 +446,9 @@ void MainWindow::Setting()
     }
     if(flag)
     {
-      //SettingDialog->connect(settingdialog->yesButton,SIGNAL(clicked()),SettingDialog,SLOT(accept());
-      threadRun->resume();
-      threadRun->start();
+        //SettingDialog->connect(settingdialog->yesButton,SIGNAL(clicked()),SettingDialog,SLOT(accept());
+        threadRun->resume();
+        threadRun->start();
     }
 }
 
@@ -478,10 +478,50 @@ void MainWindow::damageFunction(){
 }
 
 void MainWindow::fineFunction(){
+    /*
     double producer_f=0.7;
     double consumer_f=0.2;
     double highConsumer_f=0.1;
     ReStartFunction(producer_f, consumer_f, highConsumer_f);
+    */
+    bool flag=false;
+    if(threadRun->isRunning())
+    {
+        threadRun->stop();
+        flag=true;
+    }
+    for(int i=0;i<MapWidth;++i)
+    {
+        for(int j=0;j<MapHeight;++j)
+        {
+            if(Mainmap->cget(i, j).getState()==cell::LIVE)
+            {
+                Mainmap->cget(i, j).setStarvingTime(0);
+            }
+            else if(Mainmap->cget(i, j).getState()==cell::DEAD) Mainmap->cget(i, j).init();
+            else if(Mainmap->cget(i, j).getState()==cell::EMPTY)
+            {
+                time_t seed = time(0) % 10000;
+                std::uniform_int_distribution<int> FineDistribution(0,9);
+                std::default_random_engine engine(seed);
+                int burnRandom=FineDistribution(engine);
+                std::cerr<<burnRandom<<std::endl;
+                if(burnRandom>=0&&burnRandom<=5)
+                {
+                    Mainmap->cget(i, j).init(cell::LIVE,cell::PRODUCER);
+                }
+                else if(burnRandom>5&&burnRandom<=7)
+                {
+                    Mainmap->cget(i, j).init(cell::LIVE,cell::CONSUMER);
+                }
+                else
+                {
+                    Mainmap->cget(i, j).init(cell::LIVE,cell::HIGH_CONSUMER);
+                }
+            }
+        }
+    }
+    if(flag) threadRun->start();
 }
 
 void MainWindow::paintEvent(QPaintEvent *)
