@@ -20,8 +20,6 @@
         <file>skull2.png</file>
         <file>skull3.png</file>
         <file>lion_young.png</file>
-        <file>bg2.png</file>
-        <file>bg3.png</file>
         <file>bg4.png</file>
         <file>bg5.png</file>
         <file>bg6.png</file>
@@ -29,7 +27,8 @@
         <file>arrow1.png</file>
         <file>arrow2.png</file>
         <file>bg8.png</file>
-        <file>bg9.png</file>
+        <file>bg2.png</file>
+        <file>bg3.png</file>
     </qresource>
     <qresource prefix="/">
         <file>style.qss</file>

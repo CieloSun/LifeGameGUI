@@ -362,6 +362,7 @@ void MainWindow::Setting()
     int consumer_number = threadRun->getConsumerNumber();
     int high_consumer_number = threadRun->getHighConsumerNumber();
 
+
     QString nothing_text = QString::number(nothing_number);
     settingdialog->nothingShow->setText(nothing_text);
     QString producer_text = QString::number(producer_number);
@@ -372,6 +373,8 @@ void MainWindow::Setting()
     settingdialog->highShow->setText(high_consumer_text);
     QString have_run_times_text = QString::number(have_run_times);
     settingdialog->runShow->setText(have_run_times_text);
+
+
     if(settingdialog->exec()==QDialog::Accepted)
     {
 
@@ -393,6 +396,9 @@ void MainWindow::Setting()
         int consumerAddNumber=settingdialog->ConsumerBox->value();
         int highConsumerAddNumber=settingdialog->HighConsumerBox->value();
         int sum=producerAddNumber+consumerAddNumber+highConsumerAddNumber;
+
+        double evolutionProbability=settingdialog->evolutionSpinBox->value();
+        Mainmap->setEvolution(evolutionProbability);
 
         if(sum>nothing_number)
         {
@@ -531,7 +537,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     QImage image;
     if(damage)
     {
-        image.load(":image/bg9.png");
+        image.load(":image/bg2.png");
         damage=false;
     }
     else image.load( ":image/bg.png" );
