@@ -29,6 +29,7 @@
         <file>arrow1.png</file>
         <file>arrow2.png</file>
         <file>bg8.png</file>
+        <file>bg9.png</file>
     </qresource>
     <qresource prefix="/">
         <file>style.qss</file>
