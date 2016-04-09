@@ -4,6 +4,8 @@
 SettingDialog::SettingDialog(QWidget *parent) :
     QDialog(parent)
 {
+
+
     setupUi(this);
     QPixmap pixmap= QPixmap(":image/bg8.png").scaled(this->size());
     QPalette palette(this->palette());

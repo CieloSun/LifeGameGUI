@@ -18,6 +18,7 @@ image:url(:/image/arrow1.png);
 
 QSpinBox{
 border-radius:3px;
+border:0px;
 }
 
 QSpinBox::up-button{
@@ -34,3 +35,24 @@ image:url(:/image/arrow2.png);
 QSpinBox::down-arrow{
 image:url(:/image/arrow1.png);
 }
+
+QDoubleSpinBox{
+border-radius:3px;
+border:0px;
+}
+QDoubleSpinBox::up-button{
+width: 20px;
+border-top-right-radius: 3px;
+}
+QDoubleSpinBox::down-button{
+width: 20px;
+border-top-right-radius: 3px;
+}
+QDoubleSpinBox::up-arrow{
+image:url(:/image/arrow2.png);
+}
+QDoubleSpinBox::down-arrow{
+image:url(:/image/arrow1.png);
+}
+
+
