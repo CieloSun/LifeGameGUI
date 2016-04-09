@@ -24,6 +24,10 @@ QSpinBox::up-button{
 width: 20px;
 border-top-right-radius: 3px;
 }
+QSpinBox::down-button{
+width: 20px;
+border-top-right-radius: 3px;
+}
 QSpinBox::up-arrow{
 image:url(:/image/arrow2.png);
 }

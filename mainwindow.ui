@@ -35,6 +35,9 @@
       <bold>false</bold>
      </font>
     </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#bcd1ca;&quot;&gt;God's perspective&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
     <property name="styleSheet">
      <string notr="true">font: 88 13pt &quot;黑体&quot;;
 </string>
@@ -50,6 +53,9 @@
        <width>91</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;黑体&quot;;
@@ -68,6 +74,9 @@ border-color: rgb(240, 240, 240);</string>
        <height>31</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pause&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;黑体&quot;;</string>
      </property>
@@ -83,6 +92,9 @@ border-color: rgb(240, 240, 240);</string>
        <width>81</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Restart&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;黑体&quot;;</string>
@@ -100,6 +112,9 @@ border-color: rgb(240, 240, 240);</string>
        <height>31</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;End&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;黑体&quot;;</string>
      </property>
@@ -115,6 +130,9 @@ border-color: rgb(240, 240, 240);</string>
        <width>81</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Resume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;黑体&quot;;</string>
@@ -132,6 +150,9 @@ border-color: rgb(240, 240, 240);</string>
        <height>31</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Setting&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;黑体&quot;;</string>
      </property>
@@ -147,6 +168,9 @@ border-color: rgb(240, 240, 240);</string>
        <width>91</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Natural Disaster&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;黑体&quot;;</string>
@@ -164,6 +188,9 @@ border-color: rgb(240, 240, 240);</string>
        <height>31</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;favourable weather&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;黑体&quot;;</string>
      </property>
@@ -180,6 +207,9 @@ border-color: rgb(240, 240, 240);</string>
       <width>261</width>
       <height>131</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#bcd1ca;&quot;&gt;Others&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="title">
      <string>其他</string>
@@ -202,6 +232,9 @@ border-color: rgb(240, 240, 240);</string>
        <bold>false</bold>
       </font>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">font: 75 11pt &quot;微软雅黑&quot;;</string>
      </property>
@@ -217,6 +250,9 @@ border-color: rgb(240, 240, 240);</string>
        <width>101</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 100 11pt &quot;微软雅黑&quot;;
@@ -235,6 +271,9 @@ border-color: rgb(240, 240, 240);</string>
        <height>31</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;About us&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">font: 75 11pt &quot;微软雅黑&quot;;</string>
      </property>
@@ -250,6 +289,9 @@ border-color: rgb(240, 240, 240);</string>
        <width>101</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exit&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 75 11pt &quot;微软雅黑&quot;;</string>

@@ -11,6 +11,7 @@
 #include <QTextDocument>
 #include <QToolTip>
 #include <random>
+#include <QPushButton>
 
 
 MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
@@ -71,6 +72,10 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     ui->exitButton->setStyleSheet("background-color:#ffffff;color:#bcd1ca;border:0px;border-radius:5px;");
     ui->groupBox2->setStyleSheet("color:#ffffff;border-radius:5px;border:1px outset #ffffff");
 
+//    QDialogButtonBox *dialogButtonBox;
+//    dialogButtonBox->setStandardButtons(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+//    dialogButtonBox->button(QDialogButtonBox::Ok)->setText("执行");
+//    dialogButtonBox->button(QDialogButtonBox::Cancel)->setText("放弃");
 }
 
 
@@ -344,6 +349,8 @@ void MainWindow::Setting()
 {
     SettingDialog *settingdialog = new SettingDialog();
     bool flag=false;
+
+
     if (threadRun->isRunning())
     {
         flag=true;
@@ -439,6 +446,7 @@ void MainWindow::Setting()
     }
     if(flag)
     {
+      //SettingDialog->connect(settingdialog->yesButton,SIGNAL(clicked()),SettingDialog,SLOT(accept());
       threadRun->resume();
       threadRun->start();
     }
@@ -483,7 +491,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     QImage image;
     if(damage)
     {
-        image.load(":image/bg.jpg");
+        image.load(":image/bg9.png");
         damage=false;
     }
     else image.load( ":image/bg.png" );
