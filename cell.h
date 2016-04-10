@@ -32,6 +32,7 @@ static const int CONSUMER_STARVING_TIME= 10;
 static const int HIGH_CONSUMER_LN = 2;
 static const int HIGH_CONSUMER_DN = 3;
 static const int HIGH_CONSUMER_RANGE = 2;
+//static const int HIGH_CONSUMER_SEARCH_RANGE = 4;
 static const int HIGH_CONSUMER_AGE = 100;
 static const int HIGH_CONSUMER_AFTER_DEAD = 20;
 static const int HIGH_CONSUMER_PRODUCE_AGE = 30;

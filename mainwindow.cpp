@@ -508,6 +508,7 @@ void MainWindow::fineFunction(){
             else if(Mainmap->cget(i, j).getState()==cell::DEAD) Mainmap->cget(i, j).init();
             else if(Mainmap->cget(i, j).getState()==cell::EMPTY)
             {
+<<<<<<< HEAD
                 time_t seed = time(0) % 10000;
                 /*
                 std::uniform_int_distribution<int> FineDistribution(0,9);
@@ -515,12 +516,18 @@ void MainWindow::fineFunction(){
                 */
                 srand(seed);
                 int burnRandom=rand()%10;
+=======
+                std::uniform_int_distribution<int> FineDistribution(0,9);
+                std::default_random_engine engine;
+                engine.seed(std::chrono::system_clock::now().time_since_epoch().count());
+                int burnRandom=FineDistribution(engine);
+>>>>>>> design
                 std::cerr<<burnRandom<<std::endl;
                 if(burnRandom>=0&&burnRandom<=5)
                 {
                     Mainmap->cget(i, j).init(cell::LIVE,cell::PRODUCER);
                 }
-                else if(burnRandom>5&&burnRandom<=7)
+                else if(burnRandom>5&&burnRandom<=8)
                 {
                     Mainmap->cget(i, j).init(cell::LIVE,cell::CONSUMER);
                 }

@@ -73,6 +73,7 @@ start_game:
             emit End();
             break;
         }
+        Mainmap->cleanVisitedState();
         for (int i = 0; i < Mainmap->getWidth(); ++i)
         {
             for (int j = 0; j < Mainmap->getHeight(); ++j)

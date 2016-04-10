@@ -3,8 +3,10 @@
 #include <iostream>
 #include <vector>
 #include <Windows.h>
+#include <memory.h>
 #include <ctime>
 #include <random>
+#include <chrono>
 #include <thread>
 
 namespace cell
@@ -33,6 +35,11 @@ public:
 
     bool eat(cell& op1, cell& op2);
 
+    void cleanVisitedState()
+    {
+        memset(visited,false,sizeof(visited));
+    }
+
     void exist(int x, int y);
 
     void move(cell&op, int x, int y);
@@ -50,10 +57,6 @@ public:
     {
         return height;
     }
-
-    static void runMap(cellMap *);
-
-    static void pauseMap(cellMap *);
 
     void setEvolution(double _evolution)
     {
@@ -76,5 +79,7 @@ private:
     int speed;
     double evolution;
     cell array[MaxWidth][MaxHeight];
+    bool visited[MaxWidth][MaxHeight];
+    std::default_random_engine engine;
 };
 }
