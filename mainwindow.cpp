@@ -12,6 +12,7 @@
 #include <QToolTip>
 #include <random>
 #include <QPushButton>
+#include <cstdlib>
 
 
 MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
@@ -508,9 +509,12 @@ void MainWindow::fineFunction(){
             else if(Mainmap->cget(i, j).getState()==cell::EMPTY)
             {
                 time_t seed = time(0) % 10000;
+                /*
                 std::uniform_int_distribution<int> FineDistribution(0,9);
                 std::default_random_engine engine(seed);
-                int burnRandom=FineDistribution(engine);
+                */
+                srand(seed);
+                int burnRandom=rand()%10;
                 std::cerr<<burnRandom<<std::endl;
                 if(burnRandom>=0&&burnRandom<=5)
                 {
