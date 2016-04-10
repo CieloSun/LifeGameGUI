@@ -6,7 +6,6 @@
 cell::cellMap::cellMap(int _width, int _height)
     : width(_width), height(_height)
 {
-
     for (int i = 0; i < width; ++i)
     {
         for (int j = 0; j < height; ++j)
@@ -17,6 +16,7 @@ cell::cellMap::cellMap(int _width, int _height)
     //默认突变概率0.1
     evolution = 0.1;
     speed = NORMAL_SPEED;
+    engine.seed(std::chrono::system_clock::now().time_since_epoch().count());
     loadMap();
 }
 
@@ -29,8 +29,6 @@ void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double h
         return;
     }
 
-    time_t seed = time(0);
-    std::default_random_engine engine(seed);
     std::uniform_real_distribution<double> distribution(0, 1);
 
     for (int i = 0; i < width; ++i)
@@ -116,7 +114,7 @@ void cell::cellMap::burn(int x, int y)
                 }
             }
         }
-        std::default_random_engine engine(seed);
+
         std::uniform_int_distribution<int> distribution(0, countVector.size());
 
         int motherIndex = distribution(engine);
@@ -125,16 +123,17 @@ void cell::cellMap::burn(int x, int y)
         //有一定概率进行突变
 
         std::uniform_real_distribution<double> distribution2(0, 1);
+        std::uniform_int_distribution<int> distribution3(0, 5);
+        std::uniform_int_distribution<int> distribution4(0, 4);
+        std::uniform_int_distribution<int> distribution5(1, 4);
+        std::uniform_int_distribution<int> distribution6(0, 10);
+        std::uniform_int_distribution<int> distribution7(0, 10);
+        std::uniform_int_distribution<int> distribution8(0, 5);
+        std::uniform_int_distribution<int> distribution9(1, 5);
         if (distribution2(engine) < evolution)
         {
             //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
-            std::uniform_int_distribution<int> distribution3(0, 5);
-            std::uniform_int_distribution<int> distribution4(0, 4);
-            std::uniform_int_distribution<int> distribution5(1, 4);
-            std::uniform_int_distribution<int> distribution6(0, 10);
-            std::uniform_int_distribution<int> distribution7(0, 10);
-            std::uniform_int_distribution<int> distribution8(0, 5);
-            std::uniform_int_distribution<int> distribution9(1, 5);
+
             switch (distribution3(engine))
             {
             case 0:
@@ -188,6 +187,7 @@ void cell::cellMap::move(cell& op, int x,int y)
 //检查存在个体的格子
 void cell::cellMap::exist(int x, int y)
 {
+    if (visited[x][y]) return;
     if (cget(x, y).getState() == DEAD)
     {
         if (cget(x, y).getAfterDead() >= cget(x, y).getAfterDeadLimit())
@@ -214,7 +214,7 @@ void cell::cellMap::exist(int x, int y)
             //判断捕食
             if (cget(x, y).getType() != PRODUCER)
             {
-                bool full = false;
+                int full = 0;
                 for (int i = x - cget(x, y).getRange(); i <= x + cget(x, y).getRange(); ++i)
                 {
                     for (int j = y - cget(x, y).getRange(); j <= y + cget(x, y).getRange(); ++j)
@@ -224,19 +224,26 @@ void cell::cellMap::exist(int x, int y)
                             if (eat(cget(x, y), cget(i, j)))
                             {
                                 cget(i, j).init();
-                                full = true;
+                                ++full;
                             }
                         }
                     }
                 }
-                if (!full)
+                if (full > 0)
+                {
+                    int temp = cget(x, y).getStarvingTime() - full;
+                    cget(x, y).setStarvingTime((temp>=0)?temp:0);
+                    visited[x][y] = true;
+                }
+                else
                 {
                     cget(x, y).setStarvingTime(cget(x, y).getStarvingTime() + 1);
                     int opx,opy;
                     int my_range=cget(x,y).getRange();
-                    for (int i = x - my_range; i <=x + my_range; ++i)
+                    std::vector<std::pair<int,int> > target;
+                    for (int i = x + my_range; i >=x - my_range; --i)
                     {
-                        for (int j = y - my_range; j <= y + my_range; ++j)
+                        for (int j = y + my_range; j >= y - my_range; --j)
                         {
                             if (0 <= i && i < width && 0 <= j && j < height)
                             {
@@ -246,29 +253,30 @@ void cell::cellMap::exist(int x, int y)
                                     //TODO
                                     if ((cget(i, j).getType() == NOTHING)&& (i != x && j != y))
                                     {
-                                        opx=i;
-                                        opy=y;
-                                        move(cget(x,y),opx,opy);
-                                        goto breakCase;
+                                        target.push_back(std::make_pair(i,j));
                                     }
                                 }
                                 else if(cget(x, y).getType()==HIGH_CONSUMER)
                                 {
                                     //TODO
-                                    if ((cget(i, j).getType() == NOTHING)|| (cget(i, j).getType() == PRODUCER))
+                                    if (cget(i, j).getType() == NOTHING || cget(i, j).getType() == PRODUCER || cget(i, j).getType() == CONSUMER)
                                     {
-                                        opx=i;
-                                        opy=y;
-                                        move(cget(x,y),opx,opy);
-                                        goto breakCase;
+                                        target.push_back(std::make_pair(i,j));
                                     }
                                 }
                             }
                         }
                     }
-
+                    if (!target.empty())
+                    {
+                        std::uniform_int_distribution<> dist(0,target.size() - 1);
+                        auto it = target.begin() + dist(engine);
+                        move(cget(x,y),it->first,it->second);
+                        x = it->first; y = it->second;
+                    }
 breakCase:
                     if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit()) cget(x, y).setState(DEAD);
+                    visited[x][y] = true;
                 }
                 //判断竞争
                 if ((count(x, y, cget(x, y).getRange(), cget(x, y).getType(), LIVE, true).size()) >= cget(x, y).getDeadNumber())
