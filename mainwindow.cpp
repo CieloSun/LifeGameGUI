@@ -400,8 +400,6 @@ void MainWindow::Setting()
         }
         else
         {
-            size_t seed=time(0)%10000;
-            std::default_random_engine engine(seed);
             std::uniform_int_distribution<int> distribution(0, sum - 1);
             std::vector<int> cellVector;
             while(producerAddNumber-- > 0)
@@ -421,8 +419,8 @@ void MainWindow::Setting()
                 int randomTimes=MapWidth*MapHeight;
                 while(randomTimes--)
                 {
-                    int a=distribution(engine);
-                    int b=distribution(engine);
+                    int a=distribution(Mainmap->manualeng);
+                    int b=distribution(Mainmap->manualeng);
                     std::swap(cellVector[a],cellVector[b]);
                 }
 
@@ -460,14 +458,13 @@ void MainWindow::damageFunction(){
         threadRun->stop();
         flag=true;
     }
-    unsigned int seed = (unsigned int)time(0) % 10000;
-    std::default_random_engine engine(seed);
+
     std::uniform_int_distribution<int> distribution(0,1);
     for(int i=0;i<MapWidth;++i)
     {
         for(int j=0;j<MapHeight;++j)
         {
-            if(distribution(engine))
+            if(distribution(Mainmap->manualeng))
             {
                 if(Mainmap->cget(i,j).getState()==cell::LIVE) Mainmap->cget(i,j).setState(cell::DEAD);
                 else if(Mainmap->cget(i,j).getState()==cell::DEAD) Mainmap->cget(i,j).init();
@@ -501,10 +498,8 @@ void MainWindow::fineFunction(){
             else if(Mainmap->cget(i, j).getState()==cell::DEAD) Mainmap->cget(i, j).init();
             else if(Mainmap->cget(i, j).getState()==cell::EMPTY)
             {
-                time_t seed = time(0) % 10000;
                 std::uniform_int_distribution<int> FineDistribution(0,9);
-                std::default_random_engine engine(seed);
-                int burnRandom=FineDistribution(engine);
+                int burnRandom=FineDistribution(Mainmap->manualeng);
                 std::cerr<<burnRandom<<std::endl;
                 if(burnRandom>=0&&burnRandom<=5)
                 {

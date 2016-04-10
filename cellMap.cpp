@@ -16,12 +16,12 @@ cell::cellMap::cellMap(int _width, int _height)
     //默认突变概率0.1
     evolution = 0.1;
     speed = NORMAL_SPEED;
-    engine.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    manualeng.seed(std::chrono::system_clock::now().time_since_epoch().count());
     loadMap();
 }
 
 //设置完毕，生成初始态
-void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double highConsumer_freq)
+void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double highConsumer_freq,  int seed)
 {
     double sum_freq = highConsumer_freq + consumer_freq + producer_freq;
     if (producer_freq < 0 || consumer_freq < 0 || highConsumer_freq < 0 || sum_freq > 1)
@@ -29,6 +29,7 @@ void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double h
         return;
     }
 
+    engine.seed((seed<0)? std::chrono::system_clock::now().time_since_epoch().count() : seed);
     std::uniform_real_distribution<double> distribution(0, 1);
 
     for (int i = 0; i < width; ++i)

@@ -27,7 +27,8 @@ public:
 
     cellMap(int = DefaultWidth, int = DefaultHeight);
 
-    void loadMap(double = 0.5, double = 0.1, double = 0.02);
+    //for seed<0 use timestamp as a seed
+    void loadMap(double = 0.5, double = 0.1, double = 0.02, int seed = -1);
 
     std::vector<cell> count(int my_x, int my_y, int my_range, int ob_type, int ob_state, bool all);
 
@@ -73,6 +74,7 @@ public:
         return speed;
     }
 
+    std::default_random_engine manualeng; // random engine for manual operation
 private:
     int width;
     int height;
