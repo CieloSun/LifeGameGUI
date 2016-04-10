@@ -505,7 +505,7 @@ void MainWindow::fineFunction(){
                 {
                     Mainmap->cget(i, j).init(cell::LIVE,cell::PRODUCER);
                 }
-                else if(burnRandom>5&&burnRandom<=7)
+                else if(burnRandom>5&&burnRandom<=8)
                 {
                     Mainmap->cget(i, j).init(cell::LIVE,cell::CONSUMER);
                 }
