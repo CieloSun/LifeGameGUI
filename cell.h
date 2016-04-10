@@ -22,12 +22,12 @@ static const int PRODUCER_PRODUCE_AGE = 0;
 static const int PRODUCER_STARVING_TIME = 99;
 //消费者参数
 static const int CONSUMER_LN = 1;
-static const int CONSUMER_DN = 5;
+static const int CONSUMER_DN = 3;
 static const int CONSUMER_RANGE = 1;
 static const int CONSUMER_AGE = 50;
-static const int CONSUMER_AFTER_DEAD = 10;
+static const int CONSUMER_AFTER_DEAD = 5;
 static const int CONSUMER_PRODUCE_AGE = 20;
-static const int CONSUMER_STARVING_TIME= 10;
+static const int CONSUMER_STARVING_TIME= 8;
 //高级消费者参数
 static const int HIGH_CONSUMER_LN = 2;
 static const int HIGH_CONSUMER_DN = 3;
@@ -59,8 +59,11 @@ public:
     {
         type = _type;
     }
-    int getType() const
+    int getType()
     {
+        //TODO: Force overwrite errors
+        if (type < NOTHING || type > HIGH_CONSUMER)
+            setType(NOTHING);
         return type;
     }
 

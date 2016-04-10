@@ -428,8 +428,8 @@ void MainWindow::Setting()
                 int randomTimes=MapWidth*MapHeight;
                 while(randomTimes--)
                 {
-                    int a=distribution(engine);
-                    int b=distribution(engine);
+                    int a=distribution(Mainmap->manualeng);
+                    int b=distribution(Mainmap->manualeng);
                     std::swap(cellVector[a],cellVector[b]);
                 }
 
@@ -472,7 +472,7 @@ void MainWindow::damageFunction(){
     {
         for(int j=0;j<MapHeight;++j)
         {
-            if(distribution(engine))
+            if(distribution(Mainmap->manualeng))
             {
                 if(Mainmap->cget(i,j).getState()==cell::LIVE) Mainmap->cget(i,j).setState(cell::DEAD);
                 else if(Mainmap->cget(i,j).getState()==cell::DEAD) Mainmap->cget(i,j).init();
@@ -507,7 +507,7 @@ void MainWindow::fineFunction(){
             else if(Mainmap->cget(i, j).getState()==cell::EMPTY)
             {
                 std::uniform_int_distribution<int> FineDistribution(0,9);
-                int burnRandom=FineDistribution(engine);
+                int burnRandom=FineDistribution(Mainmap->manualeng);
                 std::cerr<<burnRandom<<std::endl;
                 if(burnRandom>=0&&burnRandom<=5)
                 {

@@ -17,13 +17,12 @@ cell::cellMap::cellMap(int _width, int _height)
     //默认突变概率0.1
     evolution = 0.1;
     speed = NORMAL_SPEED;
-    engine.seed((QTime().second()*QTime().msec())%10000);
-    //engine.seed(321);
+    manualeng.seed(std::chrono::system_clock::now().time_since_epoch().count());
     loadMap();
 }
 
 //设置完毕，生成初始态
-void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double highConsumer_freq)
+void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double highConsumer_freq,  int seed)
 {
     double sum_freq = highConsumer_freq + consumer_freq + producer_freq;
     if (producer_freq < 0 || consumer_freq < 0 || highConsumer_freq < 0 || sum_freq > 1)
@@ -31,6 +30,7 @@ void cell::cellMap::loadMap(double producer_freq, double consumer_freq, double h
         return;
     }
 
+    engine.seed((seed<0)? std::chrono::system_clock::now().time_since_epoch().count() : seed);
     std::uniform_real_distribution<double> distribution(0, 1);
 
     for (int i = 0; i < width; ++i)
@@ -128,10 +128,10 @@ void cell::cellMap::burn(int x, int y)
         std::uniform_int_distribution<int> distribution3(0, 5);
         std::uniform_int_distribution<int> distribution4(0, 4);
         std::uniform_int_distribution<int> distribution5(1, 4);
-        std::uniform_int_distribution<int> distribution6(0, 10);
+        std::uniform_int_distribution<int> distribution6(0, 100);
         std::uniform_int_distribution<int> distribution7(0, 10);
-        std::uniform_int_distribution<int> distribution8(0, 5);
-        std::uniform_int_distribution<int> distribution9(1, 5);
+        std::uniform_int_distribution<int> distribution8(0, 30);
+        std::uniform_int_distribution<int> distribution9(10, 50);
         if (distribution2(engine) < evolution)
         {
             //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
@@ -240,7 +240,6 @@ void cell::cellMap::exist(int x, int y)
                 else
                 {
                     cget(x, y).setStarvingTime(cget(x, y).getStarvingTime() + 1);
-                    int opx,opy;
                     int my_range=cget(x,y).getRange();
                     std::vector<std::pair<int,int> > target;
                     for (int i = x + my_range; i >=x - my_range; --i)
@@ -276,10 +275,10 @@ void cell::cellMap::exist(int x, int y)
                         move(cget(x,y),it->first,it->second);
                         x = it->first; y = it->second;
                     }
-breakCase:
-                    if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit()) cget(x, y).setState(DEAD);
+
                     visited[x][y] = true;
                 }
+                if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit()) cget(x, y).setState(DEAD);
                 //判断竞争
                 if ((count(x, y, cget(x, y).getRange(), cget(x, y).getType(), LIVE, true).size()) >= cget(x, y).getDeadNumber())
                 {

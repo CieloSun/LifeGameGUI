@@ -56,18 +56,19 @@ void cell::cell::init(int _state, int _type)
 
 void cell::cell::copy(cell const & ob)
 {
-    state = ob.state;
-    type = ob.type;
-    range = ob.range;
-    liveNumber = ob.liveNumber;
-    deadNumber = ob.deadNumber;
-    ageLimit = ob.ageLimit;
-    afterDeadLimit = ob.afterDeadLimit;
-    produceAge = ob.produceAge;
-    starvingTimeLimit = ob.starvingTimeLimit;
-    //复制即是新生
-    age = 0;
-    afterDead = 0;
-    starvingTime = 0;
+    setState(ob.getState());
+    //setType(ob.getType());
+    setType(ob.type);
+    setRange(ob.getRange());
+    setLiveNumber(ob.getLiveNumber());
+    setDeadNumber(ob.getDeadNumber());
+    setAgeLimit(ob.getAgeLimit());
+
+    setAfterDeadLimit(ob.getAfterDeadLimit());
+    setProduceAge(ob.getProduceAge());
+    setStarvingTimeLimit(ob.getStarvingTimeLimit());
+    setAge(0);
+    setAfterDead(0);
+    setStarvingTime(0);
 }
 
