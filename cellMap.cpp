@@ -127,10 +127,10 @@ void cell::cellMap::burn(int x, int y)
         std::uniform_int_distribution<int> distribution3(0, 5);
         std::uniform_int_distribution<int> distribution4(0, 4);
         std::uniform_int_distribution<int> distribution5(1, 4);
-        std::uniform_int_distribution<int> distribution6(0, 10);
+        std::uniform_int_distribution<int> distribution6(0, 100);
         std::uniform_int_distribution<int> distribution7(0, 10);
-        std::uniform_int_distribution<int> distribution8(0, 5);
-        std::uniform_int_distribution<int> distribution9(1, 5);
+        std::uniform_int_distribution<int> distribution8(0, 30);
+        std::uniform_int_distribution<int> distribution9(10, 50);
         if (distribution2(engine) < evolution)
         {
             //在deadNumber,range,ageLimit,afterDeadLimit中选择一个突变
@@ -239,7 +239,6 @@ void cell::cellMap::exist(int x, int y)
                 else
                 {
                     cget(x, y).setStarvingTime(cget(x, y).getStarvingTime() + 1);
-                    int opx,opy;
                     int my_range=cget(x,y).getRange();
                     std::vector<std::pair<int,int> > target;
                     for (int i = x + my_range; i >=x - my_range; --i)
@@ -275,10 +274,10 @@ void cell::cellMap::exist(int x, int y)
                         move(cget(x,y),it->first,it->second);
                         x = it->first; y = it->second;
                     }
-breakCase:
-                    if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit()) cget(x, y).setState(DEAD);
+
                     visited[x][y] = true;
                 }
+                if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit()) cget(x, y).setState(DEAD);
                 //判断竞争
                 if ((count(x, y, cget(x, y).getRange(), cget(x, y).getType(), LIVE, true).size()) >= cget(x, y).getDeadNumber())
                 {
