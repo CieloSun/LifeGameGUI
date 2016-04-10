@@ -57,7 +57,8 @@ void cell::cell::init(int _state, int _type)
 void cell::cell::copy(cell const & ob)
 {
     setState(ob.getState());
-    setType(ob.getType());
+    //setType(ob.getType());
+    setType(ob.type);
     setRange(ob.getRange());
     setLiveNumber(ob.getLiveNumber());
     setDeadNumber(ob.getDeadNumber());

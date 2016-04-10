@@ -59,8 +59,11 @@ public:
     {
         type = _type;
     }
-    int getType() const
+    int getType()
     {
+        //TODO: Force overwrite errors
+        if (type < NOTHING || type > HIGH_CONSUMER)
+            setType(NOTHING);
         return type;
     }
 
