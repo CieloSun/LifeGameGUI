@@ -72,6 +72,7 @@ private:
     int Ox;
     int Oy;
     unsigned long long have_run_times;
+    std::default_random_engine engine;
 
     bool damage;
 };

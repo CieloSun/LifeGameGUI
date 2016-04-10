@@ -13,12 +13,14 @@
 #include <random>
 #include <QPushButton>
 #include <cstdlib>
+#include <QTime>
 
 
 MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    engine.seed((QTime().second()*QTime().msec())%10000);
     damage=false;
     have_run_times = 0;
     MapWidth = _width;
@@ -407,8 +409,6 @@ void MainWindow::Setting()
         }
         else
         {
-            size_t seed=time(0)%10000;
-            std::default_random_engine engine(seed);
             std::uniform_int_distribution<int> distribution(0, sum - 1);
             std::vector<int> cellVector;
             while(producerAddNumber-- > 0)
@@ -467,8 +467,6 @@ void MainWindow::damageFunction(){
         threadRun->stop();
         flag=true;
     }
-    unsigned int seed = (unsigned int)time(0) % 10000;
-    std::default_random_engine engine(seed);
     std::uniform_int_distribution<int> distribution(0,1);
     for(int i=0;i<MapWidth;++i)
     {
@@ -508,20 +506,8 @@ void MainWindow::fineFunction(){
             else if(Mainmap->cget(i, j).getState()==cell::DEAD) Mainmap->cget(i, j).init();
             else if(Mainmap->cget(i, j).getState()==cell::EMPTY)
             {
-<<<<<<< HEAD
-                time_t seed = time(0) % 10000;
-                /*
                 std::uniform_int_distribution<int> FineDistribution(0,9);
-                std::default_random_engine engine(seed);
-                */
-                srand(seed);
-                int burnRandom=rand()%10;
-=======
-                std::uniform_int_distribution<int> FineDistribution(0,9);
-                std::default_random_engine engine;
-                engine.seed(std::chrono::system_clock::now().time_since_epoch().count());
                 int burnRandom=FineDistribution(engine);
->>>>>>> design
                 std::cerr<<burnRandom<<std::endl;
                 if(burnRandom>=0&&burnRandom<=5)
                 {

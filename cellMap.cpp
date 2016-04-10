@@ -1,5 +1,6 @@
 ﻿#include "cellMap.h"
 #include "iostream"//调试用
+#include <QTime>
 
 
 //构造函数
@@ -16,7 +17,8 @@ cell::cellMap::cellMap(int _width, int _height)
     //默认突变概率0.1
     evolution = 0.1;
     speed = NORMAL_SPEED;
-    engine.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    engine.seed((QTime().second()*QTime().msec())%10000);
+    //engine.seed(321);
     loadMap();
 }
 
