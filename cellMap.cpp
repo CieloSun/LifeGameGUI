@@ -280,7 +280,8 @@ void cell::cellMap::exist(int x, int y)
                 }
                 if(cget(x, y).getStarvingTime() > cget(x, y).getStarvingTimeLimit()) cget(x, y).setState(DEAD);
                 //判断竞争
-                if ((count(x, y, cget(x, y).getRange(), cget(x, y).getType(), LIVE, true).size()) >= cget(x, y).getDeadNumber())
+                if ((count(x, y, cget(x, y).getRange(), cget(x, y).getType(), LIVE, true).size())
+                        >= cget(x, y).getDeadNumber())
                 {
                     cget(x, y).setState(DEAD);
                 }

@@ -252,10 +252,6 @@ void MainWindow::End()
     }
     edialog->show();
 
-    //TODO
-    //调出一个结果统计报告页面并询问是否存储
-    //报告包括每个物种的现存数量，空地的数量，总运行次数,建议以一个对话框显示，并提供退出和重新开始两个按钮
-    //如果想实时获取数据，可以把这四个变量改为类变量
     int nothing_number = threadRun->getNothingNumber();
     int producer_number = threadRun->getProducerNumber();
     int consumer_number = threadRun->getConsumerNumber();
@@ -279,9 +275,7 @@ void MainWindow::End()
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    //TODO
-    //利用点击时的坐标（找出一种算法）来反向计算出其表示的数组对应index，利用浮出提示/信息栏来显示出对应的信息
-    //调用信息可以使用cell类中的各种get函数
+
     int x = (event->pos().rx() - Ox) / WIDTH;
     int y = (event->pos().ry() - Oy) / WIDTH;
     if (x >= 0 && x <= MapWidth && y >= 0 && y <= MapHeight)
