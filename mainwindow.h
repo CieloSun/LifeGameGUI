@@ -49,6 +49,7 @@ private slots:
     void Test();
     void damageFunction();
     void fineFunction();
+    void aboutUs();
 
 private:
     void SaveFunction(QString fileName);

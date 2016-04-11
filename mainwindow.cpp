@@ -3,6 +3,7 @@
 #include "enddialog.h"
 #include "myrestartdialog.h"
 #include "settingdialog.h"
+#include "aboutusdialog.h"
 #include <QFile>
 #include <QString>
 #include <fstream>
@@ -49,6 +50,7 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     connect(ui->openButton, SIGNAL(clicked(bool)), this, SLOT(Load()));
     connect(ui->damageButton,SIGNAL(clicked(bool)),this,SLOT(damageFunction()));
     connect(ui->fineButton,SIGNAL(clicked(bool)),this,SLOT(fineFunction()));
+    connect(ui->aboutButton,SIGNAL(clicked(bool)),this,SLOT(aboutUs()));
     //connect(ui->actionTest, SIGNAL(triggered(bool)), this, SLOT(Test()));
 
     //QWidget *widget=new QWidget();
@@ -613,6 +615,14 @@ void MainWindow::paintEvent(QPaintEvent *)
     }
 
     painter->end();
+}
+
+void MainWindow::aboutUs()
+{
+    aboutUsDialog *abdialog=new aboutUsDialog();
+    abdialog->show();
+    connect(abdialog,SIGNAL(accepted()),abdialog,SLOT(close()));
+    connect(abdialog,SIGNAL(rejected()),abdialog,SLOT(close()));
 }
 
 MainWindow::~MainWindow()

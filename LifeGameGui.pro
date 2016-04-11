@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     thread.cpp \
     enddialog.cpp \
     myrestartdialog.cpp \
-    settingdialog.cpp
+    settingdialog.cpp \
+    aboutusdialog.cpp
 
 HEADERS  += \
     targetver.h \
@@ -29,12 +30,14 @@ HEADERS  += \
     thread.h \
     enddialog.h \
     myrestartdialog.h \
-    settingdialog.h
+    settingdialog.h \
+    aboutusdialog.h
 
 FORMS    += mainwindow.ui \
     enddialog.ui \
     myrestartdialog.ui \
-    settingdialog.ui
+    settingdialog.ui \
+    aboutusdialog.ui
 
 CONFIG   +=c++11
 
