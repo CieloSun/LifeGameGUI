@@ -62,8 +62,7 @@ public:
     int getType()
     {
         //TODO: Force overwrite errors
-        if (type < NOTHING || type > HIGH_CONSUMER)
-            setType(NOTHING);
+        if (type < NOTHING || type > HIGH_CONSUMER) init();
         return type;
     }
 
