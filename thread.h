@@ -24,7 +24,7 @@ public:
 
 signals:
     void ChangeScreen();
-    //因为突变的加入，不存在死循环的可能，End信号用来发射细胞数为空的情况。
+
     void End();
 protected:
     void run();

@@ -3,16 +3,16 @@
 namespace cell
 {
 
-//物种三个状态
+//State of livings
 static const int EMPTY = 0;
 static const int LIVE = 1;
 static const int DEAD = 2;
-//三种物种
+//Type of Livings
 static const int NOTHING = 0;
 static const int PRODUCER = 1;
 static const int CONSUMER = 2;
 static const int HIGH_CONSUMER = 3;
-//生产者参数
+//Build-in parameters for PRODUCER
 static const int PRODUCER_LN = 1;
 static const int PRODUCER_DN = 7;
 static const int PRODUCER_RANGE = 1;
@@ -20,7 +20,7 @@ static const int PRODUCER_AGE = 30;
 static const int PRODUCER_AFTER_DEAD = 10;
 static const int PRODUCER_PRODUCE_AGE = 0;
 static const int PRODUCER_STARVING_TIME = 99;
-//消费者参数
+//Build-in parameters for CONSUMER
 static const int CONSUMER_LN = 1;
 static const int CONSUMER_DN = 3;
 static const int CONSUMER_RANGE = 1;
@@ -28,15 +28,24 @@ static const int CONSUMER_AGE = 50;
 static const int CONSUMER_AFTER_DEAD = 5;
 static const int CONSUMER_PRODUCE_AGE = 20;
 static const int CONSUMER_STARVING_TIME= 8;
-//高级消费者参数
+//Build-in parameters for HIGH_CONSUMER
 static const int HIGH_CONSUMER_LN = 2;
 static const int HIGH_CONSUMER_DN = 3;
 static const int HIGH_CONSUMER_RANGE = 2;
-//static const int HIGH_CONSUMER_SEARCH_RANGE = 4;
 static const int HIGH_CONSUMER_AGE = 100;
 static const int HIGH_CONSUMER_AFTER_DEAD = 20;
 static const int HIGH_CONSUMER_PRODUCE_AGE = 30;
 static const int HIGH_CONSUMER_STARVING_TIME = 20;
+/*
+ * LN max number if burning
+ * DN min number if competition
+ * RANGE range of releam for CONSUMER and HIGH_CONSUMER
+ * AGE life exception
+ * AFTER_DEAD duration for the body
+ * PRODUCE_AGE min age for reproduce
+ * STARVING_TIME limit of starvation
+*/
+
 class cell
 {
 public:
@@ -45,7 +54,7 @@ public:
     cell(cell const&) = default;
     cell& operator=(cell const&) = delete;
     void copy(cell const&);
-    //  所有变量都提供了set函数和get函数
+
     void setState(int _state)
     {
         state = _state;
@@ -61,7 +70,6 @@ public:
     }
     int getType()
     {
-        //TODO: Force overwrite errors
         if (type < NOTHING || type > HIGH_CONSUMER) init();
         return type;
     }

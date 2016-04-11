@@ -62,7 +62,7 @@ void Thread::run()
                 if (Mainmap->cget(i, j).getType() != cell::NOTHING && Mainmap->cget(i, j).getState() != cell::EMPTY)
                 {
                     have_living = true;
-                    goto start_game;//利用goto跳出多重循环
+                    goto start_game;
                 }
             }
         }
@@ -89,7 +89,7 @@ start_game:
                 }
             }
         }
-        //每轮进行初始化
+        //Init
         nothing_number = 0;
         producer_number = 0;
         consumer_number = 0;

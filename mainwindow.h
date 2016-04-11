@@ -33,19 +33,17 @@ public:
     ~MainWindow();
 protected:
     void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);//TODO
+    void mousePressEvent(QMouseEvent *);
 private slots:
     void Change();
     void Start();
-    void Restart();//TODO
+    void Restart();
     void Stop();
     void Resume();
-    void End();//TODO
-    void Save();//TODO
-    void Load();//TODO
-    void Setting();//TODO
-    //void setCurrentFile(const QString fileName);
-    //void okSlot();
+    void End();
+    void Save();
+    void Load();
+    void Setting();
     void Test();
     void damageFunction();
     void fineFunction();

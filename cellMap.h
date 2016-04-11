@@ -24,27 +24,37 @@ class cellMap
 {
 public:
 
-
+    //Initilize the map
     cellMap(int = DefaultWidth, int = DefaultHeight);
 
+    //Initilize the map with frequency
     //for seed<0 use timestamp as a seed
     void loadMap(double = 0.5, double = 0.1, double = 0.02, int seed = -1);
 
+    //Count the number of target livings in its releam/environment, return a list of target
+    //Return all neighbours if all=true
     std::vector<cell> count(int my_x, int my_y, int my_range, int ob_type, int ob_state, bool all);
 
+    //make a new live on given position
     void burn(int x, int y);
 
+    //check it they have predatory relation
     bool eat(cell& op1, cell& op2);
 
+    //mark all objects unvisited,call it before each evolution
     void cleanVisitedState()
     {
         memset(visited,false,sizeof(visited));
     }
 
+    //update given position
+    //This is the main function of evolution
     void exist(int x, int y);
 
+    //For CONSUMER and HIGH_CONSUMER, move its position
     void move(cell&op, int x, int y);
 
+    //Get objects of given position
     cell &cget(int x, int y)
     {
         return array[x][y];
@@ -81,7 +91,7 @@ private:
     int speed;
     double evolution;
     cell array[MaxWidth][MaxHeight];
-    bool visited[MaxWidth][MaxHeight];
-    std::default_random_engine engine;
+    bool visited[MaxWidth][MaxHeight];  //check if some objects are updated
+    std::default_random_engine engine;  //random engine for evolution generator
 };
 }
