@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>人为干预</string>
   </property>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
@@ -574,9 +574,6 @@ border:0px;
      </layout>
     </item>
    </layout>
-   <zorder>layoutWidget</zorder>
-   <zorder>evolutionLabel_2</zorder>
-   <zorder>layoutWidget_2</zorder>
   </widget>
   <widget class="QPushButton" name="okButton">
    <property name="geometry">
@@ -621,11 +618,6 @@ border:0px;</string>
     <string>放弃</string>
    </property>
   </widget>
-  <zorder>groupBox</zorder>
-  <zorder>groupBox_2</zorder>
-  <zorder>okButton</zorder>
-  <zorder>noButton</zorder>
-  <zorder>evolutionLabel_2</zorder>
  </widget>
  <resources/>
  <connections>

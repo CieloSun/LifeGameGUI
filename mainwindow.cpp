@@ -30,7 +30,15 @@ MainWindow::MainWindow(int _width, int _height, QWidget *parent) :
     Ox = 30;
     Oy = 30;
 
+    int width2 = this->geometry().width();
+    int height2 = this->geometry().height();
+    WIDTH = height2 / 15;
+    Ox = WIDTH * 0.6;
+    Oy = WIDTH * 0.6;
+
     ui->setupUi(this);
+
+    this->setFixedSize(width2*1.5,height2*1.3);
 
     Mainmap = new cell::cellMap(MapWidth, MapHeight);
     threadRun = new Thread(Mainmap);
@@ -531,12 +539,14 @@ void MainWindow::fineFunction(){
 
 void MainWindow::paintEvent(QPaintEvent *)
 {
+    ui->groupBox->setGeometry(MapWidth*WIDTH+Ox+50,Oy+30,210,271);
+    ui->groupBox2->setGeometry(MapWidth*WIDTH+Ox+50,Oy+WIDTH+381,201,111);
     painter = new QPainter;
     painter->begin(this);
     QImage image;
     if(damage)
     {
-        image.load(":image/bg2.png");
+        image.load(":image/bg.jpg");
         damage=false;
     }
     else image.load( ":image/bg.png" );
